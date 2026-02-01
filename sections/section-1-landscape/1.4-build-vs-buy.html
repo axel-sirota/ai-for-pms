@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>1.4 Build vs Buy - AI for Product Managers</title>
+  <link rel="stylesheet" href="../../shared/css/course.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    .calc-section { background: var(--bg-alt); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; margin: 2rem 0; }
+    .calc-section label { display: block; font-weight: 600; margin-bottom: 0.25rem; font-size: 0.9rem; }
+    .calc-section select, .calc-section input[type="range"] { width: 100%; margin-bottom: 1rem; }
+    .calc-section input[type="range"] { accent-color: var(--primary); }
+    .range-value { font-weight: 700; color: var(--primary); }
+    .calc-result { background: var(--primary-bg); border: 2px solid var(--primary); border-radius: var(--radius); padding: 1.5rem; margin-top: 1rem; }
+    .calc-result h4 { margin-top: 0; color: var(--primary); }
+    .rec-badge { display: inline-block; padding: 0.25rem 0.75rem; border-radius: 20px; font-weight: 700; font-size: 0.9rem; }
+    .rec-buy { background: #dcfce7; color: #065f46; }
+    .rec-build { background: #fef3c7; color: #92400e; }
+    .rec-api { background: #dbeafe; color: #1e3a5f; }
+  </style>
+</head>
+<body>
+  <div class="course-container">
+
+    <header class="course-header">
+      <span class="section-label">Section 1 &middot; The AI Landscape</span>
+      <h1>1.4 Build vs Buy vs API</h1>
+      <p class="subtitle">The decision that determines whether your AI project joins the 5% or the 95%</p>
+    </header>
+
+    <!-- Key Stats -->
+    <div class="stat-row">
+      <div class="stat-card">
+        <span class="stat-number">67%</span>
+        <span class="stat-label">success rate when buying / using APIs</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-number">33%</span>
+        <span class="stat-label">success rate when building from scratch</span>
+      </div>
+    </div>
+
+    <div class="callout callout-insight">
+      <div class="callout-title">The Default Should Be "Buy" (API)</div>
+      <p>Most teams default to "build" because it feels more innovative. The data says the opposite. <strong>Start with an API, prove the value, then consider building only if the API genuinely can't meet your needs.</strong></p>
+    </div>
+
+    <!-- Decision Framework -->
+    <h2>The Decision Framework</h2>
+
+    <pre class="mermaid">
+flowchart TD
+    START["AI feature\nrequested"] --> Q1{"Can an existing\nAPI solve it?"}
+    Q1 -->|"Yes"| API["Use API\n(fastest, lowest risk)"]
+    Q1 -->|"Not quite"| Q2{"Is performance gap\n>20% vs needs?"}
+    Q2 -->|"No, close enough"| API
+    Q2 -->|"Yes, significant gap"| Q3{"Do you have\n1000+ training examples?"}
+    Q3 -->|"No"| COLLECT["Collect data first\nwhile using API"]
+    Q3 -->|"Yes"| Q4{"Is this a core\ncompetitive advantage?"}
+    Q4 -->|"No"| FINETUNE["Fine-tune an\nexisting model"]
+    Q4 -->|"Yes"| BUILD["Build / Train\ncustom model"]
+
+    style API fill:#dcfce7,stroke:#059669,color:#065f46
+    style FINETUNE fill:#fef3c7,stroke:#d97706,color:#92400e
+    style BUILD fill:#fecaca,stroke:#dc2626,color:#991b1b
+    style COLLECT fill:#dbeafe,stroke:#1e40af,color:#1e3a5f
+    style START fill:#ede9fe,stroke:#7c3aed,color:#5b21b6
+    </pre>
+
+    <!-- Comparison Table -->
+    <h2>Detailed Comparison</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Factor</th>
+          <th>API (Buy)</th>
+          <th>Fine-Tune</th>
+          <th>Build from Scratch</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Time to POC</strong></td>
+          <td>Days</td>
+          <td>Weeks</td>
+          <td>Months</td>
+        </tr>
+        <tr>
+          <td><strong>Time to Production</strong></td>
+          <td>2&ndash;4 weeks</td>
+          <td>1&ndash;3 months</td>
+          <td>6&ndash;12 months</td>
+        </tr>
+        <tr>
+          <td><strong>Upfront Cost</strong></td>
+          <td>$0&ndash;$5K</td>
+          <td>$10K&ndash;$50K</td>
+          <td>$100K&ndash;$1M+</td>
+        </tr>
+        <tr>
+          <td><strong>Ongoing Cost</strong></td>
+          <td>Per-query fees</td>
+          <td>Per-query + retraining</td>
+          <td>Infrastructure + team</td>
+        </tr>
+        <tr>
+          <td><strong>Team Needed</strong></td>
+          <td>PM + 1 engineer</td>
+          <td>PM + engineer + data scientist</td>
+          <td>Full ML team (3&ndash;5+)</td>
+        </tr>
+        <tr>
+          <td><strong>Success Rate</strong></td>
+          <td>67%</td>
+          <td>~50%</td>
+          <td>33%</td>
+        </tr>
+        <tr>
+          <td><strong>Risk</strong></td>
+          <td>Vendor lock-in, less control</td>
+          <td>Data quality, overfitting</td>
+          <td>Scope creep, team burnout</td>
+        </tr>
+        <tr>
+          <td><strong>Best When</strong></td>
+          <td>Standard capability, fast time-to-market</td>
+          <td>API isn't good enough, you have data</td>
+          <td>True competitive differentiation</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Interactive Calculator -->
+    <h2>Try It: Build vs Buy Calculator</h2>
+    <p>Adjust the sliders below for a quick recommendation, or use the full interactive calculator for detailed TCO analysis.</p>
+
+    <div class="calc-section">
+      <label>Team ML Expertise: <span class="range-value" id="expertise-val">2</span> / 5</label>
+      <input type="range" id="expertise" min="1" max="5" value="2">
+
+      <label>Timeline Pressure: <span class="range-value" id="timeline-val">4</span> / 5 (5 = very urgent)</label>
+      <input type="range" id="timeline" min="1" max="5" value="4">
+
+      <label>Data Availability: <span class="range-value" id="data-val">2</span> / 5</label>
+      <input type="range" id="data-avail" min="1" max="5" value="2">
+
+      <label>Competitive Differentiation Need: <span class="range-value" id="diff-val">2</span> / 5</label>
+      <input type="range" id="differentiation" min="1" max="5" value="2">
+
+      <label>Data Sensitivity:</label>
+      <select id="sensitivity">
+        <option value="low">Low (public data)</option>
+        <option value="medium" selected>Medium (business data)</option>
+        <option value="high">High (PII, regulated)</option>
+      </select>
+
+      <div class="calc-result" id="calc-result">
+        <h4>Recommendation</h4>
+        <p id="calc-recommendation"></p>
+        <p id="calc-reasoning"></p>
+      </div>
+    </div>
+
+    <div class="hf-space-embed">
+      <a class="hf-space-link" href="https://huggingface.co/spaces/datatrainers/build-vs-buy-calculator" target="_blank">
+        Launch Full Build vs Buy Calculator
+      </a>
+      <p style="color:var(--text-light); font-size:0.9rem; margin-top:0.5rem;">Full version with 12-month TCO analysis, risk matrix, and team requirements</p>
+    </div>
+
+    <!-- Stakeholder Framing -->
+    <div class="stakeholder-frame">
+      <h3>Stakeholder Framing</h3>
+      <p>When your CEO says "Let's build our own AI &mdash; we need a competitive moat":</p>
+      <blockquote>
+        "I understand the desire for differentiation, but the data shows teams that buy/API first succeed 2x more often than those that build from scratch. I'd recommend we start with an API to prove the value in weeks instead of months. If the API can't meet our quality bar, we'll have the data to justify the investment in building. This way we de-risk the project and learn faster."
+      </blockquote>
+    </div>
+
+    <nav class="module-nav">
+      <a href="1.3-model-landscape.html">&larr; Previous: Model Landscape</a>
+      <a href="index.html">Back to Section Overview &rarr;</a>
+    </nav>
+
+  </div>
+
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({ startOnLoad: true, theme: 'base', themeVariables: { primaryColor: '#dbeafe', primaryTextColor: '#1e3a5f', primaryBorderColor: '#1e40af', lineColor: '#6b7280', secondaryColor: '#eff6ff', tertiaryColor: '#f9fafb' }});
+  </script>
+  <script src="../../shared/js/course.js"></script>
+  <script>
+    // Mini calculator logic
+    const sliders = ['expertise', 'timeline', 'data-avail', 'differentiation'];
+    const valSpans = ['expertise-val', 'timeline-val', 'data-val', 'diff-val'];
+
+    function calculate() {
+      const expertise = +document.getElementById('expertise').value;
+      const timeline = +document.getElementById('timeline').value;
+      const data = +document.getElementById('data-avail').value;
+      const diff = +document.getElementById('differentiation').value;
+      const sensitivity = document.getElementById('sensitivity').value;
+
+      // Score: higher = more reason to build
+      let buildScore = (expertise * 0.25) + (data * 0.25) + (diff * 0.35) - (timeline * 0.15);
+      if (sensitivity === 'high') buildScore += 0.5;
+
+      const recEl = document.getElementById('calc-recommendation');
+      const reasonEl = document.getElementById('calc-reasoning');
+
+      if (buildScore < 2) {
+        recEl.innerHTML = '<span class="rec-badge rec-api">Recommendation: Use an API</span>';
+        reasonEl.textContent = 'Your combination of low ML expertise, time pressure, and limited data strongly favors an API approach. Ship in weeks, not months. Build only if the API measurably fails.';
+      } else if (buildScore < 3.5) {
+        recEl.innerHTML = '<span class="rec-badge rec-buy">Recommendation: Fine-Tune or Buy</span>';
+        reasonEl.textContent = 'You have some data and differentiation needs, but building from scratch is risky. Start with an API, fine-tune if quality gaps exist, and consider building only for your most differentiating features.';
+      } else {
+        recEl.innerHTML = '<span class="rec-badge rec-build">Recommendation: Consider Building</span>';
+        reasonEl.textContent = 'Strong data, experienced team, and high differentiation needs suggest building could be justified. But still prototype with an API first to validate the use case before committing to a 6-12 month build.';
+      }
+    }
+
+    sliders.forEach((id, i) => {
+      const el = document.getElementById(id);
+      const valEl = document.getElementById(valSpans[i]);
+      el.addEventListener('input', () => { valEl.textContent = el.value; calculate(); });
+    });
+    document.getElementById('sensitivity').addEventListener('change', calculate);
+    calculate();
+  </script>
+</body>
+</html>

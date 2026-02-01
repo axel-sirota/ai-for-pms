@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>1.2 Three Paradigms - AI for Product Managers</title>
+  <link rel="stylesheet" href="../../shared/css/course.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="course-container">
+
+    <header class="course-header">
+      <span class="section-label">Section 1 &middot; The AI Landscape</span>
+      <h1>1.2 The Three Paradigms</h1>
+      <p class="subtitle">Classical ML vs LLMs vs Agents &mdash; the core framework for every AI decision</p>
+    </header>
+
+    <!-- Intro -->
+    <div class="callout callout-insight">
+      <div class="callout-title">This Is the Most Important Framework in the Course</div>
+      <p>Every AI product decision starts here. When someone says "let's add AI to the product," your first question should be: <strong>which paradigm fits this problem?</strong> Getting this wrong wastes months and millions.</p>
+    </div>
+
+    <!-- Three Paradigms Table -->
+    <h2>The Three Paradigms at a Glance</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th></th>
+          <th>Classical ML</th>
+          <th>LLMs</th>
+          <th>Agents</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Best For</strong></td>
+          <td>Prediction from structured data</td>
+          <td>Text understanding &amp; generation</td>
+          <td>Multi-step autonomous tasks</td>
+        </tr>
+        <tr>
+          <td><strong>Data Needs</strong></td>
+          <td>Thousands of labeled examples</td>
+          <td>Examples in the prompt</td>
+          <td>Task definitions + tools</td>
+        </tr>
+        <tr>
+          <td><strong>Timeline to POC</strong></td>
+          <td>2&ndash;4 months</td>
+          <td>Days to weeks</td>
+          <td>Weeks to months</td>
+        </tr>
+        <tr>
+          <td><strong>Timeline to Production</strong></td>
+          <td>6&ndash;9 months</td>
+          <td>2&ndash;3 months</td>
+          <td>4&ndash;6 months</td>
+        </tr>
+        <tr>
+          <td><strong>Explainability</strong></td>
+          <td>High (feature importance)</td>
+          <td>Low to Medium</td>
+          <td>Medium (reasoning trace)</td>
+        </tr>
+        <tr>
+          <td><strong>Cost Profile</strong></td>
+          <td>High upfront, low ongoing</td>
+          <td>Low upfront, per-query ongoing</td>
+          <td>Medium upfront, higher per-task</td>
+        </tr>
+        <tr>
+          <td><strong>Examples</strong></td>
+          <td>Churn prediction, fraud detection, demand forecasting</td>
+          <td>Customer support, content generation, summarization</td>
+          <td>Research assistant, booking agent, expense processing</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Decision Tree -->
+    <h2>The Decision Flowchart</h2>
+    <p>Use this flowchart when someone proposes an AI feature. Start at the top and follow the path:</p>
+
+    <pre class="mermaid">
+flowchart TD
+    START["Someone says:\n'Let's add AI to this'"] --> Q1{"Can a simple\nrule solve it?"}
+    Q1 -->|Yes| RULE["Use rules.\nNo AI needed."]
+    Q1 -->|No| Q2{"Is it about PREDICTING\nfrom structured data?\n(rows & columns)"}
+    Q2 -->|Yes| Q3{"Do you have 1,000+\nlabeled examples?"}
+    Q3 -->|Yes| ML["Classical ML"]
+    Q3 -->|No| COLLECT["Collect data first\nor try LLM approach"]
+    Q2 -->|No| Q4{"Does it need to take\nMULTIPLE STEPS\nwith tool use?"}
+    Q4 -->|Yes| AGENT["Agent"]
+    Q4 -->|No| LLM["LLM"]
+
+    style RULE fill:#f3f4f6,stroke:#6b7280,color:#374151
+    style ML fill:#dbeafe,stroke:#1e40af,color:#1e3a5f
+    style LLM fill:#fef3c7,stroke:#d97706,color:#92400e
+    style AGENT fill:#dcfce7,stroke:#059669,color:#065f46
+    style COLLECT fill:#fef9c3,stroke:#ca8a04,color:#713f12
+    style START fill:#ede9fe,stroke:#7c3aed,color:#5b21b6
+    </pre>
+
+    <!-- Deep Dive: When Each Wins -->
+    <h2>When Each Paradigm Wins</h2>
+
+    <div class="card-grid">
+      <div class="card">
+        <h3>Classical ML Wins When...</h3>
+        <ul>
+          <li>You have structured, tabular data</li>
+          <li>You need to <strong>predict</strong> a number or category</li>
+          <li>Explainability is required (regulated industries)</li>
+          <li>You have historical data to learn from</li>
+          <li>Low-latency inference matters</li>
+        </ul>
+        <p style="color:var(--text-light); font-size:0.9rem; margin-top:1rem;"><em>Think: "Will this customer churn?" "Is this transaction fraud?"</em></p>
+      </div>
+
+      <div class="card">
+        <h3>LLMs Win When...</h3>
+        <ul>
+          <li>The task involves understanding or generating text</li>
+          <li>You need flexibility across many tasks</li>
+          <li>You can't define rules in advance</li>
+          <li>Speed to market matters most</li>
+          <li>You don't have training data</li>
+        </ul>
+        <p style="color:var(--text-light); font-size:0.9rem; margin-top:1rem;"><em>Think: "Summarize these tickets." "Draft a response to this complaint."</em></p>
+      </div>
+
+      <div class="card">
+        <h3>Agents Win When...</h3>
+        <ul>
+          <li>The task requires multiple steps in sequence</li>
+          <li>The system needs to use external tools (APIs, databases)</li>
+          <li>Decisions depend on intermediate results</li>
+          <li>You'd otherwise need a human to coordinate</li>
+          <li>You can tolerate higher latency per task</li>
+        </ul>
+        <p style="color:var(--text-light); font-size:0.9rem; margin-top:1rem;"><em>Think: "Research competitors and compile a report." "Process this expense claim end-to-end."</em></p>
+      </div>
+    </div>
+
+    <!-- Common Mistakes -->
+    <h2>Common Paradigm Mistakes</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Mistake</th>
+          <th>Example</th>
+          <th>What Should Have Happened</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Using LLM when ML is better</td>
+          <td>LLM to predict churn from structured CRM data</td>
+          <td>Classical ML &mdash; faster, cheaper, more accurate on tabular data</td>
+        </tr>
+        <tr>
+          <td>Using ML when LLM is better</td>
+          <td>Training a classifier for 200 categories of support tickets</td>
+          <td>LLM with few-shot prompting &mdash; no training data needed</td>
+        </tr>
+        <tr>
+          <td>Jumping to agents too early</td>
+          <td>Autonomous refund agent before testing a copilot version</td>
+          <td>Start with copilot (suggestions), earn trust, then automate</td>
+        </tr>
+        <tr>
+          <td>Using AI when rules suffice</td>
+          <td>ML model to route tickets based on simple keyword matching</td>
+          <td>If-then rules &mdash; simpler, faster, 100% predictable</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Interactive: Paradigm Picker -->
+    <h2>Try It: AI Paradigm Picker</h2>
+    <p>Describe a product feature idea and our interactive tool will recommend which paradigm fits best, explain why, and give you questions to ask your engineering team.</p>
+
+    <div class="hf-space-embed">
+      <a class="hf-space-link" href="https://huggingface.co/spaces/datatrainers/ai-paradigm-picker" target="_blank">
+        Launch AI Paradigm Picker
+      </a>
+      <p style="color:var(--text-light); font-size:0.9rem; margin-top:0.5rem;">Opens in a new tab</p>
+    </div>
+
+    <!-- Quiz -->
+    <div class="quiz">
+      <h3>Practice: Match the Feature to the Paradigm</h3>
+      <p>Your e-commerce company wants to <strong>"predict which products will be trending next quarter based on sales history, search trends, and seasonal patterns."</strong></p>
+      <p>Which paradigm fits best?</p>
+
+      <button class="quiz-option" data-correct="true" data-feedback-correct="Correct! This is prediction from structured, tabular data (sales numbers, search volumes, seasonal indicators). Classical ML excels here &mdash; it's faster, cheaper, and more explainable than LLMs for this type of task.">
+        <strong>A.</strong> Classical ML &mdash; this is structured data prediction
+      </button>
+      <button class="quiz-option" data-correct="false" data-feedback-incorrect="LLMs are designed for text understanding and generation, not for predicting numbers from structured data. You'd pay more per prediction and get worse accuracy than Classical ML.">
+        <strong>B.</strong> LLM &mdash; it can analyze anything
+      </button>
+      <button class="quiz-option" data-correct="false" data-feedback-incorrect="Agents coordinate multi-step tasks with tools. Trend prediction is a single analytical task, not a workflow. An agent would be overkill and less accurate.">
+        <strong>C.</strong> Agent &mdash; it needs to gather data from multiple sources
+      </button>
+      <div class="quiz-feedback"></div>
+    </div>
+
+    <!-- Stakeholder Framing -->
+    <div class="stakeholder-frame">
+      <h3>Stakeholder Framing</h3>
+      <p>When your VP asks "Why can't we just use ChatGPT for everything?", here's your answer:</p>
+      <blockquote>
+        "AI isn't one thing &mdash; it's three different approaches, each with different strengths. Using ChatGPT for everything is like using a hammer for every home repair. We need to match the tool to the job: structured predictions use traditional ML, text tasks use LLMs, and complex workflows use agents. Getting this match right is the #1 predictor of AI project success."
+      </blockquote>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="module-nav">
+      <a href="1.1-the-stakes.html">&larr; Previous: The Stakes</a>
+      <a href="1.3-model-landscape.html">Next: Model Landscape &rarr;</a>
+    </nav>
+
+  </div>
+
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({ startOnLoad: true, theme: 'base', themeVariables: { primaryColor: '#dbeafe', primaryTextColor: '#1e3a5f', primaryBorderColor: '#1e40af', lineColor: '#6b7280', secondaryColor: '#eff6ff', tertiaryColor: '#f9fafb' }});
+  </script>
+  <script src="../../shared/js/course.js"></script>
+</body>
+</html>

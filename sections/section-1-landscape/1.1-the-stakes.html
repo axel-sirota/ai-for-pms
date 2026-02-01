@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>1.1 The Stakes - AI for Product Managers</title>
+  <link rel="stylesheet" href="../../shared/css/course.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="course-container">
+
+    <!-- Header -->
+    <header class="course-header">
+      <span class="section-label">Section 1 &middot; The AI Landscape</span>
+      <h1>1.1 The Stakes</h1>
+      <p class="subtitle">Why 95% of AI projects fail &mdash; and what PMs can do about it</p>
+    </header>
+
+    <!-- Failure Story -->
+    <div class="callout callout-failure">
+      <div class="callout-title">Failure Story: Meta's Galactica</div>
+      <p>In November 2022, Meta launched <strong>Galactica</strong>, an AI model that could "summarize academic papers, solve math problems, and generate scientific articles." Within <strong>three days</strong>, researchers discovered it confidently generated <em>fake citations</em>, invented non-existent papers, and produced plausible-sounding but completely fabricated scientific content.</p>
+      <p>Meta pulled the public demo after just 72 hours. Estimated cost: <strong>$10M+ in development</strong>, plus incalculable damage to Meta's AI credibility.</p>
+    </div>
+
+    <!-- PM Decision Point -->
+    <div class="callout callout-decision">
+      <div class="callout-title">PM Decision Point</div>
+      <p>As the PM for Galactica, you would have needed to decide:</p>
+      <ul>
+        <li>What does "good enough" look like before public launch?</li>
+        <li>How do you test for hallucination at scale?</li>
+        <li>What's the rollback plan when things go wrong?</li>
+        <li>Who signs off on a public demo of an AI that can fabricate?</li>
+      </ul>
+      <p><strong>The technology worked exactly as designed.</strong> The product decisions around it failed.</p>
+    </div>
+
+    <!-- Stats -->
+    <h2>The Numbers You Need to Know</h2>
+
+    <div class="stat-row">
+      <div class="stat-card">
+        <span class="stat-number">95%</span>
+        <span class="stat-label">of AI pilots fail to deliver P&amp;L impact</span>
+        <span class="stat-label" style="font-size:0.75rem; color:#9ca3af;">MIT, 2025</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-number">42%</span>
+        <span class="stat-label">of companies abandoned AI initiatives in 2025</span>
+        <span class="stat-label" style="font-size:0.75rem; color:#9ca3af;">S&amp;P Global</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-number">67%</span>
+        <span class="stat-label">success rate when buying vs 33% when building</span>
+        <span class="stat-label" style="font-size:0.75rem; color:#9ca3af;">MIT, 2025</span>
+      </div>
+    </div>
+
+    <div class="callout callout-insight">
+      <div class="callout-title">Key Insight</div>
+      <p>The difference between the 5% that succeed and the 95% that fail is <strong>not technology</strong> &mdash; it's <strong>PM decisions</strong>. The companies that succeed treat AI as a product challenge, not a technology challenge.</p>
+    </div>
+
+    <!-- Where AI Projects Die -->
+    <h2>Where AI Projects Die</h2>
+
+    <pre class="mermaid">
+flowchart TD
+    A["AI Project Starts"] --> B{"Clear business\nproblem?"}
+    B -->|No| FAIL1["FAIL: Solution looking\nfor a problem"]
+    B -->|Yes| C{"Right data\navailable?"}
+    C -->|No| FAIL2["FAIL: 43% cite\ndata quality issues"]
+    C -->|Yes| D{"Realistic\nexpectations?"}
+    D -->|No| FAIL3["FAIL: Demo ≠ Production\n(most common)"]
+    D -->|Yes| E{"Proper\nevaluation?"}
+    E -->|No| FAIL4["FAIL: Launched without\ntesting edge cases"]
+    E -->|Yes| F{"Stakeholder\nalignment?"}
+    F -->|No| FAIL5["FAIL: Pilot paralysis\n(can't move to prod)"]
+    F -->|Yes| SUCCESS["The 5% Club"]
+
+    style FAIL1 fill:#fecaca,stroke:#dc2626,color:#991b1b
+    style FAIL2 fill:#fecaca,stroke:#dc2626,color:#991b1b
+    style FAIL3 fill:#fecaca,stroke:#dc2626,color:#991b1b
+    style FAIL4 fill:#fecaca,stroke:#dc2626,color:#991b1b
+    style FAIL5 fill:#fecaca,stroke:#dc2626,color:#991b1b
+    style SUCCESS fill:#bbf7d0,stroke:#059669,color:#065f46
+    style A fill:#dbeafe,stroke:#1e40af,color:#1e3a5f
+    </pre>
+
+    <p>Every failure point in that diagram is a <strong>PM decision</strong>, not a technology limitation. This course gives you the frameworks to make those decisions well.</p>
+
+    <!-- The Cost of Getting It Wrong -->
+    <h2>The Cost of Getting It Wrong</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Company</th>
+          <th>What Happened</th>
+          <th>Cost / Impact</th>
+          <th>PM Lesson</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Meta (Galactica)</strong></td>
+          <td>AI generated fake scientific citations</td>
+          <td>$10M+ dev, shut down in 3 days</td>
+          <td>Test for hallucination before launch</td>
+        </tr>
+        <tr>
+          <td><strong>Air Canada</strong></td>
+          <td>Chatbot promised bereavement fare that didn't exist</td>
+          <td>$800K+ lawsuit settlement</td>
+          <td>RAG needs current data + guardrails</td>
+        </tr>
+        <tr>
+          <td><strong>Knight Capital</strong></td>
+          <td>Trading algorithm bug</td>
+          <td>$440M loss in 45 minutes</td>
+          <td>Automated systems need kill switches</td>
+        </tr>
+        <tr>
+          <td><strong>Microsoft (Tay)</strong></td>
+          <td>Chatbot learned racism from Twitter in 24 hours</td>
+          <td>Brand damage, immediate shutdown</td>
+          <td>Input/output guardrails are mandatory</td>
+        </tr>
+        <tr>
+          <td><strong>DPD</strong></td>
+          <td>Chatbot swore at customers after prompt injection</td>
+          <td>Viral screenshot, stock impact</td>
+          <td>Prompt injection is a real threat</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Quiz -->
+    <div class="quiz" id="quiz-greenlight">
+      <h3>Quick Check: Which project would you greenlight?</h3>
+      <p>Your company has budget for one AI initiative. Based on what you've learned about failure rates, which has the highest chance of success?</p>
+
+      <button class="quiz-option" data-correct="false" data-feedback-incorrect="Building from scratch has only a 33% success rate. Most companies underestimate the data, evaluation, and maintenance work needed.">
+        <strong>A.</strong> Build a custom ML model from scratch for demand forecasting (the team has never done ML before)
+      </button>
+
+      <button class="quiz-option" data-correct="true" data-feedback-correct="Correct! Using an existing API has a 67% success rate. Starting with a proven solution reduces risk and lets your team learn before taking on more complex projects.">
+        <strong>B.</strong> Use an existing LLM API to auto-categorize and summarize customer support tickets
+      </button>
+
+      <button class="quiz-option" data-correct="false" data-feedback-incorrect="Autonomous agents are the highest-risk AI projects. Without experience in simpler AI, jumping to agents typically fails. Start simpler and build trust progressively.">
+        <strong>C.</strong> Deploy an autonomous AI agent that handles refund requests end-to-end without human review
+      </button>
+
+      <button class="quiz-option" data-correct="false" data-feedback-incorrect="Doing everything at once is the #1 way to join the 95%. Successful teams start small, prove value, then expand. This scope guarantees pilot paralysis.">
+        <strong>D.</strong> Launch all three at once &mdash; move fast and break things
+      </button>
+
+      <div class="quiz-feedback" data-correct="Correct!" data-incorrect="Not quite."></div>
+    </div>
+
+    <!-- What This Course Covers -->
+    <h2>What You'll Learn in This Course</h2>
+
+    <p>Over the next three days, you'll build the decision-making skills to be in the 5%. Here's the roadmap:</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Day</th>
+          <th>Theme</th>
+          <th>You'll Be Able To...</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Day 1</strong></td>
+          <td>Foundations</td>
+          <td>Choose the right AI paradigm for any product feature</td>
+        </tr>
+        <tr>
+          <td><strong>Day 2</strong></td>
+          <td>Building</td>
+          <td>Design prompts, RAG systems, and agent workflows</td>
+        </tr>
+        <tr>
+          <td><strong>Day 3</strong></td>
+          <td>Shipping</td>
+          <td>Evaluate, safeguard, budget, and pitch AI initiatives</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Stakeholder Framing -->
+    <div class="stakeholder-frame">
+      <h3>Stakeholder Framing</h3>
+      <p>If your VP asks "Why should we invest in AI training?", here's your answer:</p>
+      <blockquote>
+        "95% of AI pilots fail to deliver business impact. The difference isn't technology &mdash; it's product decisions. This training gives our PMs the frameworks to evaluate, scope, and ship AI features that actually work. The companies in the successful 5% treat AI as a product challenge, not a tech challenge."
+      </blockquote>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="module-nav">
+      <span></span>
+      <a href="1.2-three-paradigms.html">Next: Three Paradigms &rarr;</a>
+    </nav>
+
+  </div>
+
+  <!-- Mermaid -->
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({ startOnLoad: true, theme: 'base', themeVariables: { primaryColor: '#dbeafe', primaryTextColor: '#1e3a5f', primaryBorderColor: '#1e40af', lineColor: '#6b7280', secondaryColor: '#eff6ff', tertiaryColor: '#f9fafb' }});
+  </script>
+  <script src="../../shared/js/course.js"></script>
+</body>
+</html>

@@ -1,0 +1,364 @@
+/* AI for Product Managers - Course CSS
+   Data Trainers LLC - 2026 */
+
+/* ===== Reset & Base ===== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --primary: #1e40af;
+  --primary-light: #3b82f6;
+  --primary-bg: #eff6ff;
+  --accent: #f59e0b;
+  --accent-bg: #fffbeb;
+  --danger: #dc2626;
+  --danger-bg: #fef2f2;
+  --success: #059669;
+  --success-bg: #ecfdf5;
+  --text: #1f2937;
+  --text-light: #6b7280;
+  --bg: #ffffff;
+  --bg-alt: #f9fafb;
+  --border: #e5e7eb;
+  --radius: 8px;
+  --shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+  --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+  --max-width: 900px;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font);
+  color: var(--text);
+  background: var(--bg);
+  line-height: 1.7;
+  padding: 0;
+}
+
+/* ===== Typography ===== */
+h1, h2, h3, h4, h5 {
+  line-height: 1.3;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+}
+
+h1 { font-size: 2rem; color: var(--primary); }
+h2 { font-size: 1.5rem; color: var(--primary); border-bottom: 2px solid var(--primary-bg); padding-bottom: 0.5rem; }
+h3 { font-size: 1.25rem; color: var(--text); }
+h4 { font-size: 1.1rem; color: var(--text-light); }
+
+p { margin-bottom: 1rem; }
+a { color: var(--primary-light); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ===== Layout ===== */
+.course-container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+
+.course-header {
+  text-align: center;
+  padding: 2rem 0 1rem;
+  border-bottom: 3px solid var(--primary);
+  margin-bottom: 2rem;
+}
+
+.course-header .section-label {
+  display: inline-block;
+  background: var(--primary);
+  color: #fff;
+  padding: 0.25rem 1rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+
+.course-header h1 {
+  margin-top: 0.5rem;
+  font-size: 2.25rem;
+}
+
+.course-header .subtitle {
+  color: var(--text-light);
+  font-size: 1.1rem;
+  margin-top: 0.5rem;
+}
+
+/* ===== Navigation ===== */
+.module-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+  border-top: 1px solid var(--border);
+  margin-top: 3rem;
+}
+
+.module-nav a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: var(--primary-bg);
+  border-radius: var(--radius);
+  font-weight: 500;
+  transition: background 0.2s;
+}
+
+.module-nav a:hover {
+  background: var(--primary);
+  color: #fff;
+  text-decoration: none;
+}
+
+/* ===== Cards ===== */
+.card {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: var(--shadow);
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+/* ===== Callout Boxes ===== */
+.callout {
+  border-left: 4px solid;
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.callout-failure {
+  border-color: var(--danger);
+  background: var(--danger-bg);
+}
+
+.callout-failure .callout-title { color: var(--danger); }
+
+.callout-decision {
+  border-color: var(--accent);
+  background: var(--accent-bg);
+}
+
+.callout-decision .callout-title { color: #b45309; }
+
+.callout-insight {
+  border-color: var(--primary-light);
+  background: var(--primary-bg);
+}
+
+.callout-insight .callout-title { color: var(--primary); }
+
+.callout-success {
+  border-color: var(--success);
+  background: var(--success-bg);
+}
+
+.callout-success .callout-title { color: var(--success); }
+
+.callout-title {
+  font-weight: 700;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+/* ===== Stats ===== */
+.stat-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.stat-card {
+  flex: 1;
+  min-width: 150px;
+  text-align: center;
+  padding: 1.25rem;
+  border-radius: var(--radius);
+  background: var(--bg-alt);
+  border: 1px solid var(--border);
+}
+
+.stat-card .stat-number {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--primary);
+  display: block;
+}
+
+.stat-card .stat-label {
+  font-size: 0.85rem;
+  color: var(--text-light);
+  margin-top: 0.25rem;
+}
+
+/* ===== Tables ===== */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  font-size: 0.95rem;
+}
+
+th, td {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+
+th {
+  background: var(--primary-bg);
+  font-weight: 600;
+  color: var(--primary);
+}
+
+tr:hover { background: var(--bg-alt); }
+
+/* ===== Mermaid ===== */
+.mermaid {
+  margin: 1.5rem 0;
+  text-align: center;
+}
+
+.mermaid svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* ===== Interactive Quiz ===== */
+.quiz {
+  background: var(--bg-alt);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  margin: 2rem 0;
+}
+
+.quiz h3 { margin-top: 0; }
+
+.quiz-option {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 0.75rem 1rem;
+  margin: 0.5rem 0;
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg);
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.quiz-option:hover {
+  border-color: var(--primary-light);
+  background: var(--primary-bg);
+}
+
+.quiz-option.correct {
+  border-color: var(--success);
+  background: var(--success-bg);
+}
+
+.quiz-option.incorrect {
+  border-color: var(--danger);
+  background: var(--danger-bg);
+}
+
+.quiz-feedback {
+  margin-top: 1rem;
+  padding: 1rem;
+  border-radius: var(--radius);
+  display: none;
+}
+
+.quiz-feedback.show { display: block; }
+
+/* ===== HF Space Embed ===== */
+.hf-space-embed {
+  margin: 2rem 0;
+  text-align: center;
+}
+
+.hf-space-embed iframe {
+  width: 100%;
+  height: 600px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.hf-space-link {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  background: var(--primary);
+  color: #fff;
+  border-radius: var(--radius);
+  font-weight: 600;
+  margin: 1rem 0;
+  transition: background 0.2s;
+}
+
+.hf-space-link:hover {
+  background: var(--primary-light);
+  color: #fff;
+  text-decoration: none;
+}
+
+/* ===== Stakeholder Framing ===== */
+.stakeholder-frame {
+  background: linear-gradient(135deg, var(--primary-bg), #dbeafe);
+  border: 2px solid var(--primary);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  margin: 2rem 0;
+}
+
+.stakeholder-frame h3 {
+  color: var(--primary);
+  margin-top: 0;
+}
+
+.stakeholder-frame blockquote {
+  font-style: italic;
+  border-left: 3px solid var(--primary);
+  padding-left: 1rem;
+  margin: 1rem 0;
+  color: var(--text);
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  html { font-size: 15px; }
+  .course-container { padding: 1rem; }
+  .course-header h1 { font-size: 1.75rem; }
+  .card-grid { grid-template-columns: 1fr; }
+  .stat-row { flex-direction: column; }
+  table { font-size: 0.85rem; }
+  th, td { padding: 0.5rem; }
+}
+
+@media (max-width: 480px) {
+  html { font-size: 14px; }
+  .module-nav { flex-direction: column; gap: 0.75rem; }
+}
