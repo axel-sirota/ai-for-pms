@@ -73,6 +73,7 @@ Non-technical Product Managers. **No coding required from students.**
 - PMs need DECISION FRAMEWORKS, not implementation depth
 - Kill all math formulas, algorithm taxonomies, architecture internals
 - Keep: business cost framing, real failure stories, interactive demos
+- **No em dashes** - use regular dashes `-` instead of `&mdash;` or em dash characters
 
 ### File Organization
 ```

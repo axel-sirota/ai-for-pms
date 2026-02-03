@@ -86,6 +86,7 @@ Every module follows this exact structure:
 - **No code** shown to students, ever
 - **No math formulas** - translate everything to business language
 - **No algorithm taxonomies** - focus on "when to use what"
+- **No em dashes** - use regular dashes `-` instead of `&mdash;` or em dash characters
 - **Mermaid diagrams** for all flowcharts and decision trees
 - **Mobile-friendly** - works on tablets for workshop use
 - **Each `<pre class="mermaid">` tag** gets its own diagram; never combine multiple

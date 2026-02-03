@@ -23,13 +23,13 @@
     <header class="course-header">
       <span class="section-label">Section 2 &middot; Classical ML</span>
       <h1>2.4 Metrics That Matter</h1>
-      <p class="subtitle">Precision, recall, and F1 &mdash; reframed as business decisions</p>
+      <p class="subtitle">Precision, recall, and F1 - reframed as business decisions</p>
     </header>
 
     <!-- Fire Detection Hook -->
     <div class="callout callout-decision">
       <div class="callout-title">The Question That Changes Everything</div>
-      <p>A fire detection model that <strong>always predicts "no fire"</strong> is <strong>99.9% accurate</strong>. (Because fires are rare &mdash; 0.1% of the time.)</p>
+      <p>A fire detection model that <strong>always predicts "no fire"</strong> is <strong>99.9% accurate</strong>. (Because fires are rare - 0.1% of the time.)</p>
       <p><strong>Is that a good model?</strong></p>
       <p>Of course not. It would miss every fire. <em>Accuracy alone is meaningless.</em> You need metrics that match your <strong>business cost of being wrong</strong>.</p>
     </div>
@@ -143,13 +143,13 @@
       <p>You're building a <strong>content moderation system</strong> for a children's platform. Harmful content reaching kids is unacceptable, but over-blocking safe content frustrates parents. Which metric do you optimize for?</p>
 
       <button class="quiz-option" data-correct="false" data-feedback-incorrect="Precision focuses on 'when we flag something, are we right?' It would reduce over-blocking, but risks letting harmful content through. For a children's platform, missing harmful content is the bigger risk.">
-        <strong>A.</strong> Precision &mdash; make sure our flags are accurate
+        <strong>A.</strong> Precision - make sure our flags are accurate
       </button>
       <button class="quiz-option" data-correct="true" data-feedback-correct="Correct! On a children's platform, the cost of a false negative (harmful content reaching kids) is catastrophically higher than a false positive (over-blocking safe content). Optimize for recall first, then improve precision over time.">
-        <strong>B.</strong> Recall &mdash; catch every piece of harmful content, even if we over-block some safe content
+        <strong>B.</strong> Recall - catch every piece of harmful content, even if we over-block some safe content
       </button>
       <button class="quiz-option" data-correct="false" data-feedback-incorrect="F1 balances both errors equally. But on a children's safety platform, the errors are NOT equal — missing harmful content is far worse than over-blocking. Recall should be the primary metric.">
-        <strong>C.</strong> F1 &mdash; balance both types of errors equally
+        <strong>C.</strong> F1 - balance both types of errors equally
       </button>
       <div class="quiz-feedback"></div>
     </div>

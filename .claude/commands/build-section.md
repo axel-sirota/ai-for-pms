@@ -74,6 +74,10 @@ From the **definitive spec** (ai-pm-course-full-interactive-architecture.md), ex
 [Markdown: "Discussion: How would this affect your project timeline?"]
 ```
 
+### Text Formatting Rules
+
+- **No em dashes** - use regular dashes `-` instead of `&mdash;` or em dash characters
+
 ## CRITICAL: Incremental Building
 
 **NEVER ADD MORE THAN 5 CELLS WITHOUT APPROVAL**

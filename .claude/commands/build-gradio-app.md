@@ -105,6 +105,7 @@ if __name__ == "__main__":
 - Outputs include PM insights ("This means your project will..." not raw numbers)
 - Include a "How to Read This" tab explaining what the output means
 - Error messages are friendly ("Try a different combination" not stack traces)
+- **No em dashes** - use regular dashes `-` instead of `&mdash;` or em dash characters
 
 ### Gradio Component Selection
 - **gr.Slider()** - For numeric ranges (cost, percentage, count)
