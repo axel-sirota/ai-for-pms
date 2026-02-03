@@ -15,4 +15,4 @@ short_description: 12-month TCO comparison for AI projects
 
 Get a recommendation with 12-month TCO comparison and risk analysis for your AI project.
 
-Part of the **AI for Product Managers** course by Data Trainers LLC.
+Part of the **AI for Product Managers** course.

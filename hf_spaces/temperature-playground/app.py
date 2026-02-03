@@ -193,7 +193,7 @@ with gr.Blocks(title="Temperature Playground", theme=gr.themes.Soft(primary_hue=
     run_btn.click(generate_responses, [prompt_dd, custom_prompt], [output])
     demo.load(generate_responses, [prompt_dd, custom_prompt], [output])
 
-    gr.Markdown("---\n*Part of the AI for Product Managers course by Data Trainers LLC*")
+    gr.Markdown("---\n*AI for Product Managers*")
 
 if __name__ == "__main__":
     demo.launch()

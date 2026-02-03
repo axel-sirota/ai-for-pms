@@ -13,4 +13,4 @@ pinned: false
 
 Interactive confusion matrix with business cost analysis. Adjust TP/FP/FN/TN and see how precision, recall, F1, and dollar costs change.
 
-Part of the **AI for Product Managers** course by Data Trainers LLC.
+Part of the **AI for Product Managers** course.

@@ -236,7 +236,7 @@ with gr.Blocks(title="Prompt Engineering Lab", theme=gr.themes.Soft(primary_hue=
         t4_btn.click(tab4_compare, [t4_dd], [t4_out])
         demo.load(tab4_compare, [t4_dd], [t4_out])
 
-    gr.Markdown("---\n*Part of the AI for Product Managers course by Data Trainers LLC*")
+    gr.Markdown("---\n*AI for Product Managers*")
 
 if __name__ == "__main__":
     demo.launch()

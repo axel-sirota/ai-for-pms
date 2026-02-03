@@ -29,7 +29,16 @@ See `.claude/commands/deploy.md` for full instructions.
 
 ## Project Overview
 
-This is a **3-day "AI for Product Managers" course** built by Data Trainers LLC. The course teaches PMs to lead AI initiatives confidently through interactive experiences, not lectures.
+This is an **"AI for Product Managers" course** that teaches PMs to lead AI initiatives confidently through interactive experiences, not lectures.
+
+### Brand Aesthetics
+
+**Always follow the brand guidelines in [AESTHETICS.md](AESTHETICS.md)**
+
+- Primary color: Teal `#40B8A6`
+- Secondary color: Navy `#1A3D4D`
+- No rounded corners (`border-radius: 0`)
+- Mermaid theme uses teal/navy palette
 
 ### Delivery Architecture
 | Component | Format | Purpose |

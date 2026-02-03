@@ -17,4 +17,4 @@ Send the same prompt to multiple models and compare quality, speed, and cost.
 
 Supports live API calls (when keys are configured) and pre-cached demo mode.
 
-Part of the **AI for Product Managers** course by Data Trainers LLC.
+Part of the **AI for Product Managers** course.

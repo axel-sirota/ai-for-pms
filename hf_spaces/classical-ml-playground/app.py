@@ -451,7 +451,7 @@ with gr.Blocks(title="Classical ML Playground", theme=gr.themes.Soft(primary_hue
     demo.load(get_columns, [dataset_dd, upload], [target_dd])
     demo.load(update_sliders, [dataset_dd, upload], sliders)
 
-    gr.Markdown("---\n*Part of the AI for Product Managers course by Data Trainers LLC*")
+    gr.Markdown("---\n*AI for Product Managers*")
 
 
 if __name__ == "__main__":

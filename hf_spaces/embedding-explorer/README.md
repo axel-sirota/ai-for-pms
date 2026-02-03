@@ -13,4 +13,4 @@ pinned: false
 
 Enter words and phrases, see them plotted in 2D meaning-space. Understand how embeddings power semantic search, RAG, and recommendations.
 
-Part of the **AI for Product Managers** course by Data Trainers LLC.
+Part of the **AI for Product Managers** course.

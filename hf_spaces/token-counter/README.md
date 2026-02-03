@@ -13,4 +13,4 @@ pinned: false
 
 Paste text, see exact token counts, and calculate API costs by model. Understand what every query costs at scale.
 
-Part of the **AI for Product Managers** course by Data Trainers LLC.
+Part of the **AI for Product Managers** course.

@@ -13,4 +13,4 @@ pinned: false
 
 Same task, two approaches. Compare Classical ML and LLMs on speed, cost, accuracy, and explainability.
 
-Part of the **AI for Product Managers** course by Data Trainers LLC.
+Part of the **AI for Product Managers** course.

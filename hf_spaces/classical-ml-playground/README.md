@@ -13,4 +13,4 @@ pinned: false
 
 Train a machine learning model on sample datasets — no code required. See predictions, metrics, and feature importance instantly.
 
-Part of the **AI for Product Managers** course by Data Trainers LLC.
+Part of the **AI for Product Managers** course.

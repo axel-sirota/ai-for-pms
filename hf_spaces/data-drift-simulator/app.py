@@ -184,7 +184,7 @@ with gr.Blocks(title="Data Drift Simulator", theme=gr.themes.Soft(primary_hue="b
     run_btn.click(simulate_drift, [drift_type, intensity, months], [chart, analysis])
     demo.load(simulate_drift, [drift_type, intensity, months], [chart, analysis])
 
-    gr.Markdown("---\n*Part of the AI for Product Managers course by Data Trainers LLC*")
+    gr.Markdown("---\n*AI for Product Managers*")
 
 
 if __name__ == "__main__":

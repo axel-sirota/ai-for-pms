@@ -141,7 +141,7 @@ with gr.Blocks(title="Prompt Injection Simulator", theme=gr.themes.Soft(primary_
         "1. Run each attack **without** defenses — see what breaks\n"
         "2. Toggle defenses **on** — see how each is mitigated\n"
         "3. Think: which attacks are most dangerous for *your* product?\n\n"
-        "*Part of the AI for Product Managers course by Data Trainers LLC*"
+        "*AI for Product Managers*"
     )
 
 if __name__ == "__main__":

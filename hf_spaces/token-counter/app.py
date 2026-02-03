@@ -150,7 +150,7 @@ with gr.Blocks(title="Token Counter & Cost Calculator", theme=gr.themes.Soft(pri
         [results, hidden]
     )
 
-    gr.Markdown("---\n*Part of the AI for Product Managers course by Data Trainers LLC*")
+    gr.Markdown("---\n*AI for Product Managers*")
 
 
 if __name__ == "__main__":

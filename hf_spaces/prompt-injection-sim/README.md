@@ -13,4 +13,4 @@ pinned: false
 
 Try to break a bank chatbot with 5 attack types. See which succeed and which defenses would stop them.
 
-Part of the **AI for Product Managers** course by Data Trainers LLC.
+Part of the **AI for Product Managers** course.

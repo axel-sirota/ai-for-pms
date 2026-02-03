@@ -13,4 +13,4 @@ pinned: false
 
 Same prompt, 5 temperatures. See how creativity and consistency change. Understand the tradeoff every PM needs to know.
 
-Part of the **AI for Product Managers** course by Data Trainers LLC.
+Part of the **AI for Product Managers** course.

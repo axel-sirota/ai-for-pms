@@ -13,4 +13,4 @@ pinned: false
 
 Watch a model's performance degrade as data drifts over time. Experiment with gradual, sudden, and seasonal drift.
 
-Part of the **AI for Product Managers** course by Data Trainers LLC.
+Part of the **AI for Product Managers** course.

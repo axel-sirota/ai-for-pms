@@ -1,5 +1,4 @@
-/* AI for Product Managers - Course JS
-   Data Trainers LLC - 2026 */
+/* AI for Product Managers - Course JS */
 
 // ===== Quiz Engine =====
 function initQuizzes() {

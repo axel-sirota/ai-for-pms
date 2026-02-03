@@ -201,7 +201,7 @@ with gr.Blocks(title="LLM vs ML Showdown", theme=gr.themes.Soft(primary_hue="blu
     task_dd.change(compare, [task_dd], [comparison_md, radar, verdict_md, scale_md])
     demo.load(compare, [task_dd], [comparison_md, radar, verdict_md, scale_md])
 
-    gr.Markdown("---\n*Part of the AI for Product Managers course by Data Trainers LLC*")
+    gr.Markdown("---\n*AI for Product Managers*")
 
 
 if __name__ == "__main__":

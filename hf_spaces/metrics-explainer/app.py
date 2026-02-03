@@ -171,7 +171,7 @@ with gr.Blocks(title="Metrics Explainer", theme=gr.themes.Soft(primary_hue="blue
     # Auto-calculate on load
     demo.load(calculate_metrics, inputs, outputs)
 
-    gr.Markdown("---\n*Part of the AI for Product Managers course by Data Trainers LLC*")
+    gr.Markdown("---\n*AI for Product Managers*")
 
 
 if __name__ == "__main__":
