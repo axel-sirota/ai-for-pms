@@ -1,1 +1,2 @@
-# No additional requirements - uses Gradio only
+gradio==4.44.1
+huggingface_hub==0.24.0

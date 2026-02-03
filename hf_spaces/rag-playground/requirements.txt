@@ -1,3 +1,5 @@
+gradio==4.44.1
+huggingface_hub==0.24.0
 sentence-transformers
 chromadb
 pypdf
