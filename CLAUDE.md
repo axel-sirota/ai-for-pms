@@ -4,7 +4,26 @@
 
 1. Run `/read` to load all context (GUIDELINES.md, initial_research/, sections/)
 2. Then run the appropriate skill for your task (see GUIDELINES.md for the full workflow)
-3. The build order per section is: `/phase-plan` → `/build-html-module` → `/build-gradio-app` → `/build-section` → `/validate-notebooks` → `/next-phase`
+3. The build order per section is: `/phase-plan` → `/build-html-module` → `/build-gradio-app` → `/build-section` → `/validate-notebooks` → **DEPLOY** → `/next-phase`
+
+## DEPLOYMENT (MANDATORY AFTER EACH SECTION)
+
+After building a section, deploy immediately:
+
+```bash
+# Deploy Gradio apps to HuggingFace Spaces
+.venv/bin/python3 scripts/deploy_hf_spaces.py <app-name>
+
+# Or deploy all
+.venv/bin/python3 scripts/deploy_hf_spaces.py
+```
+
+**Live URLs:**
+
+- Apps: `https://huggingface.co/spaces/axelsirota/<app-name>`
+- HTML: `https://axel-sirota.github.io/ai-for-pms/`
+
+See `.claude/commands/deploy.md` for full instructions.
 
 ---
 
