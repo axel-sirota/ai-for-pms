@@ -86,13 +86,13 @@
 
     <pre class="mermaid">
 flowchart TD
-    START["Someone says:\n'Let's add AI to this'"] --> Q1{"Can a simple\nrule solve it?"}
-    Q1 -->|Yes| RULE["Use rules.\nNo AI needed."]
-    Q1 -->|No| Q2{"Is it about PREDICTING\nfrom structured data?\n(rows & columns)"}
-    Q2 -->|Yes| Q3{"Do you have 1,000+\nlabeled examples?"}
+    START["Someone says:<br>'Let's add AI to this'"] --> Q1{"Can a simple<br>rule solve it?"}
+    Q1 -->|Yes| RULE["Use rules.<br>No AI needed."]
+    Q1 -->|No| Q2{"Is it about PREDICTING<br>from structured data?<br>(rows & columns)"}
+    Q2 -->|Yes| Q3{"Do you have 1,000+<br>labeled examples?"}
     Q3 -->|Yes| ML["Classical ML"]
-    Q3 -->|No| COLLECT["Collect data first\nor try LLM approach"]
-    Q2 -->|No| Q4{"Does it need to take\nMULTIPLE STEPS\nwith tool use?"}
+    Q3 -->|No| COLLECT["Collect data first<br>or try LLM approach"]
+    Q2 -->|No| Q4{"Does it need to take<br>MULTIPLE STEPS<br>with tool use?"}
     Q4 -->|Yes| AGENT["Agent"]
     Q4 -->|No| LLM["LLM"]
 

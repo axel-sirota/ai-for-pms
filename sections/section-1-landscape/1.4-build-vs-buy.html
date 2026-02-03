@@ -51,15 +51,15 @@
 
     <pre class="mermaid">
 flowchart TD
-    START["AI feature\nrequested"] --> Q1{"Can an existing\nAPI solve it?"}
-    Q1 -->|"Yes"| API["Use API\n(fastest, lowest risk)"]
-    Q1 -->|"Not quite"| Q2{"Is performance gap\n>20% vs needs?"}
+    START["AI feature<br>requested"] --> Q1{"Can an existing<br>API solve it?"}
+    Q1 -->|"Yes"| API["Use API<br>(fastest, lowest risk)"]
+    Q1 -->|"Not quite"| Q2{"Is performance gap<br>>20% vs needs?"}
     Q2 -->|"No, close enough"| API
-    Q2 -->|"Yes, significant gap"| Q3{"Do you have\n1000+ training examples?"}
-    Q3 -->|"No"| COLLECT["Collect data first\nwhile using API"]
-    Q3 -->|"Yes"| Q4{"Is this a core\ncompetitive advantage?"}
-    Q4 -->|"No"| FINETUNE["Fine-tune an\nexisting model"]
-    Q4 -->|"Yes"| BUILD["Build / Train\ncustom model"]
+    Q2 -->|"Yes, significant gap"| Q3{"Do you have<br>1000+ training examples?"}
+    Q3 -->|"No"| COLLECT["Collect data first<br>while using API"]
+    Q3 -->|"Yes"| Q4{"Is this a core<br>competitive advantage?"}
+    Q4 -->|"No"| FINETUNE["Fine-tune an<br>existing model"]
+    Q4 -->|"Yes"| BUILD["Build / Train<br>custom model"]
 
     style API fill:#dcfce7,stroke:#059669,color:#065f46
     style FINETUNE fill:#fef3c7,stroke:#d97706,color:#92400e

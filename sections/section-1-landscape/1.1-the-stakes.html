@@ -68,16 +68,16 @@
 
     <pre class="mermaid">
 flowchart TD
-    A["AI Project Starts"] --> B{"Clear business\nproblem?"}
-    B -->|No| FAIL1["FAIL: Solution looking\nfor a problem"]
-    B -->|Yes| C{"Right data\navailable?"}
-    C -->|No| FAIL2["FAIL: 43% cite\ndata quality issues"]
-    C -->|Yes| D{"Realistic\nexpectations?"}
-    D -->|No| FAIL3["FAIL: Demo ≠ Production\n(most common)"]
-    D -->|Yes| E{"Proper\nevaluation?"}
-    E -->|No| FAIL4["FAIL: Launched without\ntesting edge cases"]
-    E -->|Yes| F{"Stakeholder\nalignment?"}
-    F -->|No| FAIL5["FAIL: Pilot paralysis\n(can't move to prod)"]
+    A["AI Project Starts"] --> B{"Clear business<br>problem?"}
+    B -->|No| FAIL1["FAIL: Solution looking<br>for a problem"]
+    B -->|Yes| C{"Right data<br>available?"}
+    C -->|No| FAIL2["FAIL: 43% cite<br>data quality issues"]
+    C -->|Yes| D{"Realistic<br>expectations?"}
+    D -->|No| FAIL3["FAIL: Demo ≠ Production<br>(most common)"]
+    D -->|Yes| E{"Proper<br>evaluation?"}
+    E -->|No| FAIL4["FAIL: Launched without<br>testing edge cases"]
+    E -->|Yes| F{"Stakeholder<br>alignment?"}
+    F -->|No| FAIL5["FAIL: Pilot paralysis<br>(can't move to prod)"]
     F -->|Yes| SUCCESS["The 5% Club"]
 
     style FAIL1 fill:#fecaca,stroke:#dc2626,color:#991b1b

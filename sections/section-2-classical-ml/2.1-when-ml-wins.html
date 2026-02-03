@@ -66,15 +66,15 @@
 
     <pre class="mermaid">
 flowchart TD
-    Q1{"Is your data in\nrows & columns?"}
-    Q1 -->|"No, it's text/images"| NO1["Not Classical ML.\nConsider LLMs."]
-    Q1 -->|"Yes"| Q2{"Do you want to\nPREDICT something?"}
-    Q2 -->|"No"| NO2["Might not need ML.\nConsider rules or analytics."]
-    Q2 -->|"Yes"| Q3{"Do you have 1,000+\nlabeled examples?"}
-    Q3 -->|"No"| MAYBE["Collect data first,\nor try LLM with few-shot"]
-    Q3 -->|"Yes"| Q4{"Need to explain\ndecisions?"}
-    Q4 -->|"Yes"| ML1["Classical ML\n(tree-based models)"]
-    Q4 -->|"Not critical"| ML2["Classical ML\n(any algorithm)"]
+    Q1{"Is your data in<br>rows & columns?"}
+    Q1 -->|"No, it's text/images"| NO1["Not Classical ML.<br>Consider LLMs."]
+    Q1 -->|"Yes"| Q2{"Do you want to<br>PREDICT something?"}
+    Q2 -->|"No"| NO2["Might not need ML.<br>Consider rules or analytics."]
+    Q2 -->|"Yes"| Q3{"Do you have 1,000+<br>labeled examples?"}
+    Q3 -->|"No"| MAYBE["Collect data first,<br>or try LLM with few-shot"]
+    Q3 -->|"Yes"| Q4{"Need to explain<br>decisions?"}
+    Q4 -->|"Yes"| ML1["Classical ML<br>(tree-based models)"]
+    Q4 -->|"Not critical"| ML2["Classical ML<br>(any algorithm)"]
 
     style NO1 fill:#fef3c7,stroke:#d97706,color:#92400e
     style NO2 fill:#f3f4f6,stroke:#6b7280,color:#374151
