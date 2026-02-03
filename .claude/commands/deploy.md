@@ -55,6 +55,46 @@ Apps will be available at:
 - **Invalid colorTo**: Valid values: red, yellow, green, blue, indigo, purple, pink, gray
 - **Not logged in**: Run `huggingface-cli login`
 
+---
+
+## Corporate Firewall Bypass (IMPORTANT)
+
+**Problem:** Corporate firewalls (e.g., Intuit/Cisco Umbrella) block ALL `*.hf.space` domains.
+
+**Solution:** Run apps in Google Colab with `share=True` to get `*.gradio.live` URLs.
+
+### Quick Steps
+
+1. Open Google Colab
+2. Create notebook with 3 cells:
+   - Cell 1: `!pip install gradio [deps] -q`
+   - Cell 2: Paste app code from `hf_spaces/app-name/app.py`
+   - Cell 3: `demo.launch(share=True)`
+3. Run all cells - get `*.gradio.live` URL
+4. Share URL with students
+
+### Documentation
+
+- **Overview:** `plans/firewall-bypass-overview.md`
+- **Per-app migration:** `plans/migration/NN-app-name.md`
+
+### Trade-offs
+
+| HF Spaces | Colab + share=True |
+| --------- | ------------------ |
+| `*.hf.space` (blocked) | `*.gradio.live` (works) |
+| Persistent URL | 72-hour expiry |
+| Always running | Run each morning |
+
+### Workshop Morning Procedure
+
+1. Open each Colab notebook
+2. Run all cells (Ctrl+F9)
+3. Copy `gradio.live` URLs
+4. Share URL list with students
+
+---
+
 ## GitHub Pages (HTML)
 
 HTML is auto-deployed to GitHub Pages:

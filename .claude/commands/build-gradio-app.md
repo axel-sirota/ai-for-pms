@@ -140,11 +140,63 @@ if __name__ == "__main__":
 - Keep response times under 5 seconds for interactive elements
 - Use sample/mock data for demos that would otherwise need large models
 
-## File Location
+## File Locations
 
-Save to: `hf_spaces/app-name/` (all three files)
+**HF Space app:**
+Save to: `hf_spaces/app-name/` (README.md, app.py, requirements.txt)
+
+**Colab workshop notebook:**
+Save to: `notebooks/workshop-apps/NN-app-name.ipynb`
+
+Use sequential number (01, 02, 03...) based on existing files in `notebooks/workshop-apps/`.
+
+---
+
+## MANDATORY: Create Colab Workshop Notebook
+
+**Corporate firewalls block `*.hf.space`.** Create a Colab notebook that uses `share=True` to generate `*.gradio.live` URLs.
+
+### Notebook Structure (3 cells)
+
+**Cell 1: Install Dependencies**
+```python
+#@title Install Dependencies
+%%capture
+!pip install gradio [other-deps] -q
+```
+
+**Cell 2: App Code**
+```python
+#@title App Code (Run this cell)
+import gradio as gr
+# ... EXACT SAME CODE as hf_spaces/app-name/app.py ...
+# BUT change the launch line at the end
+```
+
+**Cell 3: Launch with Share**
+```python
+#@title Launch App (Copy the gradio.live URL)
+demo.launch(share=True)
+```
+
+### Key Differences from HF Space Version
+
+1. `demo.launch()` becomes `demo.launch(share=True)`
+2. All code in single notebook (not split into files)
+3. Cells use `#@title` to collapse in Colab
+
+### NotebookEdit Usage
+
+```python
+# Create notebook with 3 cells
+# Cell 0: Install (markdown type or code with %%capture)
+# Cell 1: App code (code type with #@title)
+# Cell 2: Launch (code type with #@title)
+```
 
 ## Checklist Before Complete
+
+**HF Space:**
 
 - [ ] README.md has correct HF Spaces metadata
 - [ ] app.py runs locally with `.venv/bin/python3 hf_spaces/app-name/app.py`
@@ -157,3 +209,11 @@ Save to: `hf_spaces/app-name/` (all three files)
 - [ ] Error handling with gr.Warning/gr.Info (no raw exceptions)
 - [ ] Layout uses Blocks with tabs/accordions appropriately
 - [ ] Added to requirements.txt in project root if new deps needed
+
+**Colab Workshop Notebook:**
+
+- [ ] Created at `notebooks/workshop-apps/NN-app-name.ipynb`
+- [ ] Cell 1: Install dependencies with `%%capture`
+- [ ] Cell 2: Full app code with `#@title`
+- [ ] Cell 3: `demo.launch(share=True)`
+- [ ] Runs in Colab and produces `*.gradio.live` URL

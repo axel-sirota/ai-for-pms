@@ -103,6 +103,22 @@ ai-for-pms-2026/
 - ~25-30 total apps across the course
 - Each app = a deployed HF Space students can access via URL
 
+### Corporate Firewall Bypass (IMPORTANT)
+
+**Problem:** Corporate firewalls (e.g., Intuit/Cisco Umbrella) block ALL `*.hf.space` domains.
+
+**Solution:** Run apps in Google Colab with `demo.launch(share=True)` to get `*.gradio.live` URLs (not blocked).
+
+**For every new app:**
+1. Build the app normally in `hf_spaces/app-name/`
+2. Create migration doc at `plans/migration/NN-app-name.md`
+3. See `plans/firewall-bypass-overview.md` for full details
+
+**Workshop day procedure:**
+1. Open Colab notebooks for each app
+2. Run all cells to get `*.gradio.live` URLs
+3. Share URL list with students (URLs expire after 72 hours)
+
 ### Notebook Standards
 - All code cells hidden with `@title` or collapsed
 - Students see only widgets (ipywidgets) and outputs (Plotly charts)
