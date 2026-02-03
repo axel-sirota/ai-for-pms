@@ -257,3 +257,4 @@ infrastructure/sagemaker/terraform/persistent/admin-studio-url.txt
 # IDE
 .vscode/
 .idea/
+TEACH_RUNBOOK.md
