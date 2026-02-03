@@ -258,3 +258,6 @@ infrastructure/sagemaker/terraform/persistent/admin-studio-url.txt
 .vscode/
 .idea/
 TEACH_RUNBOOK.md
+
+# Issues tracking (internal review, not for students)
+issues/

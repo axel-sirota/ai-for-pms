@@ -162,8 +162,11 @@ def simulate_drift(drift_type, intensity, months):
 
 with gr.Blocks(title="Data Drift Simulator", theme=gr.themes.Soft(primary_hue="blue")) as demo:
     gr.Markdown(
-        "# Data Drift Simulator\n"
-        "Watch a fraud detection model's performance degrade as data distribution changes.\n"
+        "# Data Drift Simulator\n\n"
+        "**PM Decision:** ML models degrade over time as real-world data changes. Use this "
+        "to understand why you must require monitoring in every ML project and budget for "
+        "retraining. A model that's 95% accurate at launch might drop to 70% in 6 months.\n\n"
+        "Watch a fraud detection model's performance degrade as data distribution changes. "
         "**ML models aren't like software — they don't stay accurate forever.**"
     )
 
@@ -184,7 +187,12 @@ with gr.Blocks(title="Data Drift Simulator", theme=gr.themes.Soft(primary_hue="b
     run_btn.click(simulate_drift, [drift_type, intensity, months], [chart, analysis])
     demo.load(simulate_drift, [drift_type, intensity, months], [chart, analysis])
 
-    gr.Markdown("---\n*AI for Product Managers*")
+    gr.Markdown(
+        "---\n"
+        "**PM Takeaway:** Always ask: 'What happens when the data changes? How will we know, "
+        "and how often will we retrain?' Budget for monitoring from day one.\n\n"
+        "*AI for Product Managers*"
+    )
 
 
 if __name__ == "__main__":

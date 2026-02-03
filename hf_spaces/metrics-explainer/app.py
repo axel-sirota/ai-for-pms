@@ -127,8 +127,11 @@ def calculate_metrics(tp, fp, fn, tn, fp_cost, fn_cost, tp_revenue):
 
 with gr.Blocks(title="Metrics Explainer", theme=gr.themes.Soft(primary_hue="blue")) as demo:
     gr.Markdown(
-        "# Metrics Explainer\n"
-        "Adjust the confusion matrix and costs to see how metrics and business impact change.\n"
+        "# Metrics Explainer\n\n"
+        "**PM Decision:** When your team reports 'accuracy is 95%,' ask: what's the cost "
+        "of the 5% errors? This tool helps you translate technical metrics into dollar "
+        "amounts stakeholders understand. Use it to decide whether to optimize for precision or recall.\n\n"
+        "Adjust the confusion matrix and costs to see how metrics and business impact change. "
         "**Every metric is a business decision.**"
     )
 
@@ -171,7 +174,12 @@ with gr.Blocks(title="Metrics Explainer", theme=gr.themes.Soft(primary_hue="blue
     # Auto-calculate on load
     demo.load(calculate_metrics, inputs, outputs)
 
-    gr.Markdown("---\n*AI for Product Managers*")
+    gr.Markdown(
+        "---\n"
+        "**PM Takeaway:** Always ask: what does a false positive cost vs a false negative? "
+        "The answer determines which metric to optimize and how to set the threshold.\n\n"
+        "*AI for Product Managers*"
+    )
 
 
 if __name__ == "__main__":

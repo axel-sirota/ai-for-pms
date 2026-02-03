@@ -349,9 +349,12 @@ def predict_what_if(dataset_name, uploaded_file, model_choice, *feature_values):
 
 with gr.Blocks(title="Classical ML Playground", theme=gr.themes.Soft(primary_hue="blue")) as demo:
     gr.Markdown(
-        "# Classical ML Playground\n"
-        "Train a machine learning model on real-world datasets — no code required.\n"
-        "See predictions, metrics, and **which features matter most**."
+        "# Classical ML Playground\n\n"
+        "**PM Decision:** When your team proposes an ML project, use this tool to understand "
+        "what they're actually building. You'll see how models learn from data, which features "
+        "drive predictions, and what the accuracy numbers really mean.\n\n"
+        "Train a model on real-world datasets — no code required. See predictions, metrics, "
+        "and **which features matter most**."
     )
 
     state_json = gr.State("")
@@ -451,7 +454,12 @@ with gr.Blocks(title="Classical ML Playground", theme=gr.themes.Soft(primary_hue
     demo.load(get_columns, [dataset_dd, upload], [target_dd])
     demo.load(update_sliders, [dataset_dd, upload], sliders)
 
-    gr.Markdown("---\n*AI for Product Managers*")
+    gr.Markdown(
+        "---\n"
+        "**PM Takeaway:** Feature importance shows what drives predictions — ask your team "
+        "which features have the biggest impact and whether they make business sense.\n\n"
+        "*AI for Product Managers*"
+    )
 
 
 if __name__ == "__main__":

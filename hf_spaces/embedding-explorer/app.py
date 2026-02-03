@@ -145,8 +145,11 @@ def explore_embeddings(w1, w2, w3, w4, w5, w6, w7, w8):
 
 with gr.Blocks(title="Embedding Explorer", theme=gr.themes.Soft(primary_hue="blue")) as demo:
     gr.Markdown(
-        "# Embedding Explorer\n"
-        "Enter words and phrases to see how AI understands meaning.\n"
+        "# Embedding Explorer\n\n"
+        "**PM Decision:** This is the foundation of semantic search and RAG. When your team "
+        "proposes a 'smart search' or 'knowledge base' feature, they're using embeddings. "
+        "Understanding this helps you evaluate RAG proposals and set realistic expectations.\n\n"
+        "Enter words and phrases to see how AI understands meaning. "
         "**Similar meanings cluster together. Different meanings stay apart.**"
     )
 
@@ -171,7 +174,13 @@ with gr.Blocks(title="Embedding Explorer", theme=gr.themes.Soft(primary_hue="blu
     run_btn.click(explore_embeddings, [w1, w2, w3, w4, w5, w6, w7, w8], [scatter, heatmap, analysis])
     demo.load(explore_embeddings, [w1, w2, w3, w4, w5, w6, w7, w8], [scatter, heatmap, analysis])
 
-    gr.Markdown("---\n*AI for Product Managers*")
+    gr.Markdown(
+        "---\n"
+        "**PM Takeaway:** Words that cluster together will be retrieved together in search. "
+        "If your domain has jargon with different meanings than everyday usage, RAG might "
+        "retrieve the wrong content.\n\n"
+        "*AI for Product Managers*"
+    )
 
 if __name__ == "__main__":
     demo.launch()
