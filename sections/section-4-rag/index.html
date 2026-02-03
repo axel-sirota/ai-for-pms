@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Section 4: RAG - AI for Product Managers</title>
+  <link rel="stylesheet" href="../../shared/css/course.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="course-container">
+
+    <header class="course-header">
+      <span class="section-label">Section 4 - RAG</span>
+      <h1>Building Knowledge-Grounded AI</h1>
+      <p class="subtitle">How to make AI answer from YOUR documents - not hallucinate from its training data.</p>
+    </header>
+
+    <div class="callout callout-insight">
+      <div class="callout-title">Coming From Section 3</div>
+      <p>You've mastered LLM fundamentals - tokens, temperature, prompts. But what happens when you need the LLM to answer questions about YOUR company's data? That's RAG - Retrieval-Augmented Generation - the pattern that grounds AI in your knowledge base.</p>
+    </div>
+
+    <div class="callout callout-decision">
+      <div class="callout-title">What You'll Learn</div>
+      <ul>
+        <li>Understand when RAG beats fine-tuning (and when it doesn't)</li>
+        <li>Configure chunking strategies for your document types</li>
+        <li>Recognize RAG failure modes before they hit production</li>
+        <li>Estimate vector database costs at scale</li>
+        <li>Design production RAG architecture your team can build</li>
+      </ul>
+    </div>
+
+    <h2>Section Modules</h2>
+
+    <div class="card-grid">
+      <a href="4.1-what-is-rag.html" class="card card-link">
+        <h3>4.1 What Is RAG?</h3>
+        <p>The RAG pipeline explained: retrieval, augmentation, generation. Why it solves hallucination - and creates new problems.</p>
+      </a>
+      <a href="4.2-rag-vs-alternatives.html" class="card card-link">
+        <h3>4.2 RAG vs Alternatives</h3>
+        <p>RAG vs fine-tuning vs long context: the PM decision tree for grounding AI in company knowledge.</p>
+      </a>
+      <a href="4.3-chunking-strategies.html" class="card card-link">
+        <h3>4.3 Chunking Strategies</h3>
+        <p>How document splitting affects retrieval quality. Fixed-size, sentence-based, semantic chunking explained.</p>
+      </a>
+      <a href="4.4-failure-modes.html" class="card card-link">
+        <h3>4.4 RAG Failure Modes</h3>
+        <p>The 5 ways RAG goes wrong: bad chunking, wrong retrieval, hallucination despite context, outdated info, missing info.</p>
+      </a>
+      <a href="4.5-building-production-rag.html" class="card card-link">
+        <h3>4.5 Production RAG</h3>
+        <p>Architecture patterns, cost considerations, and the questions to ask your engineering team.</p>
+      </a>
+    </div>
+
+    <h2>Interactive Tools</h2>
+
+    <div class="card-grid">
+      <div class="card">
+        <h3>RAG Playground</h3>
+        <p>Upload YOUR documents, ask questions, see RAG retrieve and generate answers in real-time.</p>
+        <a class="hf-space-link" href="https://huggingface.co/spaces/axelsirota/rag-playground" target="_blank">Launch RAG Playground</a>
+      </div>
+      <div class="card">
+        <h3>RAG Failure Simulator</h3>
+        <p>Experience the 5 failure modes firsthand. See what bad chunking and wrong retrieval look like.</p>
+        <a class="hf-space-link" href="https://huggingface.co/spaces/axelsirota/rag-failure-simulator" target="_blank">Launch Failure Simulator</a>
+      </div>
+      <div class="card">
+        <h3>Chunking Visualizer</h3>
+        <p>See how different chunking strategies split your documents. Spot problems before they hit production.</p>
+        <a class="hf-space-link" href="https://huggingface.co/spaces/axelsirota/chunking-visualizer" target="_blank">Launch Chunking Visualizer</a>
+      </div>
+      <div class="card">
+        <h3>RAG vs Fine-tuning</h3>
+        <p>Compare approaches side-by-side. See which wins for your use case.</p>
+        <a class="hf-space-link" href="https://huggingface.co/spaces/axelsirota/rag-vs-finetuning" target="_blank">Launch Comparison Tool</a>
+      </div>
+      <div class="card">
+        <h3>Vector DB Cost Calculator</h3>
+        <p>Estimate storage, query, and LLM costs at scale. Plan your RAG budget.</p>
+        <a class="hf-space-link" href="https://huggingface.co/spaces/axelsirota/vector-db-cost-calculator" target="_blank">Launch Cost Calculator</a>
+      </div>
+    </div>
+
+    <div class="callout callout-decision">
+      <div class="callout-title">Up Next: Agents</div>
+      <p>RAG retrieves knowledge. But what if you need AI to TAKE ACTIONS - send emails, update databases, make purchases? Section 5 covers AI Agents and intelligent automation.</p>
+    </div>
+
+    <nav class="module-nav">
+      <a href="../section-3-llms/index.html">&larr; Section 3: LLMs</a>
+      <a href="4.1-what-is-rag.html">Start Section 4 &rarr;</a>
+    </nav>
+
+  </div>
+
+  <script src="../../shared/js/course.js"></script>
+</body>
+</html>

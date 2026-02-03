@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>4.1 What Is RAG? - AI for Product Managers</title>
+  <link rel="stylesheet" href="../../shared/css/course.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="course-container">
+
+    <header class="course-header">
+      <span class="section-label">Section 4 - RAG</span>
+      <h1>What Is RAG?</h1>
+      <p class="subtitle">Retrieval-Augmented Generation: grounding AI in your documents instead of its imagination.</p>
+    </header>
+
+    <div class="callout callout-failure">
+      <div class="callout-title">Failure Story: The Lawyer's $5,000 Mistake</div>
+      <p>In 2023, attorneys at a New York law firm used ChatGPT to research case precedents. They submitted a court brief citing <strong>6 cases that didn't exist</strong> - the LLM hallucinated them completely, with fake case names, fake citations, and fake rulings.</p>
+      <p>The judge was not amused. The lawyers were <strong>fined $5,000 and publicly sanctioned</strong>.</p>
+      <p><strong>Lesson:</strong> An LLM without grounding in real documents will confidently make up facts. RAG solves this - but only if implemented correctly.</p>
+    </div>
+
+    <div class="callout callout-decision">
+      <div class="callout-title">PM Decision Point</div>
+      <p>When your team proposes an LLM feature that needs to answer questions about company data, you have three options:</p>
+      <ul>
+        <li><strong>Hope the LLM knows it</strong> - It doesn't. Or worse, it thinks it does.</li>
+        <li><strong>Fine-tune the model</strong> - Expensive, slow, can't update easily.</li>
+        <li><strong>Use RAG</strong> - Retrieve real docs, feed to LLM, get grounded answers.</li>
+      </ul>
+      <p>RAG is usually the right answer. Here's why.</p>
+    </div>
+
+    <h2>The RAG Pipeline</h2>
+
+    <pre class="mermaid">
+flowchart LR
+    Q["User Question"] --> E["Embed Query"]
+    E --> S["Search Vector DB"]
+    S --> R["Retrieve Top Chunks"]
+    R --> A["Augment Prompt<br/>with Retrieved Context"]
+    A --> G["Generate Answer"]
+    G --> O["Grounded Response<br/>with Citations"]
+
+    style Q fill:#dbeafe,stroke:#1e40af
+    style E fill:#E6F7F5,stroke:#40B8A6
+    style S fill:#E6F7F5,stroke:#40B8A6
+    style R fill:#E6F7F5,stroke:#40B8A6
+    style A fill:#fef3c7,stroke:#d97706
+    style G fill:#fef3c7,stroke:#d97706
+    style O fill:#d1fae5,stroke:#059669
+    </pre>
+
+    <h2>RAG in Plain English</h2>
+
+    <div class="card-grid">
+      <div class="card">
+        <h3>1. Retrieval</h3>
+        <p>When a user asks a question, find the most relevant chunks from your document corpus. This uses embeddings (from Section 3) to match by meaning, not keywords.</p>
+      </div>
+      <div class="card">
+        <h3>2. Augmentation</h3>
+        <p>Take those retrieved chunks and add them to the prompt: "Here's context from our docs. Now answer the user's question based on this."</p>
+      </div>
+      <div class="card">
+        <h3>3. Generation</h3>
+        <p>The LLM generates an answer grounded in the retrieved context. It can cite sources: "According to the Return Policy document..."</p>
+      </div>
+    </div>
+
+    <h2>Why RAG Works</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Problem</th>
+          <th>Without RAG</th>
+          <th>With RAG</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Hallucination</strong></td>
+          <td>LLM invents facts from training data</td>
+          <td>LLM answers from retrieved docs</td>
+        </tr>
+        <tr>
+          <td><strong>Outdated info</strong></td>
+          <td>Training data is months/years old</td>
+          <td>Docs can be updated anytime</td>
+        </tr>
+        <tr>
+          <td><strong>Company-specific</strong></td>
+          <td>LLM doesn't know your policies</td>
+          <td>Your docs are the source of truth</td>
+        </tr>
+        <tr>
+          <td><strong>Citations</strong></td>
+          <td>Can't prove where answer came from</td>
+          <td>Can cite exact source documents</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>The Catch: RAG Creates New Problems</h2>
+
+    <div class="callout callout-insight">
+      <div class="callout-title">RAG Isn't Magic</div>
+      <p>RAG solves hallucination but introduces new failure modes:</p>
+      <ul>
+        <li><strong>Bad chunking</strong> - Important info split across chunks</li>
+        <li><strong>Wrong retrieval</strong> - Similar words, wrong context</li>
+        <li><strong>Ignored context</strong> - Model hallucinates despite having the right docs</li>
+        <li><strong>Missing info</strong> - Question not covered in your docs</li>
+      </ul>
+      <p>We'll cover each of these in Module 4.4.</p>
+    </div>
+
+    <h2>Try It: RAG Playground</h2>
+    <p>Upload your own documents, ask questions, see RAG retrieve and generate in real-time.</p>
+    <div class="hf-space-embed">
+      <a class="hf-space-link" href="https://huggingface.co/spaces/axelsirota/rag-playground" target="_blank">
+        Launch RAG Playground
+      </a>
+    </div>
+
+    <div class="quiz">
+      <h3>Quick Check</h3>
+      <p>A customer asks your support chatbot: "What's your refund policy?" The chatbot confidently says "Full refunds within 90 days" - but your actual policy is 30 days. What likely happened?</p>
+      <button class="quiz-option" data-correct="false" data-feedback-incorrect="If RAG retrieved the correct chunk, the answer would match your docs. The problem is likely retrieval or hallucination despite context.">
+        <strong>A.</strong> RAG retrieved the correct chunk but the LLM summarized it wrong
+      </button>
+      <button class="quiz-option" data-correct="true" data-feedback-correct="Correct! Without RAG, or if RAG failed to retrieve the right doc, the LLM falls back to its training data - which may have outdated or generic info about refund policies. This is exactly why RAG matters.">
+        <strong>B.</strong> The LLM used its training data instead of your actual policy document
+      </button>
+      <button class="quiz-option" data-correct="false" data-feedback-incorrect="The customer asked a clear question. The issue is the source of the answer, not the question interpretation.">
+        <strong>C.</strong> The customer's question was ambiguous
+      </button>
+      <div class="quiz-feedback"></div>
+    </div>
+
+    <div class="stakeholder-frame">
+      <h3>Stakeholder Framing</h3>
+      <p>When your CEO asks <em>"Why can't the AI just know our policies?"</em>:</p>
+      <blockquote>
+        "The AI was trained on internet data - it doesn't have our specific policies. That's like hiring someone who read every Wikipedia article but never saw our employee handbook. RAG is how we give the AI access to our actual documents, so it answers from our source of truth instead of guessing."
+      </blockquote>
+    </div>
+
+    <nav class="module-nav">
+      <a href="index.html">&larr; Section Overview</a>
+      <a href="4.2-rag-vs-alternatives.html">Next: RAG vs Alternatives &rarr;</a>
+    </nav>
+
+  </div>
+
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({ startOnLoad: true, theme: 'base', themeVariables: { primaryColor: '#E6F7F5', primaryTextColor: '#1A3D4D', primaryBorderColor: '#40B8A6', lineColor: '#4B5563', secondaryColor: '#D4F0EC', tertiaryColor: '#F9FAFB' }});
+  </script>
+  <script src="../../shared/js/course.js"></script>
+</body>
+</html>

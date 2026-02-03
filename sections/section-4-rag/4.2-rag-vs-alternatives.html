@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>4.2 RAG vs Alternatives - AI for Product Managers</title>
+  <link rel="stylesheet" href="../../shared/css/course.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="course-container">
+
+    <header class="course-header">
+      <span class="section-label">Section 4 - RAG</span>
+      <h1>RAG vs Alternatives</h1>
+      <p class="subtitle">RAG, fine-tuning, or long context? The PM decision tree for grounding AI in company knowledge.</p>
+    </header>
+
+    <div class="callout callout-failure">
+      <div class="callout-title">Failure Story: The $200K Fine-Tuning Mistake</div>
+      <p>A fintech startup spent <strong>3 months and $200K</strong> fine-tuning GPT-3.5 on their customer support data. The result was 2% better than a well-crafted system prompt that took one engineer a week.</p>
+      <p>Worse: when their policies changed, the fine-tuned model kept giving outdated answers. They had to retrain - another $50K and 3 weeks.</p>
+      <p><strong>Lesson:</strong> Fine-tuning is a last resort, not a first instinct. RAG handles updates without retraining.</p>
+    </div>
+
+    <div class="callout callout-decision">
+      <div class="callout-title">PM Decision Point</div>
+      <p>Your engineering team proposes grounding the AI in company knowledge. You need to choose:</p>
+      <ul>
+        <li><strong>RAG</strong> - Retrieve docs at query time</li>
+        <li><strong>Fine-tuning</strong> - Retrain the model on your data</li>
+        <li><strong>Long Context</strong> - Stuff all docs in the prompt</li>
+      </ul>
+      <p>The right choice depends on update frequency, corpus size, and citation needs.</p>
+    </div>
+
+    <h2>The Three Approaches</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Approach</th>
+          <th>How It Works</th>
+          <th>Best For</th>
+          <th>Watch Out</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>RAG</strong></td>
+          <td>Retrieve relevant docs at query time, add to prompt</td>
+          <td>Frequently changing info, need citations, large corpus</td>
+          <td>Chunking complexity, retrieval quality</td>
+        </tr>
+        <tr>
+          <td><strong>Fine-tuning</strong></td>
+          <td>Retrain model weights on your data</td>
+          <td>Stable domain knowledge, specific style, high volume</td>
+          <td>Expensive, slow updates, can't cite sources</td>
+        </tr>
+        <tr>
+          <td><strong>Long Context</strong></td>
+          <td>Put all docs directly in prompt</td>
+          <td>Small corpus (&lt;100K tokens), simple use cases</td>
+          <td>Cost scales with corpus, can't scale</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>The PM Decision Tree</h2>
+
+    <pre class="mermaid">
+flowchart TD
+    A["Need to ground AI<br/>in company docs?"] --> B{"How often do<br/>docs change?"}
+    B -->|"Weekly+"| C["RAG"]
+    B -->|"Rarely"| D{"Need to cite<br/>sources?"}
+    D -->|"Yes"| C
+    D -->|"No"| E{"Corpus size?"}
+    E -->|"<100K tokens"| F["Long Context"]
+    E -->|"Large"| G{"Have 1000+<br/>training examples?"}
+    G -->|"Yes"| H["Consider Fine-tuning"]
+    G -->|"No"| C
+
+    style A fill:#dbeafe,stroke:#1e40af
+    style C fill:#d1fae5,stroke:#059669
+    style F fill:#fef3c7,stroke:#d97706
+    style H fill:#fee2e2,stroke:#dc2626
+    </pre>
+
+    <h2>Real-World Examples</h2>
+
+    <div class="card-grid">
+      <div class="card">
+        <h3>Customer Support Bot</h3>
+        <p><strong>Best: RAG</strong></p>
+        <p>10,000 support articles that update weekly. Customers need accurate answers with links to source articles.</p>
+        <p style="color:var(--text-light); font-size:0.85rem;"><em>Why not fine-tuning? Would need constant retraining. Can't provide citations.</em></p>
+      </div>
+      <div class="card">
+        <h3>Medical Note Summarizer</h3>
+        <p><strong>Best: Fine-tuning</strong></p>
+        <p>Consistent format, domain-specific terminology, 50,000 notes/day. Format must be identical every time.</p>
+        <p style="color:var(--text-light); font-size:0.85rem;"><em>Why not RAG? No need to retrieve - just transform. Style consistency matters more than citations.</em></p>
+      </div>
+      <div class="card">
+        <h3>Internal HR Chatbot</h3>
+        <p><strong>Best: Long Context</strong></p>
+        <p>15 HR policy documents (~50 pages total). Policies change quarterly.</p>
+        <p style="color:var(--text-light); font-size:0.85rem;"><em>Why not RAG? Corpus is small enough to fit in context. RAG adds unnecessary complexity.</em></p>
+      </div>
+      <div class="card">
+        <h3>Legal Contract Analyzer</h3>
+        <p><strong>Best: RAG</strong></p>
+        <p>500+ contracts, 1000+ case summaries. Must cite specific clauses and precedents.</p>
+        <p style="color:var(--text-light); font-size:0.85rem;"><em>Why not fine-tuning? Need citations for legal compliance. Corpus too large for context.</em></p>
+      </div>
+    </div>
+
+    <h2>Cost Comparison</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Factor</th>
+          <th>RAG</th>
+          <th>Fine-tuning</th>
+          <th>Long Context</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Setup cost</strong></td>
+          <td>$1K-$10K (vector DB, embeddings)</td>
+          <td>$10K-$200K (training)</td>
+          <td>$0</td>
+        </tr>
+        <tr>
+          <td><strong>Per-query cost</strong></td>
+          <td>Embedding + retrieval + LLM</td>
+          <td>Just LLM</td>
+          <td>High (long prompts)</td>
+        </tr>
+        <tr>
+          <td><strong>Update cost</strong></td>
+          <td>Re-embed changed docs ($)</td>
+          <td>Retrain model ($$$)</td>
+          <td>Update prompt ($)</td>
+        </tr>
+        <tr>
+          <td><strong>Time to update</strong></td>
+          <td>Minutes</td>
+          <td>Days-weeks</td>
+          <td>Immediate</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Try It: RAG vs Fine-tuning Comparison</h2>
+    <p>Compare the approaches side-by-side for different use cases.</p>
+    <div class="hf-space-embed">
+      <a class="hf-space-link" href="https://huggingface.co/spaces/axelsirota/rag-vs-finetuning" target="_blank">
+        Launch Comparison Tool
+      </a>
+    </div>
+
+    <div class="quiz">
+      <h3>Quick Check</h3>
+      <p>Your team wants to build an AI assistant that answers questions about your product documentation. The docs are 500 pages and update monthly. What approach do you recommend?</p>
+      <button class="quiz-option" data-correct="true" data-feedback-correct="Correct! RAG is ideal: large corpus (500 pages won't fit in context), monthly updates (fine-tuning would need constant retraining), and you likely want to cite source docs for accuracy.">
+        <strong>A.</strong> RAG - retrieve relevant docs at query time
+      </button>
+      <button class="quiz-option" data-correct="false" data-feedback-incorrect="Fine-tuning is expensive and slow to update. Monthly doc changes would require monthly retraining. Plus you can't cite sources with fine-tuning.">
+        <strong>B.</strong> Fine-tuning - train the model on your docs
+      </button>
+      <button class="quiz-option" data-correct="false" data-feedback-incorrect="500 pages is roughly 200K+ tokens - too large for most context windows, and per-query costs would be extremely high.">
+        <strong>C.</strong> Long context - put all docs in the prompt
+      </button>
+      <div class="quiz-feedback"></div>
+    </div>
+
+    <div class="stakeholder-frame">
+      <h3>Stakeholder Framing</h3>
+      <p>When engineering says <em>"We should fine-tune the model for better results"</em>:</p>
+      <blockquote>
+        "Before we invest in fine-tuning, let's validate the requirements. Fine-tuning costs $50K-$200K and takes weeks, plus we'd need to retrain whenever our docs change. RAG costs $1K-$10K, updates in minutes, and gives us citations. Unless we have a specific style or format requirement that RAG can't handle, RAG is the safer bet."
+      </blockquote>
+    </div>
+
+    <nav class="module-nav">
+      <a href="4.1-what-is-rag.html">&larr; What Is RAG?</a>
+      <a href="4.3-chunking-strategies.html">Next: Chunking Strategies &rarr;</a>
+    </nav>
+
+  </div>
+
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({ startOnLoad: true, theme: 'base', themeVariables: { primaryColor: '#E6F7F5', primaryTextColor: '#1A3D4D', primaryBorderColor: '#40B8A6', lineColor: '#4B5563', secondaryColor: '#D4F0EC', tertiaryColor: '#F9FAFB' }});
+  </script>
+  <script src="../../shared/js/course.js"></script>
+</body>
+</html>

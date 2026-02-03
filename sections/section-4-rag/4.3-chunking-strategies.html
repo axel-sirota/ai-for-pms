@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>4.3 Chunking Strategies - AI for Product Managers</title>
+  <link rel="stylesheet" href="../../shared/css/course.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="course-container">
+
+    <header class="course-header">
+      <span class="section-label">Section 4 - RAG</span>
+      <h1>Chunking Strategies</h1>
+      <p class="subtitle">How you split documents determines whether RAG finds the right information.</p>
+    </header>
+
+    <div class="callout callout-failure">
+      <div class="callout-title">Failure Story: The Price Quote Problem</div>
+      <p>A customer service RAG system kept giving wrong prices. Investigation revealed the problem: the pricing document said <em>"The Pro plan costs $99 per month, which includes unlimited users and priority support."</em></p>
+      <p>But the chunking split it as: Chunk 1: <em>"...The Pro plan costs $99 per"</em> - Chunk 2: <em>"month, which includes unlimited..."</em></p>
+      <p>The retrieval found Chunk 1 but missed the crucial "per month" - sometimes returning <strong>$99 per year</strong> based on the model's interpolation.</p>
+      <p><strong>Lesson:</strong> Bad chunking = bad answers. Always test chunking with real queries before launch.</p>
+    </div>
+
+    <div class="callout callout-decision">
+      <div class="callout-title">PM Decision Point</div>
+      <p>Your engineering team will ask: "What chunk size should we use?" The answer depends on:</p>
+      <ul>
+        <li><strong>Document type</strong> - FAQs chunk differently than legal contracts</li>
+        <li><strong>Query type</strong> - Fact lookups need small chunks; analysis needs large</li>
+        <li><strong>Cost tolerance</strong> - More chunks = more storage and compute</li>
+      </ul>
+    </div>
+
+    <h2>What Is Chunking?</h2>
+
+    <p><strong>Chunking</strong> splits your documents into smaller pieces that can be embedded and retrieved individually. It's necessary because:</p>
+    <ul>
+      <li>Embedding models have token limits (usually 512-8192 tokens)</li>
+      <li>Smaller chunks enable more precise retrieval</li>
+      <li>You only want to send relevant context to the LLM, not entire documents</li>
+    </ul>
+
+    <h2>Chunking Strategies</h2>
+
+    <div class="card-grid">
+      <div class="card">
+        <h3>Fixed-Size Chunking</h3>
+        <p><strong>How:</strong> Split every N characters or tokens, regardless of content.</p>
+        <p><strong>Pros:</strong> Simple, predictable chunk sizes</p>
+        <p><strong>Cons:</strong> Splits mid-sentence, loses context</p>
+        <p style="color:var(--text-light); font-size:0.85rem;"><em>Use when: You need simplicity and your docs are homogeneous.</em></p>
+      </div>
+      <div class="card">
+        <h3>Sentence-Based</h3>
+        <p><strong>How:</strong> Split on sentence boundaries, group N sentences per chunk.</p>
+        <p><strong>Pros:</strong> Preserves complete thoughts</p>
+        <p><strong>Cons:</strong> Variable chunk sizes</p>
+        <p style="color:var(--text-light); font-size:0.85rem;"><em>Use when: Your docs have clear sentence structure (FAQs, articles).</em></p>
+      </div>
+      <div class="card">
+        <h3>Paragraph-Based</h3>
+        <p><strong>How:</strong> Split on paragraph breaks.</p>
+        <p><strong>Pros:</strong> Preserves topical units</p>
+        <p><strong>Cons:</strong> Paragraphs vary wildly in size</p>
+        <p style="color:var(--text-light); font-size:0.85rem;"><em>Use when: Your docs are well-structured with clear paragraphs.</em></p>
+      </div>
+      <div class="card">
+        <h3>Semantic Chunking</h3>
+        <p><strong>How:</strong> Use embeddings to detect topic shifts, split at boundaries.</p>
+        <p><strong>Pros:</strong> Best retrieval quality</p>
+        <p><strong>Cons:</strong> More complex, slower indexing</p>
+        <p style="color:var(--text-light); font-size:0.85rem;"><em>Use when: Quality matters more than indexing speed.</em></p>
+      </div>
+    </div>
+
+    <h2>The Overlap Parameter</h2>
+
+    <pre class="mermaid">
+flowchart LR
+    subgraph "No Overlap"
+        A1["Chunk 1: 'Our return policy allows...'"]
+        A2["Chunk 2: '...30 days of purchase.'"]
+    end
+
+    subgraph "20% Overlap"
+        B1["Chunk 1: 'Our return policy allows returns within...'"]
+        B2["Chunk 2: '...allows returns within 30 days of purchase.'"]
+    end
+
+    style A1 fill:#fee2e2,stroke:#dc2626
+    style A2 fill:#fee2e2,stroke:#dc2626
+    style B1 fill:#d1fae5,stroke:#059669
+    style B2 fill:#d1fae5,stroke:#059669
+    </pre>
+
+    <p><strong>Overlap</strong> means chunks share some content at boundaries. This helps when important information spans chunk boundaries.</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Overlap %</th>
+          <th>Effect</th>
+          <th>Trade-off</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>0%</strong></td>
+          <td>No redundancy</td>
+          <td>Risk losing context at boundaries</td>
+        </tr>
+        <tr>
+          <td><strong>10-20%</strong></td>
+          <td>Good balance</td>
+          <td>Recommended default</td>
+        </tr>
+        <tr>
+          <td><strong>50%+</strong></td>
+          <td>High redundancy</td>
+          <td>Storage bloat, duplicate retrieval</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Chunk Size Guidelines</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Document Type</th>
+          <th>Recommended Chunk Size</th>
+          <th>Why</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>FAQs</td>
+          <td>1 Q&A pair per chunk</td>
+          <td>Each Q&A is a complete unit</td>
+        </tr>
+        <tr>
+          <td>Product docs</td>
+          <td>200-500 tokens</td>
+          <td>Balance between specificity and context</td>
+        </tr>
+        <tr>
+          <td>Legal contracts</td>
+          <td>Clause-based</td>
+          <td>Each clause is a logical unit</td>
+        </tr>
+        <tr>
+          <td>Support tickets</td>
+          <td>Entire ticket</td>
+          <td>Context from full conversation matters</td>
+        </tr>
+        <tr>
+          <td>Research papers</td>
+          <td>Section-based</td>
+          <td>Preserve argument structure</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Try It: Chunking Visualizer</h2>
+    <p>Upload a document, try different chunking strategies, see where chunks split and overlap.</p>
+    <div class="hf-space-embed">
+      <a class="hf-space-link" href="https://huggingface.co/spaces/axelsirota/chunking-visualizer" target="_blank">
+        Launch Chunking Visualizer
+      </a>
+    </div>
+
+    <div class="quiz">
+      <h3>Quick Check</h3>
+      <p>Your FAQ document has 200 Q&A pairs. Each answer is 50-200 words. What's the best chunking strategy?</p>
+      <button class="quiz-option" data-correct="false" data-feedback-incorrect="Fixed-size would split Q&A pairs mid-sentence. A question in one chunk, its answer in another - retrieval would fail.">
+        <strong>A.</strong> Fixed-size chunks of 500 tokens
+      </button>
+      <button class="quiz-option" data-correct="true" data-feedback-correct="Correct! Each Q&A pair is a natural semantic unit. Keep them together. When someone asks a similar question, you retrieve the complete answer.">
+        <strong>B.</strong> One Q&A pair per chunk
+      </button>
+      <button class="quiz-option" data-correct="false" data-feedback-incorrect="One sentence per chunk would split the answer across multiple chunks. You'd retrieve partial answers.">
+        <strong>C.</strong> Sentence-based, one sentence per chunk
+      </button>
+      <div class="quiz-feedback"></div>
+    </div>
+
+    <div class="stakeholder-frame">
+      <h3>Stakeholder Framing</h3>
+      <p>When engineering says <em>"We'll use 500-token chunks"</em>:</p>
+      <blockquote>
+        "How did we arrive at 500 tokens? Did we test it against real user queries? Our FAQ answers average 150 words - are we keeping each Q&A together or splitting them? Let's run a quick test with 20 real questions and see if the chunks we retrieve actually contain the answers we need."
+      </blockquote>
+    </div>
+
+    <nav class="module-nav">
+      <a href="4.2-rag-vs-alternatives.html">&larr; RAG vs Alternatives</a>
+      <a href="4.4-failure-modes.html">Next: Failure Modes &rarr;</a>
+    </nav>
+
+  </div>
+
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({ startOnLoad: true, theme: 'base', themeVariables: { primaryColor: '#E6F7F5', primaryTextColor: '#1A3D4D', primaryBorderColor: '#40B8A6', lineColor: '#4B5563', secondaryColor: '#D4F0EC', tertiaryColor: '#F9FAFB' }});
+  </script>
+  <script src="../../shared/js/course.js"></script>
+</body>
+</html>

@@ -36,6 +36,12 @@ APPS = [
     "prompt-engineering-lab",
     "prompt-injection-sim",
     "embedding-explorer",
+    # Section 4
+    "rag-playground",
+    "rag-failure-simulator",
+    "chunking-visualizer",
+    "rag-vs-finetuning",
+    "vector-db-cost-calculator",
 ]
 
 

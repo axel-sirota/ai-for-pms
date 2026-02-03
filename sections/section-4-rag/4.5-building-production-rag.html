@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>4.5 Production RAG - AI for Product Managers</title>
+  <link rel="stylesheet" href="../../shared/css/course.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="course-container">
+
+    <header class="course-header">
+      <span class="section-label">Section 4 - RAG</span>
+      <h1>Production RAG</h1>
+      <p class="subtitle">Architecture patterns, cost considerations, and the questions to ask before shipping.</p>
+    </header>
+
+    <div class="callout callout-failure">
+      <div class="callout-title">Failure Story: The $50K/Month Surprise</div>
+      <p>A startup launched their RAG-powered customer support bot. In testing, costs were $500/month. After launch, a viral TikTok drove 100x traffic.</p>
+      <p>Their bill hit <strong>$50,000 in one month</strong>. No rate limiting, no caching, no cost alerts.</p>
+      <p>They had to take the bot offline for 2 weeks while implementing safeguards.</p>
+      <p><strong>Lesson:</strong> Production RAG needs cost controls from day one, not after the viral moment.</p>
+    </div>
+
+    <div class="callout callout-decision">
+      <div class="callout-title">PM Pre-Launch Checklist</div>
+      <p>Before shipping RAG to production, verify:</p>
+      <ul>
+        <li>Cost alerts at 50%, 80%, 100% of budget</li>
+        <li>Rate limiting per user/session</li>
+        <li>Caching for common queries</li>
+        <li>Fallback when retrieval confidence is low</li>
+        <li>Monitoring for all 5 failure modes</li>
+        <li>Human escalation path</li>
+      </ul>
+    </div>
+
+    <h2>Production Architecture</h2>
+
+    <pre class="mermaid">
+flowchart TD
+    U["User Query"] --> C["Cache Check"]
+    C -->|"Hit"| R1["Return Cached Response"]
+    C -->|"Miss"| RL["Rate Limiter"]
+    RL -->|"Allowed"| E["Embed Query"]
+    RL -->|"Blocked"| R2["Return Rate Limit Error"]
+    E --> V["Vector Search"]
+    V --> CF["Confidence Filter"]
+    CF -->|"High"| G["Generate Response"]
+    CF -->|"Low"| H["Human Escalation"]
+    G --> M["Monitor & Log"]
+    M --> CA["Update Cache"]
+    CA --> R3["Return Response"]
+
+    style C fill:#E6F7F5,stroke:#40B8A6
+    style RL fill:#fef3c7,stroke:#d97706
+    style CF fill:#fef3c7,stroke:#d97706
+    style H fill:#fee2e2,stroke:#dc2626
+    style M fill:#dbeafe,stroke:#1e40af
+    </pre>
+
+    <h2>Cost Components</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Component</th>
+          <th>Cost Driver</th>
+          <th>Optimization</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Embedding (docs)</strong></td>
+          <td>One-time: ~$0.02/1M tokens</td>
+          <td>Only re-embed changed docs</td>
+        </tr>
+        <tr>
+          <td><strong>Embedding (queries)</strong></td>
+          <td>Per query: ~$0.02/1M tokens</td>
+          <td>Cache common queries</td>
+        </tr>
+        <tr>
+          <td><strong>Vector storage</strong></td>
+          <td>~$0.25/GB/month</td>
+          <td>Prune old/unused docs</td>
+        </tr>
+        <tr>
+          <td><strong>Vector queries</strong></td>
+          <td>~$0.0001/query</td>
+          <td>Batch similar queries</td>
+        </tr>
+        <tr>
+          <td><strong>LLM generation</strong></td>
+          <td>$0.15-$15/1M tokens</td>
+          <td>Smaller models, shorter prompts, caching</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout callout-insight">
+      <div class="callout-title">The 80/20 Rule of RAG Costs</div>
+      <p><strong>LLM generation is 80%+ of your cost.</strong> The vector database is cheap.</p>
+      <p>Optimization priority: (1) Cache responses, (2) Use smaller models for simple queries, (3) Reduce retrieved chunks, (4) Shorten prompts.</p>
+    </div>
+
+    <h2>Questions to Ask Engineering</h2>
+
+    <div class="card-grid">
+      <div class="card">
+        <h3>Before Build</h3>
+        <ul>
+          <li>What chunking strategy for our doc types?</li>
+          <li>How do we handle questions not in our docs?</li>
+          <li>What's the latency target? (affects model choice)</li>
+          <li>How will we update docs without downtime?</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Before Launch</h3>
+        <ul>
+          <li>What's our cost per query at expected volume?</li>
+          <li>Do we have rate limiting and cost alerts?</li>
+          <li>What's the human escalation path?</li>
+          <li>How do we monitor for the 5 failure modes?</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Post-Launch</h3>
+        <ul>
+          <li>What % of queries hit cache vs. new generation?</li>
+          <li>What's our retrieval success rate?</li>
+          <li>Which failure mode is most common?</li>
+          <li>What queries are users asking that we don't cover?</li>
+        </ul>
+      </div>
+    </div>
+
+    <h2>Monitoring Dashboard</h2>
+
+    <p>A production RAG system needs these metrics visible:</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Metric</th>
+          <th>What It Tells You</th>
+          <th>Alert Threshold</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Retrieval confidence</strong></td>
+          <td>Are we finding relevant chunks?</td>
+          <td>&lt;0.7 avg = investigate chunking</td>
+        </tr>
+        <tr>
+          <td><strong>Response latency</strong></td>
+          <td>User experience</td>
+          <td>&gt;5s p95 = optimize</td>
+        </tr>
+        <tr>
+          <td><strong>Cost per query</strong></td>
+          <td>Budget tracking</td>
+          <td>&gt;$0.10 = review model/caching</td>
+        </tr>
+        <tr>
+          <td><strong>Cache hit rate</strong></td>
+          <td>Efficiency of caching</td>
+          <td>&lt;30% = expand cache strategy</td>
+        </tr>
+        <tr>
+          <td><strong>Human escalation rate</strong></td>
+          <td>System confidence</td>
+          <td>&gt;20% = investigate failures</td>
+        </tr>
+        <tr>
+          <td><strong>User satisfaction</strong></td>
+          <td>Answer quality</td>
+          <td>&lt;70% helpful = debug pipeline</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Try It: Vector DB Cost Calculator</h2>
+    <p>Estimate your RAG costs at scale. Adjust doc count, query volume, and model selection.</p>
+    <div class="hf-space-embed">
+      <a class="hf-space-link" href="https://huggingface.co/spaces/axelsirota/vector-db-cost-calculator" target="_blank">
+        Launch Cost Calculator
+      </a>
+    </div>
+
+    <div class="quiz">
+      <h3>Quick Check</h3>
+      <p>Your RAG system costs $500/month at 1,000 queries/day. Marketing projects 10x growth next quarter. What should you do first?</p>
+      <button class="quiz-option" data-correct="false" data-feedback-incorrect="Hoping for slower growth isn't a strategy. Plan for the projected volume.">
+        <strong>A.</strong> Wait and see - growth projections are often wrong
+      </button>
+      <button class="quiz-option" data-correct="true" data-feedback-correct="Correct! At 10x volume, costs could hit $5,000/month - or more if there's no caching. Before growth hits: implement caching, set up cost alerts, configure rate limiting, and test at projected load.">
+        <strong>B.</strong> Implement caching, cost alerts, and rate limiting now
+      </button>
+      <button class="quiz-option" data-correct="false" data-feedback-incorrect="Switching to fine-tuning is a major architectural change that takes months. You need safeguards for the current system now.">
+        <strong>C.</strong> Switch from RAG to fine-tuning to reduce per-query costs
+      </button>
+      <div class="quiz-feedback"></div>
+    </div>
+
+    <div class="stakeholder-frame">
+      <h3>Stakeholder Framing</h3>
+      <p>When the CFO asks <em>"Why does this chatbot need a $10K/month budget?"</em>:</p>
+      <blockquote>
+        "The cost breaks down to: 80% LLM generation, 15% embeddings, 5% vector storage. At 5,000 queries/day, that's $0.07 per customer interaction - cheaper than a support ticket ($15-$25). We've also implemented caching that reduces costs by 40% for common questions. I can show you the cost breakdown dashboard anytime."
+      </blockquote>
+    </div>
+
+    <nav class="module-nav">
+      <a href="4.4-failure-modes.html">&larr; Failure Modes</a>
+      <a href="index.html">Section Overview &rarr;</a>
+    </nav>
+
+  </div>
+
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({ startOnLoad: true, theme: 'base', themeVariables: { primaryColor: '#E6F7F5', primaryTextColor: '#1A3D4D', primaryBorderColor: '#40B8A6', lineColor: '#4B5563', secondaryColor: '#D4F0EC', tertiaryColor: '#F9FAFB' }});
+  </script>
+  <script src="../../shared/js/course.js"></script>
+</body>
+</html>

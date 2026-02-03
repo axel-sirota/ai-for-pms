@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>4.4 RAG Failure Modes - AI for Product Managers</title>
+  <link rel="stylesheet" href="../../shared/css/course.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="course-container">
+
+    <header class="course-header">
+      <span class="section-label">Section 4 - RAG</span>
+      <h1>RAG Failure Modes</h1>
+      <p class="subtitle">RAG isn't magic. Here are the 5 ways it fails - and how to spot them before your users do.</p>
+    </header>
+
+    <div class="callout callout-failure">
+      <div class="callout-title">Failure Story: Bing Chat's Contradictory Citations</div>
+      <p>When Microsoft launched Bing Chat with RAG, users quickly found it would <strong>cite sources that directly contradicted its own answers</strong>.</p>
+      <p>Example: Bing would say "The movie released in 2019" while citing an article clearly stating "released in 2021."</p>
+      <p>The retrieval worked - it found the right source. But the generation ignored the context.</p>
+      <p><strong>Lesson:</strong> RAG can fail even when retrieval succeeds. You need to monitor the full pipeline.</p>
+    </div>
+
+    <div class="callout callout-decision">
+      <div class="callout-title">PM Decision Point</div>
+      <p>When your RAG system gives wrong answers, you need to diagnose where it failed:</p>
+      <ul>
+        <li>Did retrieval find the wrong chunks? (retrieval failure)</li>
+        <li>Did retrieval find the right chunks but they were incomplete? (chunking failure)</li>
+        <li>Did the model ignore the retrieved context? (generation failure)</li>
+      </ul>
+      <p>Different failures need different fixes.</p>
+    </div>
+
+    <h2>The 5 RAG Failure Modes</h2>
+
+    <pre class="mermaid">
+flowchart TD
+    Q["User Question"] --> R["Retrieval"]
+    R --> F1["Failure 1:<br/>Wrong Retrieval"]
+    R --> F2["Failure 2:<br/>Bad Chunking"]
+    R --> G["Generation"]
+    G --> F3["Failure 3:<br/>Hallucination<br/>Despite Context"]
+    G --> F4["Failure 4:<br/>Outdated Info<br/>Conflict"]
+    G --> F5["Failure 5:<br/>Missing Info<br/>Hallucination"]
+
+    style F1 fill:#fee2e2,stroke:#dc2626
+    style F2 fill:#fee2e2,stroke:#dc2626
+    style F3 fill:#fee2e2,stroke:#dc2626
+    style F4 fill:#fee2e2,stroke:#dc2626
+    style F5 fill:#fee2e2,stroke:#dc2626
+    </pre>
+
+    <div class="card-grid">
+      <div class="card">
+        <h3>1. Bad Chunking</h3>
+        <p><strong>What happens:</strong> Important info is split across chunks. Retrieval finds a chunk, but it's incomplete.</p>
+        <p><strong>Example:</strong> "The price is $99 per" in one chunk, "month with unlimited users" in another.</p>
+        <p><strong>How to spot:</strong> Answers are partially correct but missing key details.</p>
+        <p><strong>Fix:</strong> Sentence-aware chunking, increase overlap, test with real queries.</p>
+      </div>
+      <div class="card">
+        <h3>2. Wrong Retrieval</h3>
+        <p><strong>What happens:</strong> Semantic similarity matches keywords but misses context. Retrieved chunks are related but don't answer the question.</p>
+        <p><strong>Example:</strong> User asks about "software refund policy." Retrieves "software licensing" and "general refunds" - neither covers software-specific refunds.</p>
+        <p><strong>How to spot:</strong> Answers are confident but off-topic.</p>
+        <p><strong>Fix:</strong> Hybrid search (keywords + embeddings), metadata filtering, better chunking.</p>
+      </div>
+      <div class="card">
+        <h3>3. Hallucination Despite Context</h3>
+        <p><strong>What happens:</strong> The model ignores retrieved context and makes up an answer anyway.</p>
+        <p><strong>Example:</strong> Retrieved chunk says "30-day returns." Model says "60-day returns."</p>
+        <p><strong>How to spot:</strong> Answers contradict the cited sources.</p>
+        <p><strong>Fix:</strong> Stronger grounding prompts, better models, output validation against sources.</p>
+      </div>
+      <div class="card">
+        <h3>4. Outdated Info Conflict</h3>
+        <p><strong>What happens:</strong> Your docs say X, but the model's training data says Y. Model prefers its "knowledge."</p>
+        <p><strong>Example:</strong> Your doc says "Free shipping over $50." Model says "$35" (old policy in training data).</p>
+        <p><strong>How to spot:</strong> Answers match old info that you've since updated.</p>
+        <p><strong>Fix:</strong> Explicit prompting to prioritize retrieved context, use newer models with less domain knowledge.</p>
+      </div>
+      <div class="card">
+        <h3>5. Missing Info Hallucination</h3>
+        <p><strong>What happens:</strong> The question isn't covered in your docs. Instead of saying "I don't know," the model invents an answer.</p>
+        <p><strong>Example:</strong> User asks about student discounts. No docs mention it. Model says "Yes, 15% with valid ID."</p>
+        <p><strong>How to spot:</strong> Answers to questions your docs don't cover.</p>
+        <p><strong>Fix:</strong> Low-confidence detection, explicit "I don't know" training, retrieval confidence thresholds.</p>
+      </div>
+    </div>
+
+    <h2>Diagnostic Checklist</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Symptom</th>
+          <th>Likely Failure Mode</th>
+          <th>First Investigation</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Answer missing key details</td>
+          <td>Bad Chunking</td>
+          <td>Check if info spans multiple chunks</td>
+        </tr>
+        <tr>
+          <td>Answer confident but wrong topic</td>
+          <td>Wrong Retrieval</td>
+          <td>Examine retrieved chunks</td>
+        </tr>
+        <tr>
+          <td>Answer contradicts sources</td>
+          <td>Hallucination Despite Context</td>
+          <td>Compare output to retrieved chunks</td>
+        </tr>
+        <tr>
+          <td>Answer matches old policy</td>
+          <td>Outdated Info Conflict</td>
+          <td>Check if model's training data has old info</td>
+        </tr>
+        <tr>
+          <td>Answer to unasked question</td>
+          <td>Missing Info Hallucination</td>
+          <td>Verify topic exists in docs</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Try It: RAG Failure Simulator</h2>
+    <p>Experience each failure mode firsthand. See what they look like and practice diagnosing them.</p>
+    <div class="hf-space-embed">
+      <a class="hf-space-link" href="https://huggingface.co/spaces/axelsirota/rag-failure-simulator" target="_blank">
+        Launch Failure Simulator
+      </a>
+    </div>
+
+    <div class="quiz">
+      <h3>Quick Check</h3>
+      <p>Your RAG chatbot says "Our premium plan costs $199/year" but the retrieved chunk clearly states "$199/month." What failure mode is this?</p>
+      <button class="quiz-option" data-correct="false" data-feedback-incorrect="Wrong retrieval would mean we found the wrong chunk entirely. Here we found the right chunk - the model just ignored it.">
+        <strong>A.</strong> Wrong Retrieval
+      </button>
+      <button class="quiz-option" data-correct="false" data-feedback-incorrect="Bad chunking would mean the price info was split across chunks. Here we have the complete info - the model misread it.">
+        <strong>B.</strong> Bad Chunking
+      </button>
+      <button class="quiz-option" data-correct="true" data-feedback-correct="Correct! The retrieval worked - we got the right chunk with the right price. But the model changed 'month' to 'year' in its response. This is hallucination despite having correct context.">
+        <strong>C.</strong> Hallucination Despite Context
+      </button>
+      <div class="quiz-feedback"></div>
+    </div>
+
+    <div class="stakeholder-frame">
+      <h3>Stakeholder Framing</h3>
+      <p>When your VP says <em>"The chatbot is giving wrong answers - fix it!"</em>:</p>
+      <blockquote>
+        "I'll investigate. There are 5 different ways RAG can fail, and each needs a different fix. Give me 24 hours to diagnose whether it's a retrieval problem, a chunking problem, or a generation problem. Once I know the root cause, I can give you a timeline and fix."
+      </blockquote>
+    </div>
+
+    <nav class="module-nav">
+      <a href="4.3-chunking-strategies.html">&larr; Chunking Strategies</a>
+      <a href="4.5-building-production-rag.html">Next: Production RAG &rarr;</a>
+    </nav>
+
+  </div>
+
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({ startOnLoad: true, theme: 'base', themeVariables: { primaryColor: '#E6F7F5', primaryTextColor: '#1A3D4D', primaryBorderColor: '#40B8A6', lineColor: '#4B5563', secondaryColor: '#D4F0EC', tertiaryColor: '#F9FAFB' }});
+  </script>
+  <script src="../../shared/js/course.js"></script>
+</body>
+</html>
