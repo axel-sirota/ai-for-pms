@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2.4 Metrics That Matter - AI for Product Managers</title>
+  <link rel="stylesheet" href="../../shared/css/course.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    .cm-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; max-width: 400px; margin: 1.5rem auto; text-align: center; }
+    .cm-cell { padding: 1.25rem; font-weight: 700; font-size: 1.1rem; }
+    .cm-tp { background: #bbf7d0; color: #065f46; border-radius: var(--radius) 0 0 0; }
+    .cm-fp { background: #fecaca; color: #991b1b; border-radius: 0 var(--radius) 0 0; }
+    .cm-fn { background: #fed7aa; color: #9a3412; border-radius: 0 0 0 var(--radius); }
+    .cm-tn { background: #dbeafe; color: #1e3a5f; border-radius: 0 0 var(--radius) 0; }
+    .cm-label { font-size: 0.8rem; display: block; font-weight: 400; margin-top: 0.25rem; }
+    .cm-header { text-align: center; font-weight: 600; font-size: 0.85rem; color: var(--text-light); padding: 0.5rem; }
+  </style>
+</head>
+<body>
+  <div class="course-container">
+
+    <header class="course-header">
+      <span class="section-label">Section 2 &middot; Classical ML</span>
+      <h1>2.4 Metrics That Matter</h1>
+      <p class="subtitle">Precision, recall, and F1 &mdash; reframed as business decisions</p>
+    </header>
+
+    <!-- Fire Detection Hook -->
+    <div class="callout callout-decision">
+      <div class="callout-title">The Question That Changes Everything</div>
+      <p>A fire detection model that <strong>always predicts "no fire"</strong> is <strong>99.9% accurate</strong>. (Because fires are rare &mdash; 0.1% of the time.)</p>
+      <p><strong>Is that a good model?</strong></p>
+      <p>Of course not. It would miss every fire. <em>Accuracy alone is meaningless.</em> You need metrics that match your <strong>business cost of being wrong</strong>.</p>
+    </div>
+
+    <!-- Confusion Matrix -->
+    <h2>The Confusion Matrix (No Math, Just Logic)</h2>
+
+    <p>Every prediction falls into one of four buckets. Think of a fraud detection system:</p>
+
+    <div style="text-align:center; margin-bottom:0.5rem;">
+      <div class="cm-header">What the Model Predicted</div>
+    </div>
+    <div class="cm-grid">
+      <div class="cm-cell cm-tp">TP<span class="cm-label">True Positive<br>"Correctly caught fraud"</span></div>
+      <div class="cm-cell cm-fp">FP<span class="cm-label">False Positive<br>"Flagged a legit transaction"</span></div>
+      <div class="cm-cell cm-fn">FN<span class="cm-label">False Negative<br>"Missed real fraud"</span></div>
+      <div class="cm-cell cm-tn">TN<span class="cm-label">True Negative<br>"Correctly approved legit"</span></div>
+    </div>
+    <p style="text-align:center; font-size:0.85rem; color:var(--text-light);">Top row = model said "fraud" | Bottom row = model said "not fraud"<br>Left column = actually fraud | Right column = actually not fraud</p>
+
+    <!-- Metrics Explained -->
+    <h2>Three Metrics, Three Business Questions</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Metric</th>
+          <th>The Business Question</th>
+          <th>Prioritize When...</th>
+          <th>Example</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Precision</strong></td>
+          <td>"When we flag something, how often are we right?"</td>
+          <td>False positives are expensive</td>
+          <td><strong>Spam filter:</strong> Don't send real emails to spam</td>
+        </tr>
+        <tr>
+          <td><strong>Recall</strong></td>
+          <td>"Of all the real cases, how many did we catch?"</td>
+          <td>Missing cases is dangerous</td>
+          <td><strong>Fraud detection:</strong> Catch every fraud, even if some legit transactions get flagged</td>
+        </tr>
+        <tr>
+          <td><strong>F1 Score</strong></td>
+          <td>"What's the balance between precision and recall?"</td>
+          <td>Both types of errors matter equally</td>
+          <td><strong>Content moderation:</strong> Don't miss harmful content, but don't over-censor</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- The PM Question -->
+    <div class="callout callout-insight">
+      <div class="callout-title">The Only Question You Need to Ask</div>
+      <p><strong>"What does a false positive cost us vs a false negative?"</strong></p>
+      <p>If false positives are more expensive &rarr; optimize for <strong>precision</strong>.<br>
+      If false negatives are more expensive &rarr; optimize for <strong>recall</strong>.<br>
+      If both matter equally &rarr; optimize for <strong>F1</strong>.</p>
+    </div>
+
+    <!-- Scenarios -->
+    <h2>Business Scenarios: Which Metric Wins?</h2>
+
+    <div class="card-grid">
+      <div class="card">
+        <h3>Fraud Detection</h3>
+        <p><strong>FP cost:</strong> $50 (customer friction, support call)<br>
+        <strong>FN cost:</strong> $5,000 (average fraud loss)</p>
+        <p style="color:var(--success); font-weight:700;">Optimize for RECALL</p>
+        <p style="font-size:0.9rem; color:var(--text-light);">Better to flag some legit transactions than miss real fraud.</p>
+      </div>
+      <div class="card">
+        <h3>Email Spam Filter</h3>
+        <p><strong>FP cost:</strong> $1,000+ (missed contract, lost deal)<br>
+        <strong>FN cost:</strong> $0.10 (spam in inbox, minor annoyance)</p>
+        <p style="color:var(--primary); font-weight:700;">Optimize for PRECISION</p>
+        <p style="font-size:0.9rem; color:var(--text-light);">Never send real emails to spam. Let some spam through instead.</p>
+      </div>
+      <div class="card">
+        <h3>Cancer Screening</h3>
+        <p><strong>FP cost:</strong> $500 (unnecessary biopsy, anxiety)<br>
+        <strong>FN cost:</strong> Life-threatening (missed cancer)</p>
+        <p style="color:var(--danger); font-weight:700;">Optimize for RECALL (strongly)</p>
+        <p style="font-size:0.9rem; color:var(--text-light);">Missing cancer is unacceptable. Accept more false alarms.</p>
+      </div>
+      <div class="card">
+        <h3>Credit Approval</h3>
+        <p><strong>FP cost:</strong> $500 (lost revenue from rejected good customer)<br>
+        <strong>FN cost:</strong> $5,000 (bad debt from approved defaulter)</p>
+        <p style="color:var(--success); font-weight:700;">Optimize for RECALL (moderate)</p>
+        <p style="font-size:0.9rem; color:var(--text-light);">Lean toward catching defaults, but don't reject too many good customers.</p>
+      </div>
+    </div>
+
+    <!-- Try It -->
+    <h2>Try It: Metrics Explainer</h2>
+    <p>Adjust the confusion matrix sliders and see how metrics change. Input your own cost of errors to see the business impact in dollars.</p>
+
+    <div class="hf-space-embed">
+      <a class="hf-space-link" href="https://huggingface.co/spaces/datatrainers/metrics-explainer" target="_blank">
+        Launch Metrics Explainer
+      </a>
+    </div>
+
+    <!-- Quiz -->
+    <div class="quiz">
+      <h3>Quick Check: Which metric for this scenario?</h3>
+      <p>You're building a <strong>content moderation system</strong> for a children's platform. Harmful content reaching kids is unacceptable, but over-blocking safe content frustrates parents. Which metric do you optimize for?</p>
+
+      <button class="quiz-option" data-correct="false" data-feedback-incorrect="Precision focuses on 'when we flag something, are we right?' It would reduce over-blocking, but risks letting harmful content through. For a children's platform, missing harmful content is the bigger risk.">
+        <strong>A.</strong> Precision &mdash; make sure our flags are accurate
+      </button>
+      <button class="quiz-option" data-correct="true" data-feedback-correct="Correct! On a children's platform, the cost of a false negative (harmful content reaching kids) is catastrophically higher than a false positive (over-blocking safe content). Optimize for recall first, then improve precision over time.">
+        <strong>B.</strong> Recall &mdash; catch every piece of harmful content, even if we over-block some safe content
+      </button>
+      <button class="quiz-option" data-correct="false" data-feedback-incorrect="F1 balances both errors equally. But on a children's safety platform, the errors are NOT equal — missing harmful content is far worse than over-blocking. Recall should be the primary metric.">
+        <strong>C.</strong> F1 &mdash; balance both types of errors equally
+      </button>
+      <div class="quiz-feedback"></div>
+    </div>
+
+    <div class="stakeholder-frame">
+      <h3>Stakeholder Framing</h3>
+      <p>When someone asks "What's the accuracy of our model?":</p>
+      <blockquote>
+        "Accuracy alone doesn't tell us enough. The real question is: what's the cost of each type of error? For our fraud model, missing a fraud case costs us $5,000, but a false alarm only costs $50. So we optimize for catching every fraud case, even if it means a few false alarms. That's recall, and ours is at 94%."
+      </blockquote>
+    </div>
+
+    <nav class="module-nav">
+      <a href="2.3-why-models-fail.html">&larr; Previous: Why Models Fail</a>
+      <a href="2.5-cost-of-errors.html">Next: Cost of Errors &rarr;</a>
+    </nav>
+
+  </div>
+  <script src="../../shared/js/course.js"></script>
+</body>
+</html>

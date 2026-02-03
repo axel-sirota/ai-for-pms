@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2.1 When Classical ML Wins - AI for Product Managers</title>
+  <link rel="stylesheet" href="../../shared/css/course.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="course-container">
+
+    <header class="course-header">
+      <span class="section-label">Section 2 &middot; Classical ML</span>
+      <h1>2.1 When Classical ML Wins</h1>
+      <p class="subtitle">Structured data + prediction = Classical ML's sweet spot</p>
+    </header>
+
+    <!-- Failure Story -->
+    <div class="callout callout-failure">
+      <div class="callout-title">Failure Story: Knight Capital</div>
+      <p>In August 2012, Knight Capital deployed a trading algorithm update. A configuration error caused the system to execute <strong>millions of unintended trades in 45 minutes</strong>, resulting in a <strong>$440 million loss</strong> &mdash; enough to bankrupt the company.</p>
+      <p>The ML model wasn't wrong. The system around it &mdash; deployment, monitoring, kill switches &mdash; failed. Knight Capital was acquired at a fire-sale price within months.</p>
+    </div>
+
+    <div class="callout callout-decision">
+      <div class="callout-title">PM Decision Point</div>
+      <p>As the PM, you would have needed to ask:</p>
+      <ul>
+        <li>What's the maximum loss before we automatically halt trading?</li>
+        <li>How do we test a deployment before it touches real money?</li>
+        <li>Who monitors the system in the first hour after deployment?</li>
+        <li>What's the rollback procedure if something goes wrong?</li>
+      </ul>
+      <p><strong>Lesson:</strong> The ML model is the easy part. The product decisions around it determine success or catastrophe.</p>
+    </div>
+
+    <!-- When ML Wins -->
+    <h2>Classical ML Wins When You Have...</h2>
+
+    <div class="card-grid">
+      <div class="card">
+        <h3>Structured Data</h3>
+        <p>Rows and columns. Spreadsheets. Database tables. Things with numbers, dates, categories.</p>
+        <p style="color:var(--text-light); font-size:0.9rem;"><em>Transaction amounts, login frequency, purchase history, demographics</em></p>
+      </div>
+      <div class="card">
+        <h3>A Prediction Task</h3>
+        <p>You want to predict a number (regression) or a category (classification) from historical patterns.</p>
+        <p style="color:var(--text-light); font-size:0.9rem;"><em>"Will this customer churn?" "How much will this cost?" "Is this fraud?"</em></p>
+      </div>
+      <div class="card">
+        <h3>Labeled Examples</h3>
+        <p>Thousands of historical examples where you know the answer. The model learns patterns from these.</p>
+        <p style="color:var(--text-light); font-size:0.9rem;"><em>Past transactions labeled fraud/not-fraud, past customers labeled churned/retained</em></p>
+      </div>
+      <div class="card">
+        <h3>Explainability Needs</h3>
+        <p>Regulators, compliance, or stakeholders need to understand <em>why</em> the model made a decision.</p>
+        <p style="color:var(--text-light); font-size:0.9rem;"><em>"Why was this loan denied?" needs an answer, not a black box</em></p>
+      </div>
+    </div>
+
+    <!-- Decision Tree -->
+    <h2>Is Classical ML Right for This?</h2>
+
+    <pre class="mermaid">
+flowchart TD
+    Q1{"Is your data in\nrows & columns?"}
+    Q1 -->|"No, it's text/images"| NO1["Not Classical ML.\nConsider LLMs."]
+    Q1 -->|"Yes"| Q2{"Do you want to\nPREDICT something?"}
+    Q2 -->|"No"| NO2["Might not need ML.\nConsider rules or analytics."]
+    Q2 -->|"Yes"| Q3{"Do you have 1,000+\nlabeled examples?"}
+    Q3 -->|"No"| MAYBE["Collect data first,\nor try LLM with few-shot"]
+    Q3 -->|"Yes"| Q4{"Need to explain\ndecisions?"}
+    Q4 -->|"Yes"| ML1["Classical ML\n(tree-based models)"]
+    Q4 -->|"Not critical"| ML2["Classical ML\n(any algorithm)"]
+
+    style NO1 fill:#fef3c7,stroke:#d97706,color:#92400e
+    style NO2 fill:#f3f4f6,stroke:#6b7280,color:#374151
+    style MAYBE fill:#fef9c3,stroke:#ca8a04,color:#713f12
+    style ML1 fill:#dbeafe,stroke:#1e40af,color:#1e3a5f
+    style ML2 fill:#dbeafe,stroke:#1e40af,color:#1e3a5f
+    </pre>
+
+    <!-- Use Cases Table -->
+    <h2>PM Use Cases You Should Know</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Use Case</th>
+          <th>What It Predicts</th>
+          <th>Business Value</th>
+          <th>Industry</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Churn prediction</strong></td>
+          <td>Which customers will leave</td>
+          <td>Target retention offers before they leave</td>
+          <td>SaaS, Telecom, Banking</td>
+        </tr>
+        <tr>
+          <td><strong>Fraud detection</strong></td>
+          <td>Which transactions are fraudulent</td>
+          <td>Block fraud in real-time (&lt;100ms)</td>
+          <td>Finance, Payments</td>
+        </tr>
+        <tr>
+          <td><strong>Demand forecasting</strong></td>
+          <td>How much product to stock</td>
+          <td>Reduce overstock and stockouts</td>
+          <td>Retail, Manufacturing</td>
+        </tr>
+        <tr>
+          <td><strong>Customer segmentation</strong></td>
+          <td>Which customers group together</td>
+          <td>Personalized marketing, pricing</td>
+          <td>All industries</td>
+        </tr>
+        <tr>
+          <td><strong>Credit scoring</strong></td>
+          <td>Likelihood of default</td>
+          <td>Approve/deny with confidence</td>
+          <td>Finance, Lending</td>
+        </tr>
+        <tr>
+          <td><strong>Propensity to buy</strong></td>
+          <td>Which leads will convert</td>
+          <td>Prioritize sales efforts</td>
+          <td>B2B, E-commerce</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Why Not LLMs -->
+    <h2>Why Not Just Use an LLM?</h2>
+
+    <div class="callout callout-decision">
+      <div class="callout-title">Classical ML vs LLM for Structured Data</div>
+      <table>
+        <thead>
+          <tr><th>Factor</th><th>Classical ML</th><th>LLM</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Accuracy on tabular data</strong></td><td>Higher (purpose-built)</td><td>Lower (not designed for this)</td></tr>
+          <tr><td><strong>Inference speed</strong></td><td>Milliseconds</td><td>Seconds</td></tr>
+          <tr><td><strong>Cost per 1,000 predictions</strong></td><td>~$0.001</td><td>~$1-10</td></tr>
+          <tr><td><strong>Explainability</strong></td><td>Feature importance built-in</td><td>Black box</td></tr>
+          <tr><td><strong>Setup time</strong></td><td>Weeks-months (need data pipeline)</td><td>Hours (just a prompt)</td></tr>
+        </tbody>
+      </table>
+      <p><strong>Rule of thumb:</strong> If your data fits in a spreadsheet and you're predicting a number or category, Classical ML wins on accuracy, cost, and speed. LLMs win on flexibility and speed-to-prototype.</p>
+    </div>
+
+    <!-- Try It -->
+    <h2>Try It: Classical ML Playground</h2>
+    <p>Upload a dataset (or use our samples), train a model, and see predictions and feature importance &mdash; all without writing code.</p>
+
+    <div class="hf-space-embed">
+      <a class="hf-space-link" href="https://huggingface.co/spaces/datatrainers/classical-ml-playground" target="_blank">
+        Launch Classical ML Playground
+      </a>
+    </div>
+
+    <!-- Quiz -->
+    <div class="quiz">
+      <h3>Quick Check: Which is a Classical ML problem?</h3>
+      <p>Your e-commerce company wants to improve operations. Which task is best suited for Classical ML?</p>
+
+      <button class="quiz-option" data-correct="false" data-feedback-incorrect="Writing product descriptions is text generation &mdash; that's LLM territory. No structured data to learn from, and each description is unique.">
+        <strong>A.</strong> Write personalized product descriptions for 10,000 items
+      </button>
+      <button class="quiz-option" data-correct="true" data-feedback-correct="Correct! Demand forecasting uses structured historical data (past sales, seasonality, promotions) to predict future numbers. This is exactly what Classical ML excels at &mdash; faster, cheaper, and more accurate than an LLM for this task.">
+        <strong>B.</strong> Predict next month's demand for each product based on 3 years of sales data
+      </button>
+      <button class="quiz-option" data-correct="false" data-feedback-incorrect="Summarizing reviews is text understanding &mdash; LLM territory. The input is unstructured text, not rows and columns.">
+        <strong>C.</strong> Summarize customer reviews into key themes
+      </button>
+      <div class="quiz-feedback"></div>
+    </div>
+
+    <!-- Stakeholder Framing -->
+    <div class="stakeholder-frame">
+      <h3>Stakeholder Framing</h3>
+      <p>When engineering says "We want to use a large language model for fraud detection":</p>
+      <blockquote>
+        "For structured data predictions like fraud detection, Classical ML is 1,000x cheaper per prediction, runs in milliseconds instead of seconds, and provides explainability that compliance requires. LLMs are powerful for text tasks, but this isn't a text task &mdash; it's a pattern-matching task on transaction data. Let's use the right tool for the job."
+      </blockquote>
+    </div>
+
+    <nav class="module-nav">
+      <a href="index.html">&larr; Section Overview</a>
+      <a href="2.2-ml-lifecycle.html">Next: ML Lifecycle &rarr;</a>
+    </nav>
+
+  </div>
+
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({ startOnLoad: true, theme: 'base', themeVariables: { primaryColor: '#dbeafe', primaryTextColor: '#1e3a5f', primaryBorderColor: '#1e40af', lineColor: '#6b7280', secondaryColor: '#eff6ff', tertiaryColor: '#f9fafb' }});
+  </script>
+  <script src="../../shared/js/course.js"></script>
+</body>
+</html>

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2.2 The ML Lifecycle - AI for Product Managers</title>
+  <link rel="stylesheet" href="../../shared/css/course.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="course-container">
+
+    <header class="course-header">
+      <span class="section-label">Section 2 &middot; Classical ML</span>
+      <h1>2.2 The ML Lifecycle</h1>
+      <p class="subtitle">What the timeline really looks like &mdash; and your role at each phase</p>
+    </header>
+
+    <div class="callout callout-insight">
+      <div class="callout-title">The #1 Thing PMs Get Wrong</div>
+      <p>Most PMs think ML projects are mostly about building models. In reality, <strong>60% of the time is data work</strong> &mdash; collecting, cleaning, labeling, and validating data. If your timeline doesn't account for this, your project will be late.</p>
+    </div>
+
+    <!-- Lifecycle Diagram -->
+    <h2>The Real ML Timeline</h2>
+
+    <pre class="mermaid">
+gantt
+    title ML Project Timeline (Typical)
+    dateFormat  YYYY-MM-DD
+    axisFormat %b
+
+    section Data Work (60%)
+    Define requirements        :a1, 2025-01-01, 14d
+    Data collection            :a2, after a1, 30d
+    Data cleaning & labeling   :a3, after a2, 45d
+
+    section Model Work (20%)
+    Feature engineering        :b1, after a3, 14d
+    Model training & tuning    :b2, after b1, 21d
+
+    section Deployment (20%)
+    Evaluation & testing       :c1, after b2, 14d
+    Deployment & monitoring    :c2, after c1, 14d
+    Ongoing maintenance        :c3, after c2, 30d
+    </pre>
+
+    <!-- PM Role at Each Phase -->
+    <h2>Your Role at Each Phase</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Phase</th>
+          <th>Duration</th>
+          <th>What's Happening</th>
+          <th>PM Responsibilities</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Data Collection &amp; Cleaning</strong></td>
+          <td>2&ndash;4 months</td>
+          <td>Team is acquiring, cleaning, and labeling training data</td>
+          <td>
+            <ul>
+              <li>Define what "good data" means</li>
+              <li>Approve data sources (privacy, bias, freshness)</li>
+              <li>Unblock access to data systems</li>
+              <li>Set labeling guidelines</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Model Development</strong></td>
+          <td>1&ndash;2 months</td>
+          <td>Data scientists are training and tuning models</td>
+          <td>
+            <ul>
+              <li>Define success metrics (precision? recall? both?)</li>
+              <li>Identify test edge cases from domain knowledge</li>
+              <li>Review early results for "does this make sense?"</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Evaluation</strong></td>
+          <td>2&ndash;4 weeks</td>
+          <td>Testing on held-out data, stress testing</td>
+          <td>
+            <ul>
+              <li>Accept or reject based on business metrics</li>
+              <li>Test with real users (shadow mode)</li>
+              <li>Define "good enough" threshold</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Deployment</strong></td>
+          <td>2&ndash;4 weeks</td>
+          <td>Integrating model into production system</td>
+          <td>
+            <ul>
+              <li>Define monitoring alerts and dashboards</li>
+              <li>Plan rollout strategy (canary, A/B, full)</li>
+              <li>Prepare rollback plan</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Monitoring</strong></td>
+          <td>Ongoing</td>
+          <td>Tracking performance, detecting drift</td>
+          <td>
+            <ul>
+              <li>Review performance dashboards weekly</li>
+              <li>Trigger retraining when metrics drop</li>
+              <li>Plan for model versioning</li>
+            </ul>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Key Stats -->
+    <div class="stat-row">
+      <div class="stat-card">
+        <span class="stat-number">60%</span>
+        <span class="stat-label">of ML project time is data work</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-number">6-9</span>
+        <span class="stat-label">months from idea to production (typical)</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-number">3-6</span>
+        <span class="stat-label">months before retraining is needed</span>
+      </div>
+    </div>
+
+    <!-- Questions to Ask -->
+    <h2>Questions to Ask at Each Phase</h2>
+
+    <div class="card-grid">
+      <div class="card">
+        <h3>Before Starting</h3>
+        <ul>
+          <li>"Do we have the data this requires?"</li>
+          <li>"What does success look like in business terms?"</li>
+          <li>"What's the cost of getting it wrong?"</li>
+          <li>"Is the timeline realistic given data work?"</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>During Development</h3>
+        <ul>
+          <li>"What's the current accuracy on test data?"</li>
+          <li>"Have we tested the edge cases I identified?"</li>
+          <li>"Where does the model fail most?"</li>
+          <li>"Are there biases in the training data?"</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Before Launch</h3>
+        <ul>
+          <li>"What happens when the model is wrong?"</li>
+          <li>"How will we know if performance degrades?"</li>
+          <li>"What's the rollback plan?"</li>
+          <li>"Who's on call for the first week?"</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Common Timeline Mistakes -->
+    <h2>Common Timeline Mistakes</h2>
+
+    <table>
+      <thead>
+        <tr><th>Mistake</th><th>Reality</th><th>What to Do</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>"We'll have a model in 2 weeks"</td>
+          <td>You might have a prototype. Production takes months.</td>
+          <td>Separate POC timeline from production timeline</td>
+        </tr>
+        <tr>
+          <td>"The data is ready"</td>
+          <td>Data is never ready. Cleaning takes 2-4 months.</td>
+          <td>Budget 60% of timeline for data work</td>
+        </tr>
+        <tr>
+          <td>"We'll launch and iterate"</td>
+          <td>ML models don't iterate like features. Retraining is expensive.</td>
+          <td>Define "good enough" before building, not after</td>
+        </tr>
+        <tr>
+          <td>"The model is done"</td>
+          <td>Models degrade. Maintenance is forever.</td>
+          <td>Budget ongoing monitoring and retraining costs</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Stakeholder Framing -->
+    <div class="stakeholder-frame">
+      <h3>Stakeholder Framing</h3>
+      <p>When your VP asks "Why does this ML project take so long?":</p>
+      <blockquote>
+        "60% of ML project time is data work &mdash; collecting, cleaning, and validating training data. The actual model training is only about 20% of the effort. We can show a demo in weeks, but a production-quality system that handles edge cases reliably takes 6-9 months. Rushing past data quality is the #1 reason ML projects fail."
+      </blockquote>
+    </div>
+
+    <nav class="module-nav">
+      <a href="2.1-when-ml-wins.html">&larr; Previous: When ML Wins</a>
+      <a href="2.3-why-models-fail.html">Next: Why Models Fail &rarr;</a>
+    </nav>
+
+  </div>
+
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({ startOnLoad: true, theme: 'base', themeVariables: { primaryColor: '#dbeafe', primaryTextColor: '#1e3a5f', primaryBorderColor: '#1e40af', lineColor: '#6b7280', secondaryColor: '#eff6ff', tertiaryColor: '#f9fafb' }});
+  </script>
+  <script src="../../shared/js/course.js"></script>
+</body>
+</html>

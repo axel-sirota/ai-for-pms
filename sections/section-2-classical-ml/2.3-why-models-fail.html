@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2.3 Why Models Fail - AI for Product Managers</title>
+  <link rel="stylesheet" href="../../shared/css/course.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    .failure-visual { text-align: center; padding: 1.5rem; background: var(--bg-alt); border-radius: var(--radius); margin: 1rem 0; font-family: var(--font-mono); font-size: 0.85rem; line-height: 1.4; }
+    .failure-visual .label { font-family: var(--font); font-weight: 600; margin-bottom: 0.5rem; display: block; }
+  </style>
+</head>
+<body>
+  <div class="course-container">
+
+    <header class="course-header">
+      <span class="section-label">Section 2 &middot; Classical ML</span>
+      <h1>2.3 Why Models Fail</h1>
+      <p class="subtitle">Three failure modes every PM must recognize &mdash; no formulas required</p>
+    </header>
+
+    <div class="callout callout-insight">
+      <div class="callout-title">Why This Matters for PMs</div>
+      <p>You don't need to diagnose these problems yourself &mdash; that's your data scientist's job. But you need to <strong>recognize the symptoms</strong> so you can ask the right questions and avoid shipping a broken model.</p>
+    </div>
+
+    <!-- Failure Mode 1: Overfitting -->
+    <h2>1. Overfitting: The Model Memorized, It Didn't Learn</h2>
+
+    <div class="card">
+      <div class="failure-visual">
+        <span class="label">Good Fit vs Overfitting</span>
+        <pre>
+  Good Model:                    Overfitted Model:
+  Finds the TREND               Memorizes EVERY point
+
+     *    *                         *    *
+   *   **    *                    */  \*/   \*
+  *  *    *    *                 *  *    *    *
+       smooth curve                  wiggly mess
+       (generalizes)                 (memorized noise)
+        </pre>
+      </div>
+
+      <h3>What's happening?</h3>
+      <p>The model learned the training data <em>too well</em> &mdash; including the noise and random patterns. It performs perfectly on historical data but <strong>fails on new data</strong>.</p>
+
+      <h3>PM Signal</h3>
+      <div class="callout callout-failure" style="margin:0.5rem 0;">
+        <div class="callout-title">Red Flag</div>
+        <p>"Our model is 99% accurate on test data but only 70% in production."</p>
+      </div>
+
+      <h3>Questions to Ask</h3>
+      <ul>
+        <li>"Are we testing on data the model has never seen?"</li>
+        <li>"How different is our test data from production data?"</li>
+        <li>"Is the model simpler than the data requires, or too complex?"</li>
+      </ul>
+    </div>
+
+    <!-- Failure Mode 2: Underfitting -->
+    <h2>2. Underfitting: The Model Is Too Simple</h2>
+
+    <div class="card">
+      <div class="failure-visual">
+        <span class="label">Underfitting</span>
+        <pre>
+  The data has a curve:           The model draws a line:
+
+     *    *                          *    *
+   *   **    *                     ----*-------*--
+  *  *    *    *                  *  *    *    *
+       curved pattern                 straight line
+                                      (misses the pattern)
+        </pre>
+      </div>
+
+      <h3>What's happening?</h3>
+      <p>The model is too simple to capture the real patterns in the data. Like trying to describe a mountain range with a flat line.</p>
+
+      <h3>PM Signal</h3>
+      <div class="callout callout-failure" style="margin:0.5rem 0;">
+        <div class="callout-title">Red Flag</div>
+        <p>"We've been training for weeks but accuracy won't improve beyond 60%, even on training data."</p>
+      </div>
+
+      <h3>Questions to Ask</h3>
+      <ul>
+        <li>"Do we have enough features (input variables) for this task?"</li>
+        <li>"Is the model type appropriate for this problem?"</li>
+        <li>"Is there actually a predictable pattern in this data?"</li>
+      </ul>
+    </div>
+
+    <!-- Failure Mode 3: Data Drift -->
+    <h2>3. Data Drift: The World Changed, the Model Didn't</h2>
+
+    <div class="card">
+      <div class="callout callout-failure" style="margin:0 0 1rem;">
+        <div class="callout-title">Real Example: COVID &amp; Demand Forecasting</div>
+        <p>Every demand forecasting model trained on pre-2020 data broke when COVID hit. The patterns the models learned &mdash; seasonal shopping, commute-based purchases, office supply orders &mdash; simply <strong>stopped being true</strong>.</p>
+      </div>
+
+      <h3>What's happening?</h3>
+      <p>The data distribution in production is different from what the model was trained on. The model's "rules" no longer apply because the world has changed.</p>
+
+      <h3>Three Types of Drift</h3>
+      <table>
+        <thead>
+          <tr><th>Type</th><th>What It Looks Like</th><th>Example</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Gradual</strong></td>
+            <td>Performance slowly degrades over months</td>
+            <td>Customer preferences shift over time</td>
+          </tr>
+          <tr>
+            <td><strong>Sudden</strong></td>
+            <td>Performance drops sharply</td>
+            <td>Pandemic, regulatory change, competitor launch</td>
+          </tr>
+          <tr>
+            <td><strong>Seasonal</strong></td>
+            <td>Performance varies predictably by season</td>
+            <td>Holiday shopping vs normal periods</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>PM Signal</h3>
+      <div class="callout callout-failure" style="margin:0.5rem 0;">
+        <div class="callout-title">Red Flag</div>
+        <p>"The model was great 6 months ago but accuracy has dropped to 65%. Nothing changed in our code."</p>
+      </div>
+
+      <h3>Questions to Ask</h3>
+      <ul>
+        <li>"When was the model last retrained?"</li>
+        <li>"Do we have monitoring for performance drift?"</li>
+        <li>"What's our retraining schedule and trigger?"</li>
+      </ul>
+    </div>
+
+    <!-- Try It -->
+    <h2>Try It: Data Drift Simulator</h2>
+    <p>Watch a model's performance degrade over time as data drifts. Experiment with gradual, sudden, and seasonal drift to see when retraining is needed.</p>
+
+    <div class="hf-space-embed">
+      <a class="hf-space-link" href="https://huggingface.co/spaces/datatrainers/data-drift-simulator" target="_blank">
+        Launch Data Drift Simulator
+      </a>
+    </div>
+
+    <!-- Interactive Resource -->
+    <div class="callout callout-insight">
+      <div class="callout-title">Interactive Resource: r2d3.us</div>
+      <p>For a beautiful visual explanation of how machine learning models find patterns in data, visit <a href="http://www.r2d3.us/visual-intro-to-machine-learning-part-1/" target="_blank">r2d3.us</a>. It shows how a model learns to classify San Francisco vs New York apartments &mdash; no math required.</p>
+    </div>
+
+    <!-- Summary -->
+    <h2>The PM Cheat Sheet</h2>
+
+    <table>
+      <thead>
+        <tr><th>Failure Mode</th><th>PM Signal</th><th>First Question to Ask</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Overfitting</strong></td>
+          <td>Great on test data, bad in production</td>
+          <td>"How different is test data from production?"</td>
+        </tr>
+        <tr>
+          <td><strong>Underfitting</strong></td>
+          <td>Accuracy never improves, even on training data</td>
+          <td>"Do we have enough signal in this data?"</td>
+        </tr>
+        <tr>
+          <td><strong>Data Drift</strong></td>
+          <td>Performance degrades over time</td>
+          <td>"When was the model last retrained?"</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="stakeholder-frame">
+      <h3>Stakeholder Framing</h3>
+      <p>When someone asks "Why did the model stop working?":</p>
+      <blockquote>
+        "ML models aren't like software &mdash; they don't stay accurate forever. They learn patterns from historical data, and when the world changes, those patterns become outdated. We need to monitor performance continuously and retrain every 3-6 months, just like we update our forecasts."
+      </blockquote>
+    </div>
+
+    <nav class="module-nav">
+      <a href="2.2-ml-lifecycle.html">&larr; Previous: ML Lifecycle</a>
+      <a href="2.4-metrics-that-matter.html">Next: Metrics That Matter &rarr;</a>
+    </nav>
+
+  </div>
+
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({ startOnLoad: true, theme: 'base', themeVariables: { primaryColor: '#dbeafe', primaryTextColor: '#1e3a5f', primaryBorderColor: '#1e40af', lineColor: '#6b7280', secondaryColor: '#eff6ff', tertiaryColor: '#f9fafb' }});
+  </script>
+  <script src="../../shared/js/course.js"></script>
+</body>
+</html>

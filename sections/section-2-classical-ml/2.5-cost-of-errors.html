@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2.5 Cost of Errors in Dollars - AI for Product Managers</title>
+  <link rel="stylesheet" href="../../shared/css/course.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    .calc-section { background: var(--bg-alt); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; margin: 2rem 0; }
+    .calc-section label { display: block; font-weight: 600; margin-bottom: 0.25rem; font-size: 0.9rem; }
+    .calc-section input[type="range"] { width: 100%; margin-bottom: 1rem; accent-color: var(--primary); }
+    .calc-section input[type="number"] { width: 120px; padding: 0.4rem; border: 1px solid var(--border); border-radius: 4px; font-size: 0.95rem; margin-bottom: 1rem; }
+    .range-value { font-weight: 700; color: var(--primary); }
+    .calc-result { background: var(--primary-bg); border: 2px solid var(--primary); border-radius: var(--radius); padding: 1.5rem; margin-top: 1rem; }
+    .result-row { display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid var(--border); }
+    .result-row:last-child { border: none; font-weight: 700; font-size: 1.1rem; }
+    .result-label { color: var(--text-light); }
+    .result-value { font-weight: 600; }
+    .result-value.danger { color: var(--danger); }
+    .result-value.success { color: var(--success); }
+  </style>
+</head>
+<body>
+  <div class="course-container">
+
+    <header class="course-header">
+      <span class="section-label">Section 2 &middot; Classical ML</span>
+      <h1>2.5 Cost of Errors in Dollars</h1>
+      <p class="subtitle">Turn model tradeoffs into the language stakeholders understand: money</p>
+    </header>
+
+    <div class="callout callout-insight">
+      <div class="callout-title">The Framework That Changes Conversations</div>
+      <p>When you can say <em>"Improving recall from 85% to 95% saves us $2.3M per year in fraud losses, but increases false alarms by $180K"</em> &mdash; you're speaking a language every executive understands. This framework turns abstract model metrics into concrete dollars.</p>
+    </div>
+
+    <!-- The Formula -->
+    <h2>The Cost Framework</h2>
+
+    <div class="card">
+      <h3>Expected Monthly Cost of Errors</h3>
+      <div style="background: #f8fafc; padding: 1rem; border-radius: var(--radius); font-size: 1.05rem; text-align: center; margin: 1rem 0;">
+        <strong>Total Cost</strong> = (Number of False Positives &times; Cost per FP) + (Number of False Negatives &times; Cost per FN)
+      </div>
+      <p>That's it. No complex math. Just count the errors and multiply by what each one costs your business.</p>
+    </div>
+
+    <!-- Worked Example -->
+    <h2>Worked Example: Fraud Detection</h2>
+
+    <div class="card">
+      <p><strong>Scenario:</strong> Your fraud detection model processes 100,000 transactions/month. Actual fraud rate is 1% (1,000 fraudulent transactions).</p>
+
+      <table>
+        <thead>
+          <tr><th>Metric</th><th>Model A (High Recall)</th><th>Model B (High Precision)</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Recall</td><td>95% (catches 950 of 1,000 frauds)</td><td>80% (catches 800 of 1,000 frauds)</td></tr>
+          <tr><td>Precision</td><td>70% (30% of flags are false alarms)</td><td>95% (only 5% are false alarms)</td></tr>
+          <tr><td>False Positives</td><td>407 legit flagged</td><td>42 legit flagged</td></tr>
+          <tr><td>False Negatives</td><td>50 frauds missed</td><td>200 frauds missed</td></tr>
+        </tbody>
+      </table>
+
+      <p><strong>Costs:</strong> FP = $50 (customer friction) | FN = $5,000 (fraud loss)</p>
+
+      <table>
+        <thead>
+          <tr><th></th><th>Model A (High Recall)</th><th>Model B (High Precision)</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>FP Cost</td><td>407 &times; $50 = <strong>$20,350</strong></td><td>42 &times; $50 = <strong>$2,100</strong></td></tr>
+          <tr><td>FN Cost</td><td>50 &times; $5,000 = <strong>$250,000</strong></td><td>200 &times; $5,000 = <strong>$1,000,000</strong></td></tr>
+          <tr style="font-weight:700; background:#eff6ff;"><td>Total Monthly Cost</td><td style="color:var(--success);">$270,350</td><td style="color:var(--danger);">$1,002,100</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout-success" style="margin-top:1rem;">
+        <div class="callout-title">The Decision</div>
+        <p>Model A costs <strong>$732K/month less</strong> than Model B, despite having more false alarms. When false negatives cost 100x more than false positives, recall wins. This is the conversation to have with your stakeholders.</p>
+      </div>
+    </div>
+
+    <!-- Interactive Calculator -->
+    <h2>Try It: Cost of Errors Calculator</h2>
+
+    <div class="calc-section">
+      <label>Monthly Predictions: <span class="range-value" id="pred-val">10,000</span></label>
+      <input type="range" id="predictions" min="1000" max="500000" step="1000" value="10000">
+
+      <label>Positive Rate (% that are actual positives): <span class="range-value" id="pos-val">5%</span></label>
+      <input type="range" id="posrate" min="0.5" max="30" step="0.5" value="5">
+
+      <label>Model Recall: <span class="range-value" id="recall-val">90%</span></label>
+      <input type="range" id="recall" min="50" max="99" step="1" value="90">
+
+      <label>Model Precision: <span class="range-value" id="prec-val">80%</span></label>
+      <input type="range" id="precision" min="50" max="99" step="1" value="80">
+
+      <div style="display:flex; gap:2rem; flex-wrap:wrap;">
+        <div>
+          <label>Cost per False Positive ($):</label>
+          <input type="number" id="fp-cost" value="50" min="0" max="1000000">
+        </div>
+        <div>
+          <label>Cost per False Negative ($):</label>
+          <input type="number" id="fn-cost" value="5000" min="0" max="1000000">
+        </div>
+      </div>
+
+      <div class="calc-result" id="calc-result">
+        <h4 style="margin-top:0; color:var(--primary);">Cost Analysis</h4>
+        <div id="calc-output"></div>
+      </div>
+    </div>
+
+    <!-- Stakeholder Framing -->
+    <div class="stakeholder-frame">
+      <h3>Stakeholder Framing</h3>
+      <p>When presenting model tradeoffs to leadership:</p>
+      <blockquote>
+        "We have two model options. Model A catches 95% of fraud but generates more false alarms — costing $270K/month total. Model B has fewer false alarms but misses more fraud — costing $1M/month. I recommend Model A. The $20K in extra customer friction is a bargain compared to $750K in prevented fraud losses."
+      </blockquote>
+    </div>
+
+    <nav class="module-nav">
+      <a href="2.4-metrics-that-matter.html">&larr; Previous: Metrics That Matter</a>
+      <a href="index.html">Back to Section Overview &rarr;</a>
+    </nav>
+
+  </div>
+
+  <script src="../../shared/js/course.js"></script>
+  <script>
+    function calculate() {
+      const preds = +document.getElementById('predictions').value;
+      const posRate = +document.getElementById('posrate').value / 100;
+      const recall = +document.getElementById('recall').value / 100;
+      const precision = +document.getElementById('precision').value / 100;
+      const fpCost = +document.getElementById('fp-cost').value;
+      const fnCost = +document.getElementById('fn-cost').value;
+
+      const actualPos = Math.round(preds * posRate);
+      const actualNeg = preds - actualPos;
+
+      const tp = Math.round(actualPos * recall);
+      const fn = actualPos - tp;
+      const fp = Math.round(tp / precision) - tp;
+      const tn = actualNeg - fp;
+
+      const totalFPCost = fp * fpCost;
+      const totalFNCost = fn * fnCost;
+      const totalCost = totalFPCost + totalFNCost;
+      const annualCost = totalCost * 12;
+
+      document.getElementById('calc-output').innerHTML = `
+        <div class="result-row"><span class="result-label">Actual positives / month</span><span class="result-value">${actualPos.toLocaleString()}</span></div>
+        <div class="result-row"><span class="result-label">True Positives (caught)</span><span class="result-value success">${tp.toLocaleString()}</span></div>
+        <div class="result-row"><span class="result-label">False Positives (false alarms)</span><span class="result-value danger">${Math.max(0,fp).toLocaleString()}</span></div>
+        <div class="result-row"><span class="result-label">False Negatives (missed)</span><span class="result-value danger">${fn.toLocaleString()}</span></div>
+        <div class="result-row"><span class="result-label">FP Cost / month</span><span class="result-value">$${Math.max(0,totalFPCost).toLocaleString()}</span></div>
+        <div class="result-row"><span class="result-label">FN Cost / month</span><span class="result-value danger">$${totalFNCost.toLocaleString()}</span></div>
+        <div class="result-row"><span class="result-label">Total Error Cost / month</span><span class="result-value danger" style="font-size:1.2rem;">$${Math.max(0,totalCost).toLocaleString()}</span></div>
+        <div class="result-row"><span class="result-label">Annual Error Cost</span><span class="result-value danger" style="font-size:1.2rem;">$${Math.max(0,annualCost).toLocaleString()}</span></div>
+        <div style="margin-top:1rem; padding:0.75rem; background:${fnCost > fpCost * 10 ? '#ecfdf5' : fnCost * 10 < fpCost ? '#eff6ff' : '#fffbeb'}; border-radius:6px;">
+          <strong>Recommendation:</strong> ${fnCost > fpCost * 10 ? 'Optimize for RECALL — missed cases cost far more than false alarms.' : fnCost * 10 < fpCost ? 'Optimize for PRECISION — false alarms are the bigger cost.' : 'Optimize for F1 — both error types have similar costs.'}
+        </div>
+      `;
+
+      // Update display values
+      document.getElementById('pred-val').textContent = preds.toLocaleString();
+      document.getElementById('pos-val').textContent = (posRate * 100).toFixed(1) + '%';
+      document.getElementById('recall-val').textContent = (recall * 100) + '%';
+      document.getElementById('prec-val').textContent = (precision * 100) + '%';
+    }
+
+    document.querySelectorAll('.calc-section input').forEach(el => {
+      el.addEventListener('input', calculate);
+    });
+    calculate();
+  </script>
+</body>
+</html>
