@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Section 3: LLMs - AI for Product Managers</title>
+  <link rel="stylesheet" href="../../shared/css/course.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="course-container">
+
+    <header class="course-header">
+      <span class="section-label">Day 1 Afternoon &amp; Day 2 Morning</span>
+      <h1>Section 3: LLMs &mdash; How They Work</h1>
+      <p class="subtitle">Tokens, temperature, embeddings, and prompt engineering &mdash; the PM's guide to language models</p>
+    </header>
+
+    <div class="callout callout-insight">
+      <div class="callout-title">Section Overview</div>
+      <p><strong>Duration:</strong> 165 minutes (Module 3: Foundations 60 min + Module 4: Prompt Engineering 105 min)</p>
+      <p><strong>Key Question:</strong> What do you actually need to know about LLMs to make good product decisions?</p>
+      <p><strong>By the end:</strong> You'll understand token economics, know which prompt patterns to use, and be able to defend against prompt injection attacks.</p>
+    </div>
+
+    <h2>Module 3: Foundations</h2>
+
+    <div class="card-grid">
+      <a href="3.1-tokens-and-cost.html" style="text-decoration:none; color:inherit;">
+        <div class="card">
+          <h3>3.1 Tokens &amp; Cost</h3>
+          <p>What tokens are, why they cost money, and how context windows shape what's possible.</p>
+        </div>
+      </a>
+      <a href="3.2-temperature.html" style="text-decoration:none; color:inherit;">
+        <div class="card">
+          <h3>3.2 Temperature</h3>
+          <p>The creativity-consistency dial. When to use 0 vs 0.7 vs 1.0.</p>
+        </div>
+      </a>
+      <a href="3.3-embeddings.html" style="text-decoration:none; color:inherit;">
+        <div class="card">
+          <h3>3.3 Embeddings</h3>
+          <p>How LLMs understand meaning &mdash; and why this powers search, RAG, and recommendations.</p>
+        </div>
+      </a>
+      <a href="3.4-foundation-vs-finetuned.html" style="text-decoration:none; color:inherit;">
+        <div class="card">
+          <h3>3.4 Foundation vs Fine-tuned</h3>
+          <p>When to prompt, when to fine-tune, and why 90% of the time prompting wins.</p>
+        </div>
+      </a>
+    </div>
+
+    <h2>Module 4: Prompt Engineering</h2>
+
+    <div class="card-grid">
+      <a href="3.5-prompt-engineering.html" style="text-decoration:none; color:inherit;">
+        <div class="card">
+          <h3>3.5 Prompt Engineering</h3>
+          <p>System vs user prompts, 5 essential patterns, and the Air Canada lesson.</p>
+        </div>
+      </a>
+      <a href="3.6-prompt-injection.html" style="text-decoration:none; color:inherit;">
+        <div class="card">
+          <h3>3.6 Prompt Injection</h3>
+          <p>How users break your system &mdash; and the defense layers every PM must require.</p>
+        </div>
+      </a>
+    </div>
+
+    <h2>Interactive Tools</h2>
+
+    <div class="card-grid">
+      <a href="https://huggingface.co/spaces/datatrainers/token-counter" target="_blank" style="text-decoration:none; color:inherit;">
+        <div class="card">
+          <h3>Token Counter &amp; Cost Calculator</h3>
+          <p>Paste text, see tokens, estimate costs by model. Know what every query costs.</p>
+        </div>
+      </a>
+      <a href="https://huggingface.co/spaces/datatrainers/temperature-playground" target="_blank" style="text-decoration:none; color:inherit;">
+        <div class="card">
+          <h3>Temperature Playground</h3>
+          <p>Same prompt at 5 temperatures. See creativity vs consistency in action.</p>
+        </div>
+      </a>
+      <a href="https://huggingface.co/spaces/datatrainers/prompt-engineering-lab" target="_blank" style="text-decoration:none; color:inherit;">
+        <div class="card">
+          <h3>Prompt Engineering Lab</h3>
+          <p>Try zero-shot vs few-shot, chain-of-thought, system prompts, and output formats.</p>
+        </div>
+      </a>
+      <a href="https://huggingface.co/spaces/datatrainers/prompt-injection-sim" target="_blank" style="text-decoration:none; color:inherit;">
+        <div class="card">
+          <h3>Prompt Injection Simulator</h3>
+          <p>Try to break a chatbot. See which attacks work and which defenses stop them.</p>
+        </div>
+      </a>
+      <a href="https://huggingface.co/spaces/datatrainers/embedding-explorer" target="_blank" style="text-decoration:none; color:inherit;">
+        <div class="card">
+          <h3>Embedding Explorer</h3>
+          <p>Enter words, see them plotted by meaning. Understand the foundation of semantic search.</p>
+        </div>
+      </a>
+    </div>
+
+    <h2>Lab Notebook</h2>
+
+    <div class="card">
+      <h3>Section 3 Lab: Prompt Design &amp; Cost Estimation</h3>
+      <p>Design system prompts, select temperature settings, and calculate token costs for real scenarios.</p>
+      <a class="hf-space-link" href="https://colab.research.google.com/github/datatrainers/ai-for-pms-2026/blob/main/notebooks/section-3-llms/section-3-llms.ipynb" target="_blank" style="margin-top:0.5rem;">
+        Open in Google Colab
+      </a>
+    </div>
+
+    <nav class="module-nav">
+      <a href="../section-2-classical-ml/index.html">&larr; Section 2: Classical ML</a>
+      <a href="../section-4-rag/index.html">Section 4: RAG &rarr;</a>
+    </nav>
+
+  </div>
+  <script src="../../shared/js/course.js"></script>
+</body>
+</html>

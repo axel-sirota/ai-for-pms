@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3.1 Tokens &amp; Cost - AI for Product Managers</title>
+  <link rel="stylesheet" href="../../shared/css/course.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="course-container">
+
+    <header class="course-header">
+      <span class="section-label">Section 3 &middot; LLM Foundations</span>
+      <h1>Tokens &amp; Cost</h1>
+      <p class="subtitle">Every word costs money. Here's how to budget for it.</p>
+    </header>
+
+    <!-- Opening Hook -->
+    <div class="callout callout-insight">
+      <div class="callout-title">Try This Right Now</div>
+      <p>Type <strong>"I love product management"</strong> into a tokenizer.</p>
+      <p>Result: <code>["I", " love", " product", " management"]</code> &mdash; <strong>4 tokens</strong>.</p>
+      <p>Now imagine your chatbot handles 10,000 queries/day. Each query averages 500 tokens in + 300 tokens out. That's <strong>8 million tokens/day</strong>.</p>
+      <p>At GPT-4o pricing, that's <strong>~$60/day or $1,800/month</strong> just for the API.</p>
+    </div>
+
+    <!-- What Is a Token? -->
+    <h2>What Is a Token?</h2>
+
+    <p>A token is roughly <strong>4 characters</strong> or <strong>0.75 words</strong>. It's the unit LLMs "think" in &mdash; and the unit you <strong>pay</strong> for.</p>
+
+    <div class="card-grid">
+      <div class="card">
+        <h3>Simple Words</h3>
+        <p>"hello" = 1 token</p>
+        <p>"Hello," = 2 tokens</p>
+        <p style="color:var(--text-light); font-size:0.9rem;"><em>Punctuation and capitalization affect token count</em></p>
+      </div>
+      <div class="card">
+        <h3>Common Phrases</h3>
+        <p>"artificial intelligence" = 2 tokens</p>
+        <p>"I love product management" = 4 tokens</p>
+        <p style="color:var(--text-light); font-size:0.9rem;"><em>Common words are single tokens</em></p>
+      </div>
+      <div class="card">
+        <h3>Technical Terms</h3>
+        <p>"tokenization" = 3 tokens</p>
+        <p>"pneumonoultramicro..." = 9 tokens</p>
+        <p style="color:var(--text-light); font-size:0.9rem;"><em>Rare/long words get split into more tokens</em></p>
+      </div>
+    </div>
+
+    <div class="callout callout-decision">
+      <div class="callout-title">PM Decision Point</div>
+      <p><strong>You pay for both input AND output tokens.</strong> The cost equation is:</p>
+      <p style="text-align:center; font-size:1.2rem; font-weight:600;">
+        Total Cost = (Input Tokens &times; Input Price) + (Output Tokens &times; Output Price)
+      </p>
+      <p>Output tokens typically cost <strong>2-4x more</strong> than input tokens. This means controlling output length saves more money than shortening prompts.</p>
+    </div>
+
+    <!-- Token Flow Diagram -->
+    <h2>How Tokens Flow Through an LLM</h2>
+
+    <pre class="mermaid">
+flowchart LR
+    A["Your Text<br/>500 words"] --> B["Tokenizer<br/>~670 tokens"]
+    B --> C["LLM Processing<br/>$$$ per token"]
+    C --> D["Output Tokens<br/>~400 tokens"]
+    D --> E["Response Text<br/>~300 words"]
+
+    style A fill:#dbeafe,stroke:#1e40af
+    style B fill:#fef3c7,stroke:#d97706
+    style C fill:#fee2e2,stroke:#dc2626
+    style D fill:#fef3c7,stroke:#d97706
+    style E fill:#d1fae5,stroke:#059669
+    </pre>
+
+    <!-- Context Windows -->
+    <h2>Context Windows: How Much Can the Model "See"?</h2>
+
+    <p>The context window is the <strong>total input + output</strong> the model can handle in one request. Think of it as the model's working memory.</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Model</th>
+          <th>Context Window</th>
+          <th>Real-World Meaning</th>
+          <th>Use Case</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>GPT-4o</strong></td>
+          <td>128K tokens</td>
+          <td>~96K words / ~300 pages</td>
+          <td>Long documents, code analysis</td>
+        </tr>
+        <tr>
+          <td><strong>Claude 3.5 Sonnet</strong></td>
+          <td>200K tokens</td>
+          <td>~150K words / ~500 pages</td>
+          <td>Entire codebases, book analysis</td>
+        </tr>
+        <tr>
+          <td><strong>Gemini 1.5 Pro</strong></td>
+          <td>1M tokens</td>
+          <td>~750K words / entire codebase</td>
+          <td>Video transcripts, massive docs</td>
+        </tr>
+        <tr>
+          <td><strong>GPT-4o-mini</strong></td>
+          <td>128K tokens</td>
+          <td>~96K words</td>
+          <td>Budget-friendly long context</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout callout-failure">
+      <div class="callout-title">The "Lost in the Middle" Problem</div>
+      <p>Just because a model has a 200K token context window doesn't mean it uses all of it well. Research shows LLMs tend to <strong>pay most attention to the beginning and end</strong> of the context, often missing information in the middle.</p>
+      <p><strong>PM Lesson:</strong> Bigger context window &ne; better results. A 4K-token prompt with the right information beats a 100K-token dump of everything.</p>
+    </div>
+
+    <!-- Cost Comparison -->
+    <h2>What Does It Actually Cost?</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Model</th>
+          <th>Input (per 1M tokens)</th>
+          <th>Output (per 1M tokens)</th>
+          <th>1,000-word query cost</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>GPT-4o</strong></td>
+          <td>$2.50</td>
+          <td>$10.00</td>
+          <td>~$0.007</td>
+        </tr>
+        <tr>
+          <td><strong>GPT-4o-mini</strong></td>
+          <td>$0.15</td>
+          <td>$0.60</td>
+          <td>~$0.0004</td>
+        </tr>
+        <tr>
+          <td><strong>Claude 3.5 Sonnet</strong></td>
+          <td>$3.00</td>
+          <td>$15.00</td>
+          <td>~$0.009</td>
+        </tr>
+        <tr>
+          <td><strong>Claude 3.5 Haiku</strong></td>
+          <td>$0.80</td>
+          <td>$4.00</td>
+          <td>~$0.003</td>
+        </tr>
+        <tr>
+          <td><strong>Gemini 1.5 Pro</strong></td>
+          <td>$1.25</td>
+          <td>$5.00</td>
+          <td>~$0.004</td>
+        </tr>
+        <tr>
+          <td><strong>Llama 3.1 70B (self-hosted)</strong></td>
+          <td>~$0.50*</td>
+          <td>~$0.50*</td>
+          <td>~$0.001*</td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="color:var(--text-light); font-size:0.85rem;">*Self-hosted costs vary by infrastructure. Includes GPU compute amortization.</p>
+
+    <div class="callout callout-decision">
+      <div class="callout-title">PM Cost Framework</div>
+      <p>For any LLM feature, calculate:</p>
+      <ol>
+        <li><strong>Average tokens per query</strong> (input + output)</li>
+        <li><strong>Expected queries per day</strong></li>
+        <li><strong>Monthly cost</strong> = tokens &times; queries &times; 30 &times; price per token</li>
+        <li><strong>Scale factor</strong> &mdash; what happens at 10x or 100x usage?</li>
+      </ol>
+      <p>A feature that costs $50/month at launch can cost $50,000/month at scale.</p>
+    </div>
+
+    <!-- Try It -->
+    <h2>Try It: Token Counter &amp; Cost Calculator</h2>
+    <p>Paste real text from your product, see exact token counts, and calculate what it would cost at scale.</p>
+    <div class="hf-space-embed">
+      <a class="hf-space-link" href="https://huggingface.co/spaces/datatrainers/token-counter" target="_blank">
+        Launch Token Counter
+      </a>
+    </div>
+
+    <!-- Tips -->
+    <h2>5 Ways to Reduce Token Costs</h2>
+
+    <div class="card-grid">
+      <div class="card">
+        <h3>1. Use a Smaller Model</h3>
+        <p>GPT-4o-mini is 17x cheaper than GPT-4o. For many tasks, quality is comparable.</p>
+      </div>
+      <div class="card">
+        <h3>2. Limit Output Length</h3>
+        <p>Set <code>max_tokens</code> to cap response length. Output tokens cost 2-4x more than input.</p>
+      </div>
+      <div class="card">
+        <h3>3. Cache Common Queries</h3>
+        <p>If 20% of queries are the same, cache those responses. Zero token cost for repeats.</p>
+      </div>
+      <div class="card">
+        <h3>4. Shorten System Prompts</h3>
+        <p>Your system prompt is sent with every query. A 500-token system prompt × 10K queries/day = 5M extra tokens/day.</p>
+      </div>
+      <div class="card">
+        <h3>5. Route by Complexity</h3>
+        <p>Use a cheap model for simple queries, expensive model for complex ones. This alone can cut costs 60-80%.</p>
+      </div>
+    </div>
+
+    <!-- Quiz -->
+    <div class="quiz">
+      <h3>Quick Check</h3>
+      <p>Your chatbot handles 5,000 queries/day. Average: 400 input tokens, 200 output tokens. You're using GPT-4o ($2.50/1M input, $10/1M output). What's the approximate monthly API cost?</p>
+      <button class="quiz-option" data-correct="false" data-feedback-incorrect="Too low. Remember output tokens cost 4x more than input. Recalculate: (5000 × 400 × $2.50/1M) + (5000 × 200 × $10/1M) = $5 + $10 = $15/day × 30 = $450/month.">
+        <strong>A.</strong> ~$75/month
+      </button>
+      <button class="quiz-option" data-correct="true" data-feedback-correct="Correct! Input: 5000 × 400 × $2.50/1M = $5/day. Output: 5000 × 200 × $10/1M = $10/day. Total: $15/day × 30 = $450/month. And that's at current scale — what happens at 10x?">
+        <strong>B.</strong> ~$450/month
+      </button>
+      <button class="quiz-option" data-correct="false" data-feedback-incorrect="Too high. At GPT-4o pricing: (5000 × 400 × $2.50/1M) + (5000 × 200 × $10/1M) = $15/day = ~$450/month. $4,500 would be at 10x volume.">
+        <strong>C.</strong> ~$4,500/month
+      </button>
+      <div class="quiz-feedback"></div>
+    </div>
+
+    <!-- Stakeholder Framing -->
+    <div class="stakeholder-frame">
+      <h3>Stakeholder Framing</h3>
+      <p>When your CTO says <em>"Let's just use GPT-4o for everything"</em>:</p>
+      <blockquote>
+        "GPT-4o costs 17x more per token than GPT-4o-mini. At our projected volume of 50K queries/day, that's the difference between $300/month and $5,100/month. Let's route simple queries to the cheaper model and reserve GPT-4o for complex ones."
+      </blockquote>
+    </div>
+
+    <nav class="module-nav">
+      <a href="index.html">&larr; Section Overview</a>
+      <a href="3.2-temperature.html">Next: Temperature &rarr;</a>
+    </nav>
+
+  </div>
+
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({ startOnLoad: true, theme: 'base', themeVariables: { primaryColor: '#dbeafe', primaryTextColor: '#1e3a5f', primaryBorderColor: '#1e40af', lineColor: '#6b7280', secondaryColor: '#eff6ff', tertiaryColor: '#f9fafb' }});
+  </script>
+  <script src="../../shared/js/course.js"></script>
+</body>
+</html>

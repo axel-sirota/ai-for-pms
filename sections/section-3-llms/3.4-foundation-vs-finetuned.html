@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3.4 Foundation vs Fine-tuned - AI for Product Managers</title>
+  <link rel="stylesheet" href="../../shared/css/course.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="course-container">
+
+    <header class="course-header">
+      <span class="section-label">Section 3 &middot; LLM Foundations</span>
+      <h1>Foundation vs Fine-tuned</h1>
+      <p class="subtitle">When to prompt, when to fine-tune, and why 90% of the time prompting wins.</p>
+    </header>
+
+    <div class="callout callout-failure">
+      <div class="callout-title">The Expensive Mistake</div>
+      <p>A fintech startup spent <strong>3 months and $200K</strong> fine-tuning GPT-3.5 on their customer support data. The result was 2% better than a well-crafted system prompt that took one engineer a week.</p>
+      <p>The fine-tuned model also couldn't be updated when policies changed without another round of training.</p>
+      <p><strong>Lesson:</strong> Fine-tuning is a last resort, not a first instinct.</p>
+    </div>
+
+    <h2>The Three Approaches</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Approach</th>
+          <th>What It Is</th>
+          <th>Cost</th>
+          <th>Time</th>
+          <th>Data Needed</th>
+          <th>When to Use</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Prompting</strong></td>
+          <td>Use a foundation model with well-crafted instructions</td>
+          <td>$0 (just API costs)</td>
+          <td>Hours to days</td>
+          <td>None</td>
+          <td>First approach. Always try this first.</td>
+        </tr>
+        <tr>
+          <td><strong>Fine-tuning</strong></td>
+          <td>Retrain an existing model on your specific data</td>
+          <td>$500&ndash;$50K</td>
+          <td>Weeks</td>
+          <td>1,000+ examples</td>
+          <td>Prompting fails AND you have good data</td>
+        </tr>
+        <tr>
+          <td><strong>Training from scratch</strong></td>
+          <td>Build a model from zero</td>
+          <td>$1M&ndash;$100M+</td>
+          <td>Months to years</td>
+          <td>Billions of tokens</td>
+          <td>Almost never. Only for large AI companies.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>The PM Decision Tree</h2>
+
+    <pre class="mermaid">
+flowchart TD
+    A["Can you achieve results<br/>with prompting alone?"] -->|"YES"| B["Use Prompting<br/>Cheapest, fastest,<br/>easiest to update"]
+    A -->|"NO"| C["Do you have 1,000+<br/>examples of desired<br/>behavior?"]
+    C -->|"YES"| D["Is accuracy<br/>mission-critical<br/>AND prompting<br/>consistently fails?"]
+    C -->|"NO"| E["Improve your prompts<br/>or collect more data"]
+    D -->|"YES"| F["Consider Fine-tuning<br/>But budget for<br/>maintenance"]
+    D -->|"NO"| G["Improve your prompts<br/>Try RAG first<br/>(Section 4)"]
+
+    style A fill:#dbeafe,stroke:#1e40af
+    style B fill:#d1fae5,stroke:#059669
+    style E fill:#fef3c7,stroke:#d97706
+    style F fill:#fee2e2,stroke:#dc2626
+    style G fill:#fef3c7,stroke:#d97706
+    </pre>
+
+    <div class="callout callout-insight">
+      <div class="callout-title">The 90% Rule</div>
+      <p><strong>90% of the time, better prompts beat fine-tuning.</strong></p>
+      <p>Before spending money on fine-tuning, try: more specific system prompts, few-shot examples in the prompt, chain-of-thought reasoning, or RAG (grounding the model with your data).</p>
+    </div>
+
+    <h2>3 Questions Before Fine-tuning</h2>
+
+    <div class="card-grid">
+      <div class="card">
+        <h3>1. Have you exhausted prompting?</h3>
+        <p>Have you tried: persona prompts, few-shot examples, chain-of-thought, output format constraints, and RAG? If not, start there.</p>
+      </div>
+      <div class="card">
+        <h3>2. Do you have clean, labeled data?</h3>
+        <p>Fine-tuning needs 1,000+ examples of input-output pairs. Bad data = bad model. Budget 60% of fine-tuning time for data prep.</p>
+      </div>
+      <div class="card">
+        <h3>3. Can you maintain it?</h3>
+        <p>Fine-tuned models need retraining when your product changes. Budget for ongoing maintenance, not just initial training.</p>
+      </div>
+    </div>
+
+    <h2>Real-World Comparison</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Scenario</th>
+          <th>Best Approach</th>
+          <th>Why</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Customer support chatbot</td>
+          <td><strong>Prompting + RAG</strong></td>
+          <td>Policies change often. RAG keeps responses current without retraining.</td>
+        </tr>
+        <tr>
+          <td>Medical note summarizer</td>
+          <td><strong>Fine-tuning</strong></td>
+          <td>Domain-specific language, high accuracy required, stable format.</td>
+        </tr>
+        <tr>
+          <td>Email categorizer</td>
+          <td><strong>Prompting</strong></td>
+          <td>Simple classification. A good system prompt with examples handles this easily.</td>
+        </tr>
+        <tr>
+          <td>Legal contract analyzer</td>
+          <td><strong>Fine-tuning + RAG</strong></td>
+          <td>Domain expertise needed, but also needs access to specific case law.</td>
+        </tr>
+        <tr>
+          <td>Marketing copy writer</td>
+          <td><strong>Prompting</strong></td>
+          <td>Brand voice can be captured in a system prompt. Fine-tuning overkill.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Quiz -->
+    <div class="quiz">
+      <h3>Quick Check</h3>
+      <p>Your team wants to fine-tune a model for your customer support bot. They've collected 200 example conversations. What do you do?</p>
+      <button class="quiz-option" data-correct="false" data-feedback-incorrect="200 examples is far too few for fine-tuning (need 1,000+). You'd likely get a worse model than good prompting.">
+        <strong>A.</strong> Approve the fine-tuning &mdash; 200 examples should be enough
+      </button>
+      <button class="quiz-option" data-correct="true" data-feedback-correct="Correct! 200 examples is too few for fine-tuning. First exhaust prompting approaches (system prompt, few-shot, RAG). If those fail, collect more data before considering fine-tuning.">
+        <strong>B.</strong> Push back &mdash; try better prompting first, collect more data if needed
+      </button>
+      <button class="quiz-option" data-correct="false" data-feedback-incorrect="Training from scratch requires billions of tokens and millions of dollars. This would be absurd for a support chatbot.">
+        <strong>C.</strong> Train a model from scratch for maximum quality
+      </button>
+      <div class="quiz-feedback"></div>
+    </div>
+
+    <!-- Stakeholder Framing -->
+    <div class="stakeholder-frame">
+      <h3>Stakeholder Framing</h3>
+      <p>When engineering says <em>"We need to fine-tune the model for better results"</em>:</p>
+      <blockquote>
+        "Before we invest in fine-tuning, let's validate that we've exhausted prompting approaches. Have we tried few-shot examples, chain-of-thought, and RAG? Fine-tuning costs $X and takes Y weeks, plus ongoing maintenance. If prompting gets us to 90% quality, that last 10% may not justify the investment."
+      </blockquote>
+    </div>
+
+    <nav class="module-nav">
+      <a href="3.3-embeddings.html">&larr; Embeddings</a>
+      <a href="3.5-prompt-engineering.html">Next: Prompt Engineering &rarr;</a>
+    </nav>
+
+  </div>
+
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({ startOnLoad: true, theme: 'base', themeVariables: { primaryColor: '#dbeafe', primaryTextColor: '#1e3a5f', primaryBorderColor: '#1e40af', lineColor: '#6b7280', secondaryColor: '#eff6ff', tertiaryColor: '#f9fafb' }});
+  </script>
+  <script src="../../shared/js/course.js"></script>
+</body>
+</html>

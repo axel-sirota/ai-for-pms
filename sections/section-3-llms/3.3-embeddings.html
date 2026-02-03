@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3.3 Embeddings - AI for Product Managers</title>
+  <link rel="stylesheet" href="../../shared/css/course.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="course-container">
+
+    <header class="course-header">
+      <span class="section-label">Section 3 &middot; LLM Foundations</span>
+      <h1>Embeddings</h1>
+      <p class="subtitle">How AI understands meaning &mdash; and why this powers search, RAG, and recommendations.</p>
+    </header>
+
+    <div class="callout callout-insight">
+      <div class="callout-title">The Key Idea</div>
+      <p>Embeddings turn words into <strong>coordinates in meaning-space</strong>. Words with similar meanings end up close together. Words with different meanings end up far apart.</p>
+      <p>This is the foundation of semantic search, RAG (Section 4), and recommendation systems.</p>
+    </div>
+
+    <h2>The Spain-Madrid Example</h2>
+
+    <p>Imagine plotting words on a 2D map based on meaning:</p>
+
+    <div class="card-grid">
+      <div class="card" style="text-align:center;">
+        <h3>Spain</h3>
+        <p style="font-size:1.5rem; font-weight:700; color:#1e40af;">[1.0, 1.0]</p>
+        <p>Country, European, warm</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <h3>Madrid</h3>
+        <p style="font-size:1.5rem; font-weight:700; color:#1e40af;">[0.9, 0.9]</p>
+        <p>City, European, warm, capital of Spain</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <h3>Russia</h3>
+        <p style="font-size:1.5rem; font-weight:700; color:#dc2626;">[-1.0, -1.0]</p>
+        <p>Country, but very different from Spain</p>
+      </div>
+    </div>
+
+    <p><strong>Madrid is close to Spain</strong> (0.9 vs 1.0) because they're related in meaning. <strong>Russia is far away</strong> (-1.0 vs 1.0) because it's a very different context.</p>
+
+    <p>Real embeddings use <strong>hundreds or thousands of dimensions</strong> (not just 2), capturing nuances like tone, topic, formality, and domain.</p>
+
+    <h2>Why Similarity Matters</h2>
+
+    <pre class="mermaid">
+flowchart TD
+    Q["User searches:<br/>'How do I return a product?'"] --> E["Embedding Model<br/>converts to coordinates"]
+    E --> S["Find nearest<br/>documents in<br/>meaning-space"]
+    S --> R1["Return Policy FAQ<br/>similarity: 0.92"]
+    S --> R2["Shipping Guide<br/>similarity: 0.45"]
+    S --> R3["Product Catalog<br/>similarity: 0.12"]
+
+    style Q fill:#dbeafe,stroke:#1e40af
+    style E fill:#fef3c7,stroke:#d97706
+    style R1 fill:#d1fae5,stroke:#059669
+    style R2 fill:#fef3c7,stroke:#d97706
+    style R3 fill:#fee2e2,stroke:#dc2626
+    </pre>
+
+    <p>The search doesn't look for the word "return" &mdash; it understands the <strong>meaning</strong> of the query and finds the most relevant documents.</p>
+
+    <h2>Similarity Scores: What the Numbers Mean</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Score</th>
+          <th>Meaning</th>
+          <th>Example</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>0.95+</strong></td>
+          <td>Near-identical meaning</td>
+          <td>"happy" &harr; "joyful"</td>
+        </tr>
+        <tr>
+          <td><strong>0.80&ndash;0.95</strong></td>
+          <td>Strongly related</td>
+          <td>"king" &harr; "queen"</td>
+        </tr>
+        <tr>
+          <td><strong>0.50&ndash;0.80</strong></td>
+          <td>Somewhat related</td>
+          <td>"king" &harr; "president"</td>
+        </tr>
+        <tr>
+          <td><strong>0.20&ndash;0.50</strong></td>
+          <td>Loosely related</td>
+          <td>"king" &harr; "chess"</td>
+        </tr>
+        <tr>
+          <td><strong>&lt;0.20</strong></td>
+          <td>Unrelated</td>
+          <td>"king" &harr; "banana"</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Why PMs Care About Embeddings</h2>
+
+    <div class="card-grid">
+      <div class="card">
+        <h3>Semantic Search</h3>
+        <p>Users find what they <em>mean</em>, not just what they <em>type</em>. "How to cancel my subscription" matches "account cancellation policy" even though they share few words.</p>
+      </div>
+      <div class="card">
+        <h3>RAG (Section 4)</h3>
+        <p>Retrieval-Augmented Generation uses embeddings to find relevant documents, then feeds them to an LLM. This is how you ground AI in your company's knowledge.</p>
+      </div>
+      <div class="card">
+        <h3>Recommendations</h3>
+        <p>"Users who liked this product also liked..." works by finding products with similar embeddings &mdash; similar in meaning, not just category.</p>
+      </div>
+      <div class="card">
+        <h3>Clustering &amp; Analysis</h3>
+        <p>Group support tickets by topic, cluster customer feedback by theme, find duplicate content &mdash; all powered by embedding similarity.</p>
+      </div>
+    </div>
+
+    <div class="callout callout-decision">
+      <div class="callout-title">PM Decision Point</div>
+      <p>When evaluating an embedding model for your product, ask:</p>
+      <ul>
+        <li><strong>Domain fit:</strong> Was it trained on text similar to yours? (medical, legal, casual)</li>
+        <li><strong>Speed vs quality:</strong> Smaller models embed faster but may miss nuance</li>
+        <li><strong>Dimensions:</strong> More dimensions = richer representation = more storage cost</li>
+        <li><strong>Cost:</strong> OpenAI embeddings cost $0.02/1M tokens. Self-hosted is free but needs GPU.</li>
+      </ul>
+    </div>
+
+    <!-- Try It -->
+    <h2>Try It: Embedding Explorer</h2>
+    <p>Enter words and phrases, see them plotted in 2D meaning-space. Watch countries cluster together, fruits cluster together, and unrelated words stay apart.</p>
+    <div class="hf-space-embed">
+      <a class="hf-space-link" href="https://huggingface.co/spaces/datatrainers/embedding-explorer" target="_blank">
+        Launch Embedding Explorer
+      </a>
+    </div>
+
+    <!-- Quiz -->
+    <div class="quiz">
+      <h3>Quick Check</h3>
+      <p>A user searches your help center for "my package never arrived." Which document would have the highest embedding similarity?</p>
+      <button class="quiz-option" data-correct="false" data-feedback-incorrect="The return policy is related to post-purchase issues but not specifically about delivery problems.">
+        <strong>A.</strong> "How to return a product"
+      </button>
+      <button class="quiz-option" data-correct="true" data-feedback-correct="Correct! 'Lost or missing delivery' is semantically closest to 'package never arrived' — same meaning, different words. This is exactly what embedding-based search enables.">
+        <strong>B.</strong> "Lost or missing delivery troubleshooting"
+      </button>
+      <button class="quiz-option" data-correct="false" data-feedback-incorrect="Shipping times are related to delivery but not about packages that never arrived. The embedding would find 'lost delivery' content as a closer match.">
+        <strong>C.</strong> "Estimated shipping times by region"
+      </button>
+      <div class="quiz-feedback"></div>
+    </div>
+
+    <!-- Stakeholder Framing -->
+    <div class="stakeholder-frame">
+      <h3>Stakeholder Framing</h3>
+      <p>When someone asks <em>"Why can't we just use keyword search?"</em>:</p>
+      <blockquote>
+        "Keyword search only finds exact word matches. If a customer types 'my package never came' but our FAQ says 'lost delivery,' keyword search finds nothing. Semantic search using embeddings understands that these mean the same thing. It's the difference between a search that works 40% of the time and one that works 90% of the time."
+      </blockquote>
+    </div>
+
+    <nav class="module-nav">
+      <a href="3.2-temperature.html">&larr; Temperature</a>
+      <a href="3.4-foundation-vs-finetuned.html">Next: Foundation vs Fine-tuned &rarr;</a>
+    </nav>
+
+  </div>
+
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({ startOnLoad: true, theme: 'base', themeVariables: { primaryColor: '#dbeafe', primaryTextColor: '#1e3a5f', primaryBorderColor: '#1e40af', lineColor: '#6b7280', secondaryColor: '#eff6ff', tertiaryColor: '#f9fafb' }});
+  </script>
+  <script src="../../shared/js/course.js"></script>
+</body>
+</html>

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3.2 Temperature - AI for Product Managers</title>
+  <link rel="stylesheet" href="../../shared/css/course.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="course-container">
+
+    <header class="course-header">
+      <span class="section-label">Section 3 &middot; LLM Foundations</span>
+      <h1>Temperature</h1>
+      <p class="subtitle">The creativity-consistency dial every PM needs to understand.</p>
+    </header>
+
+    <div class="callout callout-failure">
+      <div class="callout-title">When Temperature Goes Wrong</div>
+      <p>A customer service bot set to temperature 1.0 told a customer their order would arrive "on the wings of a thousand doves, probably Tuesday or perhaps the heat death of the universe."</p>
+      <p>The customer filed a complaint. The PM had never heard of temperature settings.</p>
+      <p><strong>Lesson:</strong> Temperature is a product decision, not just an engineering parameter.</p>
+    </div>
+
+    <h2>What Is Temperature?</h2>
+
+    <p>Temperature controls how <strong>"random"</strong> the model's word choices are. At every step, the model picks the next word from a probability distribution. Temperature changes that distribution:</p>
+
+    <pre class="mermaid">
+flowchart LR
+    A["Temperature 0<br/>Always picks<br/>most likely word"] -->|"Deterministic"| B["Same output<br/>every time"]
+    C["Temperature 0.3-0.5<br/>Slight variation<br/>in word choice"] -->|"Mostly consistent"| D["Minor rewording<br/>same meaning"]
+    E["Temperature 0.7-1.0<br/>More random<br/>word choices"] -->|"Creative"| F["Different phrasing<br/>new ideas"]
+    G["Temperature >1.0<br/>Very random<br/>choices"] -->|"Chaotic"| H["May be<br/>incoherent"]
+
+    style A fill:#d1fae5,stroke:#059669
+    style B fill:#d1fae5,stroke:#059669
+    style C fill:#dbeafe,stroke:#1e40af
+    style D fill:#dbeafe,stroke:#1e40af
+    style E fill:#fef3c7,stroke:#d97706
+    style F fill:#fef3c7,stroke:#d97706
+    style G fill:#fee2e2,stroke:#dc2626
+    style H fill:#fee2e2,stroke:#dc2626
+    </pre>
+
+    <h2>Temperature Use-Case Matrix</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Temperature</th>
+          <th>Behavior</th>
+          <th>Best For</th>
+          <th>Avoid For</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>0</strong></td>
+          <td>Deterministic &mdash; same output every time</td>
+          <td>Factual Q&amp;A, data extraction, classification, code generation</td>
+          <td>Marketing copy, brainstorming</td>
+        </tr>
+        <tr>
+          <td><strong>0.3&ndash;0.5</strong></td>
+          <td>Slight variation, mostly consistent</td>
+          <td>Customer support, summaries, translations</td>
+          <td>Tasks requiring exact reproducibility</td>
+        </tr>
+        <tr>
+          <td><strong>0.7&ndash;1.0</strong></td>
+          <td>Creative, varied outputs each time</td>
+          <td>Marketing copy, brainstorming, story writing</td>
+          <td>Medical/legal/financial advice</td>
+        </tr>
+        <tr>
+          <td><strong>&gt;1.0</strong></td>
+          <td>Very random, may produce nonsense</td>
+          <td>Rarely useful &mdash; experimental only</td>
+          <td>Almost everything in production</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout callout-decision">
+      <div class="callout-title">PM Rule of Thumb</div>
+      <p><strong>Start at temperature 0 for production. Increase only if you have a specific reason.</strong></p>
+      <p>Most product features (search, support, extraction, classification) work best at 0. Only increase for creative tasks like content generation.</p>
+    </div>
+
+    <h2>Same Prompt, Different Temperatures</h2>
+
+    <p>Prompt: <em>"Write a one-sentence product description for noise-canceling headphones."</em></p>
+
+    <div class="card-grid">
+      <div class="card">
+        <h3>Temperature 0</h3>
+        <p>"Experience crystal-clear audio with our premium noise-canceling headphones, designed to block out distractions and deliver immersive sound quality."</p>
+        <p style="color:var(--text-light); font-size:0.85rem;"><em>Run 3 times: identical output each time</em></p>
+      </div>
+      <div class="card">
+        <h3>Temperature 0.5</h3>
+        <p>"Block the world out and tune into pure, uninterrupted sound with our advanced noise-canceling headphones."</p>
+        <p style="color:var(--text-light); font-size:0.85rem;"><em>Run 3 times: similar structure, slightly different words</em></p>
+      </div>
+      <div class="card">
+        <h3>Temperature 1.0</h3>
+        <p>"Silence becomes your superpower — these headphones don't just cancel noise, they create your personal concert hall."</p>
+        <p style="color:var(--text-light); font-size:0.85rem;"><em>Run 3 times: noticeably different each time</em></p>
+      </div>
+    </div>
+
+    <h2>Common PM Scenarios</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Your Feature</th>
+          <th>Recommended Temperature</th>
+          <th>Why</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Customer support chatbot</td>
+          <td><strong>0</strong></td>
+          <td>Consistency matters. Same question should get same answer.</td>
+        </tr>
+        <tr>
+          <td>Email subject line generator</td>
+          <td><strong>0.7&ndash;0.9</strong></td>
+          <td>You want variety. 10 different options to choose from.</td>
+        </tr>
+        <tr>
+          <td>Legal document summarizer</td>
+          <td><strong>0</strong></td>
+          <td>Accuracy over creativity. No room for "creative" legal interpretations.</td>
+        </tr>
+        <tr>
+          <td>Product review analyzer</td>
+          <td><strong>0</strong></td>
+          <td>Extraction task. "Is this positive or negative?" needs consistent answers.</td>
+        </tr>
+        <tr>
+          <td>Marketing blog post writer</td>
+          <td><strong>0.8</strong></td>
+          <td>Creative writing benefits from variety.</td>
+        </tr>
+        <tr>
+          <td>Code documentation generator</td>
+          <td><strong>0</strong></td>
+          <td>Technical accuracy. No creative license needed.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Try It -->
+    <h2>Try It: Temperature Playground</h2>
+    <p>Enter the same prompt and see how responses change across 5 temperature settings. Watch consistency dissolve as temperature rises.</p>
+    <div class="hf-space-embed">
+      <a class="hf-space-link" href="https://huggingface.co/spaces/datatrainers/temperature-playground" target="_blank">
+        Launch Temperature Playground
+      </a>
+    </div>
+
+    <!-- Quiz -->
+    <div class="quiz">
+      <h3>Quick Check</h3>
+      <p>You're building a chatbot that answers questions about your company's return policy. What temperature should you use?</p>
+      <button class="quiz-option" data-correct="true" data-feedback-correct="Correct! A return policy chatbot needs to give the same, accurate answer every time. Temperature 0 ensures deterministic, consistent responses. A customer asking the same question twice should get the same answer.">
+        <strong>A.</strong> Temperature 0 &mdash; consistent, deterministic
+      </button>
+      <button class="quiz-option" data-correct="false" data-feedback-incorrect="Too high for a factual support bot. At 0.7, the bot might describe your return policy differently each time. Customers expect consistent, reliable answers about policies.">
+        <strong>B.</strong> Temperature 0.7 &mdash; some creative variation
+      </button>
+      <button class="quiz-option" data-correct="false" data-feedback-incorrect="Way too high. At 1.0, the bot might get creative with policy interpretations — exactly what got Air Canada sued for $800K.">
+        <strong>C.</strong> Temperature 1.0 &mdash; maximum creativity
+      </button>
+      <div class="quiz-feedback"></div>
+    </div>
+
+    <!-- Stakeholder Framing -->
+    <div class="stakeholder-frame">
+      <h3>Stakeholder Framing</h3>
+      <p>When engineering says <em>"we set temperature to 0.9 for better results"</em>:</p>
+      <blockquote>
+        "What problem are we solving with higher temperature? For our support chatbot, consistency is more important than creativity. A customer asking about returns should get the same answer every time. Let's set it to 0 and only increase if we see the responses are too rigid for a specific use case."
+      </blockquote>
+    </div>
+
+    <nav class="module-nav">
+      <a href="3.1-tokens-and-cost.html">&larr; Tokens &amp; Cost</a>
+      <a href="3.3-embeddings.html">Next: Embeddings &rarr;</a>
+    </nav>
+
+  </div>
+
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({ startOnLoad: true, theme: 'base', themeVariables: { primaryColor: '#dbeafe', primaryTextColor: '#1e3a5f', primaryBorderColor: '#1e40af', lineColor: '#6b7280', secondaryColor: '#eff6ff', tertiaryColor: '#f9fafb' }});
+  </script>
+  <script src="../../shared/js/course.js"></script>
+</body>
+</html>
