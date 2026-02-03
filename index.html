@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI for Product Managers</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f5f5; color: #333; line-height: 1.6; }
+        .container { max-width: 900px; margin: 0 auto; padding: 2rem; }
+        h1 { font-size: 2.5rem; margin-bottom: 0.5rem; color: #1a1a1a; }
+        .subtitle { color: #666; margin-bottom: 2rem; font-size: 1.1rem; }
+        .sections { display: grid; gap: 1rem; }
+        .section-card { background: white; border-radius: 12px; padding: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.08); transition: transform 0.2s, box-shadow 0.2s; }
+        .section-card:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,0.12); }
+        .section-card h2 { font-size: 1.3rem; margin-bottom: 0.5rem; }
+        .section-card h2 a { color: #2563eb; text-decoration: none; }
+        .section-card h2 a:hover { text-decoration: underline; }
+        .section-card p { color: #666; font-size: 0.95rem; margin-bottom: 1rem; }
+        .apps { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+        .app-link { display: inline-block; padding: 0.4rem 0.8rem; background: #e0e7ff; color: #3730a3; border-radius: 6px; text-decoration: none; font-size: 0.85rem; }
+        .app-link:hover { background: #c7d2fe; }
+        .footer { margin-top: 3rem; text-align: center; color: #999; font-size: 0.9rem; }
+        .badge { display: inline-block; padding: 0.2rem 0.6rem; background: #10b981; color: white; border-radius: 4px; font-size: 0.75rem; margin-left: 0.5rem; }
+        .badge.coming { background: #9ca3af; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>AI for Product Managers</h1>
+        <p class="subtitle">A 3-day hands-on course by Data Trainers LLC</p>
+
+        <div class="sections">
+            <div class="section-card">
+                <h2><a href="sections/section-1-landscape/index.html">Section 1: AI Landscape</a> <span class="badge">Live</span></h2>
+                <p>Three paradigms: Classical ML, LLMs, and Agents. When to use which, and the build vs buy decision.</p>
+                <div class="apps">
+                    <a class="app-link" href="https://huggingface.co/spaces/axelsirota/ai-paradigm-picker" target="_blank">Paradigm Picker</a>
+                    <a class="app-link" href="https://huggingface.co/spaces/axelsirota/build-vs-buy-calculator" target="_blank">Build vs Buy</a>
+                    <a class="app-link" href="https://huggingface.co/spaces/axelsirota/model-comparison-arena" target="_blank">Model Arena</a>
+                </div>
+            </div>
+
+            <div class="section-card">
+                <h2><a href="sections/section-2-classical-ml/index.html">Section 2: Classical ML</a> <span class="badge">Live</span></h2>
+                <p>When structured data + prediction wins. ML lifecycle, metrics, drift, and cost of errors.</p>
+                <div class="apps">
+                    <a class="app-link" href="https://huggingface.co/spaces/axelsirota/classical-ml-playground" target="_blank">ML Playground</a>
+                    <a class="app-link" href="https://huggingface.co/spaces/axelsirota/metrics-explainer" target="_blank">Metrics Explainer</a>
+                    <a class="app-link" href="https://huggingface.co/spaces/axelsirota/data-drift-simulator" target="_blank">Drift Simulator</a>
+                    <a class="app-link" href="https://huggingface.co/spaces/axelsirota/llm-vs-ml-showdown" target="_blank">LLM vs ML</a>
+                </div>
+            </div>
+
+            <div class="section-card">
+                <h2><a href="sections/section-3-llms/index.html">Section 3: LLMs</a> <span class="badge">Live</span></h2>
+                <p>Tokens, temperature, embeddings, prompt engineering, and prompt injection defense.</p>
+                <div class="apps">
+                    <a class="app-link" href="https://huggingface.co/spaces/axelsirota/token-counter" target="_blank">Token Counter</a>
+                    <a class="app-link" href="https://huggingface.co/spaces/axelsirota/temperature-playground" target="_blank">Temperature</a>
+                    <a class="app-link" href="https://huggingface.co/spaces/axelsirota/prompt-engineering-lab" target="_blank">Prompt Lab</a>
+                    <a class="app-link" href="https://huggingface.co/spaces/axelsirota/prompt-injection-sim" target="_blank">Injection Sim</a>
+                    <a class="app-link" href="https://huggingface.co/spaces/axelsirota/embedding-explorer" target="_blank">Embeddings</a>
+                </div>
+            </div>
+
+            <div class="section-card" style="opacity: 0.6;">
+                <h2>Section 4: RAG <span class="badge coming">Coming Soon</span></h2>
+                <p>Retrieval-Augmented Generation, knowledge grounding, and failure modes.</p>
+            </div>
+
+            <div class="section-card" style="opacity: 0.6;">
+                <h2>Section 5: Agents <span class="badge coming">Coming Soon</span></h2>
+                <p>Copilot vs Agent, ReAct pattern, human-in-the-loop design.</p>
+            </div>
+
+            <div class="section-card" style="opacity: 0.6;">
+                <h2>Sections 6-9 <span class="badge coming">Coming Soon</span></h2>
+                <p>Evaluation, Guardrails, Cost & Timeline, Strategy.</p>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>Data Trainers LLC &copy; 2026</p>
+        </div>
+    </div>
+</body>
+</html>
