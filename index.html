@@ -10,7 +10,8 @@
         .container { max-width: 900px; margin: 0 auto; padding: 2rem; }
         h1 { font-size: 2.5rem; margin-bottom: 0.5rem; color: #1A3D4D; }
         .subtitle { color: #4B5563; margin-bottom: 2rem; font-size: 1.1rem; }
-        .sections { display: grid; gap: 1rem; }
+        .day-header { background: #1A3D4D; color: white; padding: 0.75rem 1.5rem; font-size: 1.1rem; font-weight: 600; margin-bottom: 1rem; display: inline-block; }
+        .sections { display: grid; gap: 1rem; margin-bottom: 2rem; }
         .section-card { background: white; padding: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.08); transition: transform 0.2s, box-shadow 0.2s; border-left: 4px solid #40B8A6; }
         .section-card:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,0.12); }
         .section-card h2 { font-size: 1.3rem; margin-bottom: 0.5rem; }
@@ -21,8 +22,6 @@
         .app-link { display: inline-block; padding: 0.4rem 0.8rem; background: #E6F7F5; color: #1A3D4D; text-decoration: none; font-size: 0.85rem; }
         .app-link:hover { background: #40B8A6; color: white; }
         .footer { margin-top: 3rem; text-align: center; color: #4B5563; font-size: 0.9rem; }
-        .badge { display: inline-block; padding: 0.2rem 0.6rem; background: #40B8A6; color: white; font-size: 0.75rem; margin-left: 0.5rem; }
-        .badge.coming { background: #9ca3af; }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
@@ -31,9 +30,11 @@
         <h1>AI for Product Managers</h1>
         <p class="subtitle">A hands-on course for leading AI initiatives confidently</p>
 
+        <div class="day-header">Day 1</div>
+
         <div class="sections">
             <div class="section-card">
-                <h2><a href="sections/section-1-landscape/index.html">Section 1: AI Landscape</a> <span class="badge">Live</span></h2>
+                <h2><a href="sections/section-1-landscape/index.html">AI Landscape</a></h2>
                 <p>Three paradigms: Classical ML, LLMs, and Agents. When to use which, and the build vs buy decision.</p>
                 <div class="apps">
                     <a class="app-link" href="https://huggingface.co/spaces/axelsirota/ai-paradigm-picker" target="_blank">Paradigm Picker</a>
@@ -43,7 +44,7 @@
             </div>
 
             <div class="section-card">
-                <h2><a href="sections/section-2-classical-ml/index.html">Section 2: Classical ML</a> <span class="badge">Live</span></h2>
+                <h2><a href="sections/section-2-classical-ml/index.html">Classical ML</a></h2>
                 <p>When structured data + prediction wins. ML lifecycle, metrics, drift, and cost of errors.</p>
                 <div class="apps">
                     <a class="app-link" href="https://huggingface.co/spaces/axelsirota/classical-ml-playground" target="_blank">ML Playground</a>
@@ -54,7 +55,7 @@
             </div>
 
             <div class="section-card">
-                <h2><a href="sections/section-3-llms/index.html">Section 3: LLMs</a> <span class="badge">Live</span></h2>
+                <h2><a href="sections/section-3-llms/index.html">LLMs</a></h2>
                 <p>Tokens, temperature, embeddings, prompt engineering, and prompt injection defense.</p>
                 <div class="apps">
                     <a class="app-link" href="https://huggingface.co/spaces/axelsirota/token-counter" target="_blank">Token Counter</a>
@@ -63,21 +64,6 @@
                     <a class="app-link" href="https://huggingface.co/spaces/axelsirota/prompt-injection-sim" target="_blank">Injection Sim</a>
                     <a class="app-link" href="https://huggingface.co/spaces/axelsirota/embedding-explorer" target="_blank">Embeddings</a>
                 </div>
-            </div>
-
-            <div class="section-card" style="opacity: 0.6;">
-                <h2>Section 4: RAG <span class="badge coming">Coming Soon</span></h2>
-                <p>Retrieval-Augmented Generation, knowledge grounding, and failure modes.</p>
-            </div>
-
-            <div class="section-card" style="opacity: 0.6;">
-                <h2>Section 5: Agents <span class="badge coming">Coming Soon</span></h2>
-                <p>Copilot vs Agent, ReAct pattern, human-in-the-loop design.</p>
-            </div>
-
-            <div class="section-card" style="opacity: 0.6;">
-                <h2>Sections 6-9 <span class="badge coming">Coming Soon</span></h2>
-                <p>Evaluation, Guardrails, Cost & Timeline, Strategy.</p>
             </div>
         </div>
 
