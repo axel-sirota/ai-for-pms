@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3.7 LLM Project Lifecycle - AI for Product Managers</title>
+  <link rel="stylesheet" href="../../shared/css/course.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="course-container">
+
+    <header class="course-header">
+      <span class="section-label">Section 3 - LLMOps</span>
+      <h1>The LLM Project Lifecycle</h1>
+      <p class="subtitle">How AI projects work differently - faster iteration, new metrics, and your role at each phase.</p>
+    </header>
+
+    <div class="callout callout-insight">
+      <div class="callout-title">Building on Section 2.2</div>
+      <p>In Section 2, you learned the <a href="../section-2-classical-ml/2.2-ml-lifecycle.html">ML Lifecycle</a>: 60% data work, months of model training, deterministic metrics. The LLM project lifecycle (<strong>LLMOps</strong>) is fundamentally different - faster iteration, no training data work, and new challenges like prompt engineering and non-deterministic output.</p>
+    </div>
+
+    <div class="callout callout-failure">
+      <div class="callout-title">Failure Story: The Hallucinating Launch</div>
+      <p>A B2B SaaS company rushed their AI assistant to market in 6 weeks. No systematic evaluation. No monitoring. On day 3, a customer screenshot went viral: the assistant had confidently recommended a competitor's product as "superior."</p>
+      <p>They pulled the feature, spent 8 weeks rebuilding with proper evaluation, and lost a key enterprise deal.</p>
+      <p><strong>Lesson:</strong> LLM projects move fast, but skipping evaluation phases creates expensive failures.</p>
+    </div>
+
+    <h2>MLOps vs LLMOps: Key Differences</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Aspect</th>
+          <th>MLOps (Section 2.2)</th>
+          <th>LLMOps (This Module)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Focus</strong></td>
+          <td>Training, validation, deployment</td>
+          <td>Prompt management, inference optimization</td>
+        </tr>
+        <tr>
+          <td><strong>Data Work</strong></td>
+          <td>60% of time - collecting, labeling, cleaning</td>
+          <td>0-10% (unless fine-tuning)</td>
+        </tr>
+        <tr>
+          <td><strong>Iteration Speed</strong></td>
+          <td>Weeks to months</td>
+          <td>Hours to days</td>
+        </tr>
+        <tr>
+          <td><strong>Experimentation</strong></td>
+          <td>Hyperparameter tuning</td>
+          <td>Prompt refinement, model routing</td>
+        </tr>
+        <tr>
+          <td><strong>Metrics</strong></td>
+          <td>Accuracy, precision, recall</td>
+          <td>Relevance, toxicity, <strong>hallucination rate</strong></td>
+        </tr>
+        <tr>
+          <td><strong>Monitoring</strong></td>
+          <td>Model drift, accuracy degradation</td>
+          <td>Output quality, cost per query, latency</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout callout-insight">
+      <div class="callout-title">The Big Difference</div>
+      <p>In ML, you spend months on data before you have anything to show. In LLMs, you can have a working prototype in hours - but production quality requires systematic evaluation that most teams skip.</p>
+    </div>
+
+    <h2>The 6 Phases of LLM Projects</h2>
+
+    <pre class="mermaid">
+flowchart LR
+    A["Problem<br/>Definition"] --> B["Data<br/>Investigation"]
+    B --> C["Development<br/>(Prompting)"]
+    C --> D["Evaluation"]
+    D --> E["Deployment"]
+    E --> F["Monitor &<br/>Iterate"]
+    F -.->|"Feedback Loop"| C
+
+    style A fill:#dbeafe,stroke:#1e40af
+    style B fill:#d1fae5,stroke:#059669
+    style C fill:#fef3c7,stroke:#d97706
+    style D fill:#ede9fe,stroke:#7c3aed
+    style E fill:#E6F7F5,stroke:#40B8A6
+    style F fill:#fee2e2,stroke:#dc2626
+    </pre>
+
+    <div class="card-grid">
+      <div class="card">
+        <h3>1. Problem Definition</h3>
+        <p><strong>What happens:</strong> Define the business problem, success criteria, and whether AI is the right solution.</p>
+        <p><strong>PM role:</strong></p>
+        <ul>
+          <li>Define "what good looks like" in business terms</li>
+          <li>Identify failure modes that matter (hallucination? latency? cost?)</li>
+          <li>Decide: prompting, RAG, or fine-tuning?</li>
+        </ul>
+        <p><strong>Duration:</strong> 1-2 weeks</p>
+      </div>
+      <div class="card">
+        <h3>2. Data Investigation</h3>
+        <p><strong>What happens:</strong> Identify what data the LLM needs access to. For RAG: what documents? For fine-tuning: what examples?</p>
+        <p><strong>PM role:</strong></p>
+        <ul>
+          <li>Approve data sources (privacy, freshness, bias)</li>
+          <li>Define what content is in-scope vs out-of-scope</li>
+          <li>Identify gaps in existing documentation</li>
+        </ul>
+        <p><strong>Duration:</strong> 1-3 weeks</p>
+      </div>
+      <div class="card">
+        <h3>3. Development (Prompting)</h3>
+        <p><strong>What happens:</strong> Prompt engineering, RAG pipeline setup, integration with your product.</p>
+        <p><strong>PM role:</strong></p>
+        <ul>
+          <li>Review system prompt constraints</li>
+          <li>Provide edge case scenarios to test</li>
+          <li>Define output format requirements</li>
+        </ul>
+        <p><strong>Duration:</strong> 2-6 weeks</p>
+      </div>
+      <div class="card">
+        <h3>4. Evaluation</h3>
+        <p><strong>What happens:</strong> Systematic testing against real scenarios. Human review of outputs. Red-team testing.</p>
+        <p><strong>PM role:</strong></p>
+        <ul>
+          <li>Define test scenarios from customer use cases</li>
+          <li>Review sample outputs for quality</li>
+          <li>Decide go/no-go based on eval metrics</li>
+        </ul>
+        <p><strong>Duration:</strong> 1-3 weeks (don't skip this!)</p>
+      </div>
+      <div class="card">
+        <h3>5. Deployment</h3>
+        <p><strong>What happens:</strong> Production rollout with monitoring, guardrails, and fallback systems.</p>
+        <p><strong>PM role:</strong></p>
+        <ul>
+          <li>Define rollout strategy (canary, A/B, full)</li>
+          <li>Set up cost alerts and rate limits</li>
+          <li>Prepare incident response plan</li>
+        </ul>
+        <p><strong>Duration:</strong> 1-2 weeks</p>
+      </div>
+      <div class="card">
+        <h3>6. Monitor & Iterate</h3>
+        <p><strong>What happens:</strong> Continuous monitoring, user feedback collection, prompt refinement.</p>
+        <p><strong>PM role:</strong></p>
+        <ul>
+          <li>Review quality dashboards weekly</li>
+          <li>Triage user complaints about AI responses</li>
+          <li>Prioritize prompt improvements</li>
+        </ul>
+        <p><strong>Duration:</strong> Ongoing</p>
+      </div>
+    </div>
+
+    <h2>Common Timeline Mistakes</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>What Teams Say</th>
+          <th>Reality</th>
+          <th>What to Do</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>"We'll have it working in a week"</td>
+          <td>A demo, yes. Production-quality? 6-10 weeks minimum.</td>
+          <td>Separate "demo" timeline from "production" timeline</td>
+        </tr>
+        <tr>
+          <td>"We don't need evaluation - it's just prompting"</td>
+          <td>Prompting is easy. Systematic quality is hard.</td>
+          <td>Budget 1-3 weeks for eval. It saves months later.</td>
+        </tr>
+        <tr>
+          <td>"We'll fix issues after launch"</td>
+          <td>One viral bad response costs more than proper eval.</td>
+          <td>Soft-launch to internal users first. Always.</td>
+        </tr>
+        <tr>
+          <td>"The model is good enough"</td>
+          <td>Good enough for demos != good enough for production.</td>
+          <td>Define quantitative success criteria before building</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Questions to Ask at Each Phase</h2>
+
+    <div class="card-grid">
+      <div class="card">
+        <h3>Before Starting</h3>
+        <ul>
+          <li>"Is AI actually the right solution here?"</li>
+          <li>"What does 'good enough' look like?"</li>
+          <li>"What's the cost of getting it wrong?"</li>
+          <li>"Prompting, RAG, or fine-tuning?"</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>During Development</h3>
+        <ul>
+          <li>"Have we tested the edge cases I identified?"</li>
+          <li>"What's our hallucination rate on the test set?"</li>
+          <li>"Is the system prompt defensive enough?"</li>
+          <li>"What happens when the model doesn't know?"</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Before Launch</h3>
+        <ul>
+          <li>"Have we done red-team testing?"</li>
+          <li>"What's the rollback plan?"</li>
+          <li>"Do we have cost alerts set up?"</li>
+          <li>"Who's on call for the first week?"</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Post-Launch</h3>
+        <ul>
+          <li>"What's our cost per query?"</li>
+          <li>"What failure modes are most common?"</li>
+          <li>"What are users asking that we don't handle?"</li>
+          <li>"Is quality stable or degrading?"</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Quiz -->
+    <div class="quiz">
+      <h3>Quick Check</h3>
+      <p>Your team has a working LLM feature demo after 2 weeks. The VP wants to launch next week. What do you do?</p>
+      <button class="quiz-option" data-correct="false" data-feedback-incorrect="Launching a demo as production is how you get viral screenshots of bad responses. Always separate demo from production timelines.">
+        <strong>A.</strong> Launch it - the demo looks great, ship fast
+      </button>
+      <button class="quiz-option" data-correct="true" data-feedback-correct="Correct! A demo is not production-ready. You need systematic evaluation, edge case testing, and monitoring before launch. Suggest a soft-launch to internal users first.">
+        <strong>B.</strong> Push back - we need evaluation and soft-launch first
+      </button>
+      <button class="quiz-option" data-correct="false" data-feedback-incorrect="Waiting indefinitely isn't the answer either. Define specific evaluation criteria and a timeline to meet them, then launch with confidence.">
+        <strong>C.</strong> Wait until the model is perfect
+      </button>
+      <div class="quiz-feedback"></div>
+    </div>
+
+    <!-- Stakeholder -->
+    <div class="stakeholder-frame">
+      <h3>Stakeholder Framing</h3>
+      <p>When your VP says <em>"Why does this AI feature take 8 weeks? I thought LLMs were fast?"</em>:</p>
+      <blockquote>
+        "You're right that we can have a working demo in days - that's the power of LLMs. But a demo that works in the conference room is different from a feature that works for 10,000 customers. We need 2-3 weeks for systematic evaluation to catch hallucinations, edge cases, and prompt injection attacks before they become viral screenshots. That investment upfront prevents the 8-week fire drill of pulling a broken feature."
+      </blockquote>
+    </div>
+
+    <!-- Up Next -->
+    <div class="callout callout-decision">
+      <div class="callout-title">Up Next: RAG</div>
+      <p>You've learned LLM fundamentals, prompt patterns, and the project lifecycle. In <a href="../section-4-rag/index.html">Section 4</a>, you'll learn <strong>RAG</strong> - how to make LLMs answer from YOUR company's documents. RAG systems follow this same lifecycle, but add retrieval and chunking phases.</p>
+    </div>
+
+    <nav class="module-nav">
+      <a href="3.6-prompt-injection.html">&larr; Prompt Injection</a>
+      <a href="../section-4-rag/index.html">Section 4: RAG &rarr;</a>
+    </nav>
+
+  </div>
+
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({ startOnLoad: true, theme: 'base', themeVariables: { primaryColor: '#E6F7F5', primaryTextColor: '#1A3D4D', primaryBorderColor: '#40B8A6', lineColor: '#4B5563', secondaryColor: '#D4F0EC', tertiaryColor: '#F9FAFB' }});
+  </script>
+  <script src="../../shared/js/course.js"></script>
+</body>
+</html>

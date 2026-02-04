@@ -13,7 +13,7 @@
     <header class="course-header">
       <span class="section-label">Section 3 &middot; Prompt Engineering</span>
       <h1>Prompt Engineering</h1>
-      <p class="subtitle">System vs user prompts, 5 essential patterns, and the art of getting what you want from an LLM.</p>
+      <p class="subtitle">System vs user prompts, 9 essential patterns from the Jules White research, and the art of getting what you want from an LLM.</p>
     </header>
 
     <div class="callout callout-failure">
@@ -78,8 +78,9 @@
       <p><strong>The PM's job</strong> is defining those system prompt constraints before launch.</p>
     </div>
 
-    <!-- 5 Patterns -->
-    <h2>5 Essential Prompt Patterns</h2>
+    <!-- 9 Patterns - Based on Jules White's "A Prompt Pattern Catalog" (arXiv 2302.11382) -->
+    <h2>9 Essential Prompt Patterns</h2>
+    <p>These patterns come from academic research on effective prompting, adapted for PM use cases. Source: <a href="https://arxiv.org/abs/2302.11382" target="_blank">Jules White et al. "A Prompt Pattern Catalog"</a></p>
 
     <div class="card-grid">
       <div class="card">
@@ -120,31 +121,69 @@
         <p><strong>Example:</strong> "Let's play: you're a difficult customer and I'll practice responding. Score my response 1-10."</p>
         <p style="color:var(--text-light); font-size:0.85rem;"><em>PM use: Training tools, simulation features, prompt refinement.</em></p>
       </div>
+      <div class="card">
+        <h3>6. Template Pattern</h3>
+        <p><strong>Template:</strong> "Use this exact format: [FIELD]: [VALUE]"</p>
+        <p><strong>When:</strong> Output needs to feed into other systems (APIs, databases, reports).</p>
+        <p><strong>Example:</strong> "Extract data as JSON: {name: string, order_id: string, issue: string}"</p>
+        <p style="color:var(--text-light); font-size:0.85rem;"><em>PM use: Critical when AI output feeds into downstream systems. Define the schema upfront.</em></p>
+      </div>
+      <div class="card">
+        <h3>7. Flipped Interaction</h3>
+        <p><strong>Template:</strong> "Ask me questions until you have enough information to [goal]."</p>
+        <p><strong>When:</strong> Chatbot design, requirements gathering, complex tasks with missing context.</p>
+        <p><strong>Example:</strong> "Ask me questions until you can write a complete PRD for this feature."</p>
+        <p style="color:var(--text-light); font-size:0.85rem;"><em>PM use: Essential for chatbot UX - make the AI ask before assuming.</em></p>
+      </div>
+      <div class="card">
+        <h3>8. Reflection Pattern</h3>
+        <p><strong>Template:</strong> "After generating your answer, critique it and identify potential issues."</p>
+        <p><strong>When:</strong> High-stakes outputs, safety-critical content, quality assurance.</p>
+        <p><strong>Example:</strong> "Write the response, then review it for factual accuracy and tone issues."</p>
+        <p style="color:var(--text-light); font-size:0.85rem;"><em>PM use: Add to system prompts for self-checking in customer-facing AI.</em></p>
+      </div>
+      <div class="card">
+        <h3>9. Fact Check List</h3>
+        <p><strong>Template:</strong> "List all factual claims you made that should be verified."</p>
+        <p><strong>When:</strong> Hallucination defense, compliance requirements, high-trust content.</p>
+        <p><strong>Example:</strong> "After answering, list: (1) claims made, (2) sources if known, (3) confidence level."</p>
+        <p style="color:var(--text-light); font-size:0.85rem;"><em>PM use: Your primary defense against hallucination in customer-facing AI.</em></p>
+      </div>
     </div>
 
     <h2>When to Use Which Pattern</h2>
 
     <pre class="mermaid">
 flowchart TD
-    A["What's your task?"] --> B{"Need consistent<br/>formatting?"}
-    B -->|"Yes"| C["Few-Shot Pattern<br/>Give 2-5 examples"]
-    B -->|"No"| D{"Need complex<br/>reasoning?"}
-    D -->|"Yes"| E["Chain-of-Thought<br/>'Think step by step'"]
-    D -->|"No"| F{"Need domain<br/>expertise?"}
-    F -->|"Yes"| G["Persona Pattern<br/>'Act as a...'"]
-    F -->|"No"| H{"Ambiguous<br/>request?"}
-    H -->|"Yes"| I["Cognitive Verifier<br/>'Ask questions first'"]
-    H -->|"No"| J["Start with a clear,<br/>specific prompt"]
+    A["What's your task?"] --> B{"Need structured<br/>output for systems?"}
+    B -->|"Yes"| C["Template Pattern<br/>'Use this exact format'"]
+    B -->|"No"| D{"Need consistent<br/>formatting?"}
+    D -->|"Yes"| E["Few-Shot Pattern<br/>Give 2-5 examples"]
+    D -->|"No"| F{"Need complex<br/>reasoning?"}
+    F -->|"Yes"| G["Chain-of-Thought<br/>'Think step by step'"]
+    F -->|"No"| H{"Need domain<br/>expertise?"}
+    H -->|"Yes"| I["Persona Pattern<br/>'Act as a...'"]
+    H -->|"No"| J{"Ambiguous request<br/>or chatbot?"}
+    J -->|"Ambiguous"| K["Cognitive Verifier<br/>'Ask questions first'"]
+    J -->|"Chatbot"| L["Flipped Interaction<br/>'Ask me questions until...'"]
+    J -->|"No"| M{"High-stakes or<br/>compliance?"}
+    M -->|"Safety"| N["Reflection Pattern<br/>'Critique your answer'"]
+    M -->|"Compliance"| O["Fact Check List<br/>'List claims to verify'"]
+    M -->|"No"| P["Start with a clear,<br/>specific prompt"]
 
     style C fill:#d1fae5,stroke:#059669
-    style E fill:#dbeafe,stroke:#1e40af
-    style G fill:#fef3c7,stroke:#d97706
-    style I fill:#ede9fe,stroke:#7c3aed
+    style E fill:#d1fae5,stroke:#059669
+    style G fill:#dbeafe,stroke:#1e40af
+    style I fill:#fef3c7,stroke:#d97706
+    style K fill:#ede9fe,stroke:#7c3aed
+    style L fill:#ede9fe,stroke:#7c3aed
+    style N fill:#fee2e2,stroke:#dc2626
+    style O fill:#fee2e2,stroke:#dc2626
     </pre>
 
     <!-- Try It -->
     <h2>Try It: Prompt Engineering Lab</h2>
-    <p>Experiment with all 4 patterns side-by-side. See how few-shot, chain-of-thought, system prompts, and output format control change the quality of responses.</p>
+    <p>Experiment with key patterns side-by-side. See how few-shot, chain-of-thought, system prompts, and output format control change the quality of responses.</p>
     <div class="hf-space-embed">
       <a class="hf-space-link" href="https://huggingface.co/spaces/axelsirota/prompt-engineering-lab" target="_blank">
         Launch Prompt Engineering Lab
@@ -177,6 +216,18 @@ flowchart TD
       <blockquote>
         "Before we look at more expensive models or fine-tuning, let's try better prompting. Have we tested: system prompts with clear constraints, few-shot examples, and chain-of-thought reasoning? In most cases, better prompts improve output quality more than switching models."
       </blockquote>
+    </div>
+
+    <!-- Up Next: RAG -->
+    <div class="callout callout-decision">
+      <div class="callout-title">Up Next: Applying Patterns to RAG</div>
+      <p>These 9 prompt patterns work for general LLM tasks. In <a href="../section-4-rag/index.html">Section 4</a>, you'll learn how to adapt them for <strong>RAG</strong> - where the LLM answers from YOUR company's documents.</p>
+      <p>The patterns you'll use most in RAG:</p>
+      <ul>
+        <li><strong>Template</strong> - for citation formats ("Based on [SOURCE], the answer is...")</li>
+        <li><strong>Fact Check List</strong> - your defense against hallucination</li>
+        <li><strong>Reflection</strong> - "Double-check claims against retrieved sources"</li>
+      </ul>
     </div>
 
     <nav class="module-nav">
