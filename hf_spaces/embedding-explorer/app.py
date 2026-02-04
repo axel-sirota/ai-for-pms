@@ -73,7 +73,7 @@ def explore_embeddings(w1, w2, w3, w4, w5, w6, w7, w8):
 
     # t-SNE to 2D
     perplexity = min(5, len(words) - 1)
-    tsne = TSNE(n_components=2, perplexity=perplexity, random_state=42, n_iter=1000)
+    tsne = TSNE(n_components=2, perplexity=perplexity, random_state=42, max_iter=1000)
     coords = tsne.fit_transform(embeddings)
 
     # Assign colors by rough clustering
