@@ -23,6 +23,13 @@ except ImportError:
 
 def get_completion(api_key: str, provider: str, prompt: str, system_prompt: str = None) -> str:
     """Get completion from OpenAI or Anthropic."""
+    # Clean the API key - remove any accidental prefixes
+    if api_key:
+        api_key = api_key.strip()
+        # Remove numbered list prefixes like "12. " that can occur from Gradio bugs
+        import re
+        api_key = re.sub(r'^\d+\.\s*', '', api_key)
+
     # Use provided key, or fall back to HF Secrets
     if provider == "OpenAI":
         key = api_key or os.getenv("OPENAI_API_KEY")
