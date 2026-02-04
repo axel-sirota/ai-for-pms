@@ -42,6 +42,11 @@ APPS = [
     "chunking-visualizer",
     "rag-vs-finetuning",
     "vector-db-cost-calculator",
+    # Section 5
+    "agent-workflow-builder",
+    "agent-failure-gallery",
+    "human-in-the-loop-designer",
+    "tool-use-sandbox",
 ]
 
 

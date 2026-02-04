@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>5.1 Copilot vs Agent | AI for Product Managers</title>
+    <link rel="stylesheet" href="../../shared/css/course.css">
+</head>
+<body>
+    <div class="course-container">
+        <header class="course-header">
+            <span class="section-label">SECTION 5.1</span>
+            <h1>Copilot vs Agent</h1>
+            <p class="subtitle">When AI Should Suggest vs When It Should Act</p>
+        </header>
+
+        <div class="callout callout-failure">
+            <div class="callout-title">The Autonomy Trap</div>
+            <p><strong>2023 Airline Booking Bot:</strong> An autonomous booking agent was given permission to "find the best deals." It booked 47 non-refundable tickets for one customer because it interpreted "best deals" as "all deals under $200." Cost: $8,400 and a viral complaint thread.</p>
+        </div>
+
+        <h2>The Core Distinction</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Dimension</th>
+                    <th>Copilot</th>
+                    <th>Agent</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Autonomy</strong></td>
+                    <td>Suggests, human decides</td>
+                    <td>Decides and acts</td>
+                </tr>
+                <tr>
+                    <td><strong>Risk</strong></td>
+                    <td>Low (human in loop)</td>
+                    <td>Higher (autonomous actions)</td>
+                </tr>
+                <tr>
+                    <td><strong>Trust Required</strong></td>
+                    <td>Low</td>
+                    <td>High</td>
+                </tr>
+                <tr>
+                    <td><strong>Speed</strong></td>
+                    <td>Slower (human review)</td>
+                    <td>Faster (no waiting)</td>
+                </tr>
+                <tr>
+                    <td><strong>Example</strong></td>
+                    <td>GitHub Copilot, email suggestions</td>
+                    <td>Booking agent, automated trading</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>The Decision Framework</h2>
+
+        <pre class="mermaid">
+flowchart TD
+    A[Can the user easily undo the action?] -->|YES| B[Copilot OK<br>Can be more autonomous]
+    A -->|NO| C[Is the cost of error < $100?]
+    C -->|YES| D[Agent with logging]
+    C -->|NO| E[Require human approval]
+
+    style A fill:#E6F7F5,stroke:#40B8A6
+    style B fill:#ecfdf5,stroke:#059669
+    style D fill:#fffbeb,stroke:#f59e0b
+    style E fill:#fef2f2,stroke:#dc2626
+        </pre>
+
+        <div class="callout callout-decision">
+            <div class="callout-title">PM Decision Point</div>
+            <p>Before launching any AI feature, ask: <strong>"What's the blast radius if this goes wrong?"</strong></p>
+            <ul>
+                <li><strong>Small blast radius</strong> (typo in email draft) = Copilot fine</li>
+                <li><strong>Medium blast radius</strong> (wrong meeting scheduled) = Agent with undo</li>
+                <li><strong>Large blast radius</strong> (money transferred, data deleted) = Require approval</li>
+            </ul>
+        </div>
+
+        <h2>Real-World Examples</h2>
+
+        <div class="card-grid">
+            <div class="card">
+                <h3>Copilot Examples</h3>
+                <ul>
+                    <li>GitHub Copilot (suggests code)</li>
+                    <li>Gmail Smart Compose (suggests text)</li>
+                    <li>Notion AI (suggests edits)</li>
+                    <li>Grammarly (suggests corrections)</li>
+                </ul>
+                <p><strong>Pattern:</strong> User reviews before action</p>
+            </div>
+            <div class="card">
+                <h3>Agent Examples</h3>
+                <ul>
+                    <li>Klarna customer service (resolves issues)</li>
+                    <li>Trading algorithms (executes trades)</li>
+                    <li>Email auto-responders (sends replies)</li>
+                    <li>Smart home systems (adjusts settings)</li>
+                </ul>
+                <p><strong>Pattern:</strong> Acts without waiting for approval</p>
+            </div>
+        </div>
+
+        <h2>The Reversibility Test</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Action</th>
+                    <th>Reversible?</th>
+                    <th>Recommendation</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Draft an email</td>
+                    <td>Yes (don't send)</td>
+                    <td>Copilot</td>
+                </tr>
+                <tr>
+                    <td>Send an email</td>
+                    <td>No</td>
+                    <td>Agent + Approval</td>
+                </tr>
+                <tr>
+                    <td>Schedule a meeting</td>
+                    <td>Yes (can cancel)</td>
+                    <td>Agent OK</td>
+                </tr>
+                <tr>
+                    <td>Make a purchase</td>
+                    <td>Sometimes</td>
+                    <td>Agent + Threshold</td>
+                </tr>
+                <tr>
+                    <td>Delete data</td>
+                    <td>No</td>
+                    <td>Always approve</td>
+                </tr>
+                <tr>
+                    <td>Transfer money</td>
+                    <td>No</td>
+                    <td>Always approve</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>Try It Yourself</h2>
+        <div class="hf-space-embed">
+            <a href="https://huggingface.co/spaces/axelsirota/agent-workflow-builder" class="hf-space-link" target="_blank">Open Agent Workflow Builder</a>
+            <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-light);">
+                Firewall blocked? <a href="https://colab.research.google.com/github/axel-sirota/ai-for-pms/blob/main/notebooks/workshop-apps/18-agent-workflow-builder.ipynb" target="_blank">Open in Google Colab</a>
+            </p>
+        </div>
+
+        <div class="callout callout-insight">
+            <div class="callout-title">PM Insight</div>
+            <p><strong>Start as a copilot, graduate to an agent.</strong> Even Klarna started with human review for every response. They earned agent status through 2 years of demonstrated reliability.</p>
+        </div>
+
+        <div class="stakeholder-frame">
+            <h3>How to Explain This to Stakeholders</h3>
+            <blockquote>
+                "A copilot is like a helpful assistant who drafts things for you to approve. An agent is like a trusted employee who can act on your behalf. We start with copilots and promote to agents only after the AI proves it can handle the responsibility."
+            </blockquote>
+        </div>
+
+        <nav class="module-nav">
+            <a href="index.html">&larr; Section Overview</a>
+            <a href="5.2-react-pattern.html">Next: ReAct Pattern &rarr;</a>
+        </nav>
+    </div>
+
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'base',
+            themeVariables: {
+                primaryColor: '#E6F7F5',
+                primaryTextColor: '#1A3D4D',
+                primaryBorderColor: '#40B8A6',
+                lineColor: '#40B8A6',
+                secondaryColor: '#F9FAFB',
+                tertiaryColor: '#fff'
+            }
+        });
+    </script>
+</body>
+</html>

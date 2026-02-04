@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>5.3 Trust Progression | AI for Product Managers</title>
+    <link rel="stylesheet" href="../../shared/css/course.css">
+</head>
+<body>
+    <div class="course-container">
+        <header class="course-header">
+            <span class="section-label">SECTION 5.3</span>
+            <h1>Trust Progression</h1>
+            <p class="subtitle">Earning Autonomy Through Demonstrated Success</p>
+        </header>
+
+        <div class="callout callout-success">
+            <div class="callout-title">The Klarna Playbook</div>
+            <p><strong>Klarna's 2-year journey:</strong> Started with AI suggesting responses that humans sent. After 6 months of near-perfect performance, AI drafted responses humans approved with one click. After 12 months, AI handled routine cases autonomously. Now handles 2/3 of all chats - but high-value cases still get human review.</p>
+        </div>
+
+        <h2>The Trust Progression Framework</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Level</th>
+                    <th>Description</th>
+                    <th>Human Role</th>
+                    <th>Use When</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr style="background: #fef2f2;">
+                    <td><strong>Level 0</strong></td>
+                    <td>AI suggests, human does everything</td>
+                    <td>Full control</td>
+                    <td>New system, high risk, no track record</td>
+                </tr>
+                <tr style="background: #fffbeb;">
+                    <td><strong>Level 1</strong></td>
+                    <td>AI drafts, human approves</td>
+                    <td>Review + approve</td>
+                    <td>Some track record, medium risk</td>
+                </tr>
+                <tr style="background: #ecfdf5;">
+                    <td><strong>Level 2</strong></td>
+                    <td>AI acts, human reviews after</td>
+                    <td>Spot check</td>
+                    <td>Good track record, lower risk</td>
+                </tr>
+                <tr style="background: #E6F7F5;">
+                    <td><strong>Level 3</strong></td>
+                    <td>AI acts autonomously</td>
+                    <td>Exception handling only</td>
+                    <td>Proven system, low risk actions</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>The Progression Journey</h2>
+
+        <pre class="mermaid">
+flowchart LR
+    L0[Level 0<br>Human Does] --> |"Accuracy > 95%<br>4+ weeks"| L1[Level 1<br>Human Approves]
+    L1 --> |"Accuracy > 98%<br>4+ weeks"| L2[Level 2<br>Human Reviews]
+    L2 --> |"Accuracy > 99%<br>8+ weeks"| L3[Level 3<br>Autonomous]
+
+    L3 --> |"Error rate increases"| L2
+    L2 --> |"Error rate increases"| L1
+    L1 --> |"Major failure"| L0
+
+    style L0 fill:#fef2f2,stroke:#dc2626
+    style L1 fill:#fffbeb,stroke:#f59e0b
+    style L2 fill:#ecfdf5,stroke:#059669
+    style L3 fill:#E6F7F5,stroke:#40B8A6
+        </pre>
+
+        <div class="callout callout-decision">
+            <div class="callout-title">PM Decision Point</div>
+            <p>You define the promotion and demotion criteria:</p>
+            <ul>
+                <li><strong>Promotion threshold:</strong> What accuracy % for how long?</li>
+                <li><strong>Demotion trigger:</strong> What error rate forces a step back?</li>
+                <li><strong>Emergency brake:</strong> What failure type forces Level 0 immediately?</li>
+            </ul>
+        </div>
+
+        <h2>Example: Email Assistant Progression</h2>
+
+        <div class="card-grid">
+            <div class="card">
+                <h3>Week 1-4: Level 0</h3>
+                <p>AI suggests reply topics. Human writes the actual email.</p>
+                <p><strong>Metrics tracked:</strong> Suggestion relevance</p>
+            </div>
+            <div class="card">
+                <h3>Week 5-8: Level 1</h3>
+                <p>AI drafts full emails. Human reviews and clicks "Send" or edits.</p>
+                <p><strong>Metrics tracked:</strong> Edit rate, approval rate</p>
+            </div>
+            <div class="card">
+                <h3>Week 9-16: Level 2</h3>
+                <p>AI sends routine replies. Human reviews daily sample.</p>
+                <p><strong>Metrics tracked:</strong> Customer satisfaction, escalation rate</p>
+            </div>
+            <div class="card">
+                <h3>Month 4+: Level 3</h3>
+                <p>AI handles routine emails autonomously. Complex cases flagged.</p>
+                <p><strong>Metrics tracked:</strong> Resolution rate, CSAT, escalations</p>
+            </div>
+        </div>
+
+        <h2>Metrics That Drive Trust</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Metric</th>
+                    <th>What It Measures</th>
+                    <th>Target for Promotion</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Accuracy</strong></td>
+                    <td>% of correct actions</td>
+                    <td>>98% for Level 2, >99% for Level 3</td>
+                </tr>
+                <tr>
+                    <td><strong>Edit Rate</strong></td>
+                    <td>% of AI outputs humans modify</td>
+                    <td><5% for Level 2, <2% for Level 3</td>
+                </tr>
+                <tr>
+                    <td><strong>Rejection Rate</strong></td>
+                    <td>% of AI actions humans reject</td>
+                    <td><2% for any level</td>
+                </tr>
+                <tr>
+                    <td><strong>Escalation Rate</strong></td>
+                    <td>% of cases needing human help</td>
+                    <td><10% for Level 3</td>
+                </tr>
+                <tr>
+                    <td><strong>User Satisfaction</strong></td>
+                    <td>End-user feedback on AI interactions</td>
+                    <td>>4.5/5 stars</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>When to Demote</h2>
+
+        <div class="callout callout-failure">
+            <div class="callout-title">Automatic Demotion Triggers</div>
+            <ul>
+                <li><strong>Single catastrophic failure:</strong> PII leak, wrong financial action, public embarrassment → Level 0 immediately</li>
+                <li><strong>Error rate spike:</strong> 2x normal error rate for 24 hours → Drop one level</li>
+                <li><strong>User complaints spike:</strong> 3x normal complaint rate → Drop one level</li>
+                <li><strong>System change:</strong> Major model update or new capabilities → Re-evaluate from Level 1</li>
+            </ul>
+        </div>
+
+        <div class="callout callout-insight">
+            <div class="callout-title">PM Insight</div>
+            <p><strong>Trust is earned slowly and lost quickly.</strong> Klarna took 2 years to reach Level 3. Knight Capital went from trusted to bankrupt in 45 minutes. Build in automatic demotion triggers - they're your safety net.</p>
+        </div>
+
+        <h2>Try It Yourself</h2>
+        <div class="hf-space-embed">
+            <a href="https://huggingface.co/spaces/axelsirota/human-in-the-loop-designer" class="hf-space-link" target="_blank">Open Human-in-the-Loop Designer</a>
+            <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-light);">
+                Firewall blocked? <a href="https://colab.research.google.com/github/axel-sirota/ai-for-pms/blob/main/notebooks/workshop-apps/20-human-in-the-loop-designer.ipynb" target="_blank">Open in Google Colab</a>
+            </p>
+            <p>Design approval workflows and see how trust levels affect the user experience.</p>
+        </div>
+
+        <div class="stakeholder-frame">
+            <h3>How to Explain Trust Progression to Stakeholders</h3>
+            <blockquote>
+                "We treat AI like a new employee. Week one, they shadow and learn. Month one, they draft work for review. Month three, they handle routine tasks with spot checks. Eventually, they work independently - but we're always monitoring and can pull them back if needed. This is how Klarna safely scaled to handling millions of customer chats."
+            </blockquote>
+        </div>
+
+        <nav class="module-nav">
+            <a href="5.2-react-pattern.html">&larr; ReAct Pattern</a>
+            <a href="5.4-human-in-the-loop.html">Next: Human-in-the-Loop &rarr;</a>
+        </nav>
+    </div>
+
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'base',
+            themeVariables: {
+                primaryColor: '#E6F7F5',
+                primaryTextColor: '#1A3D4D',
+                primaryBorderColor: '#40B8A6',
+                lineColor: '#40B8A6',
+                secondaryColor: '#F9FAFB',
+                tertiaryColor: '#fff'
+            }
+        });
+    </script>
+</body>
+</html>

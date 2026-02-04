@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Section 5: AI Agents | AI for Product Managers</title>
+    <link rel="stylesheet" href="../../shared/css/course.css">
+</head>
+<body>
+    <div class="course-container">
+        <header class="course-header">
+            <span class="section-label">SECTION 5</span>
+            <h1>AI Agents and Intelligent Automation</h1>
+            <p class="subtitle">From Assistants to Autonomous Systems</p>
+        </header>
+
+        <div class="callout callout-failure">
+            <div class="callout-title">The $440 Million Mistake</div>
+            <p><strong>Knight Capital, 2012:</strong> A software bug in their trading algorithm caused the system to execute erroneous trades autonomously. In 45 minutes, they lost $440 million - nearly bankrupting the company. The agent had no human checkpoints for high-risk actions.</p>
+        </div>
+
+        <div class="callout callout-success">
+            <div class="callout-title">The Success Story</div>
+            <p><strong>Klarna, 2024:</strong> Their AI assistant now handles 2/3 of all customer service chats - equivalent to 700 full-time agents. But it took 2 years of careful trust progression to get there safely.</p>
+        </div>
+
+        <h2>What You'll Learn</h2>
+        <div class="card-grid">
+            <div class="card">
+                <h3>Copilot vs Agent</h3>
+                <p>When AI should suggest vs when it should act autonomously</p>
+                <a href="5.1-copilot-vs-agent.html">Start Learning &rarr;</a>
+            </div>
+            <div class="card">
+                <h3>The ReAct Pattern</h3>
+                <p>How agents reason, act, and observe in cycles</p>
+                <a href="5.2-react-pattern.html">Start Learning &rarr;</a>
+            </div>
+            <div class="card">
+                <h3>Trust Progression</h3>
+                <p>Earning autonomy through demonstrated success</p>
+                <a href="5.3-trust-progression.html">Start Learning &rarr;</a>
+            </div>
+            <div class="card">
+                <h3>Human-in-the-Loop</h3>
+                <p>Designing safe agent systems with appropriate checkpoints</p>
+                <a href="5.4-human-in-the-loop.html">Start Learning &rarr;</a>
+            </div>
+        </div>
+
+        <h2>Key Statistics</h2>
+        <div class="stat-row">
+            <div class="stat-card">
+                <span class="stat-number">700</span>
+                <span class="stat-label">FTE equivalent (Klarna AI)</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">$440M</span>
+                <span class="stat-label">Knight Capital loss (45 min)</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">2 years</span>
+                <span class="stat-label">Klarna's trust progression</span>
+            </div>
+        </div>
+
+        <h2>Interactive Experiences</h2>
+        <div class="card-grid">
+            <div class="card">
+                <h3>Agent Workflow Builder</h3>
+                <p>Design agent workflows and see simulated execution</p>
+                <a href="https://huggingface.co/spaces/axelsirota/agent-workflow-builder" class="hf-space-link" target="_blank">Open App</a>
+                <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-light);">
+                    Firewall blocked? <a href="https://colab.research.google.com/github/axel-sirota/ai-for-pms/blob/main/notebooks/workshop-apps/18-agent-workflow-builder.ipynb" target="_blank">Open in Google Colab</a>
+                </p>
+            </div>
+            <div class="card">
+                <h3>Agent Failure Gallery</h3>
+                <p>Watch agents fail in controlled scenarios</p>
+                <a href="https://huggingface.co/spaces/axelsirota/agent-failure-gallery" class="hf-space-link" target="_blank">Open App</a>
+                <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-light);">
+                    Firewall blocked? <a href="https://colab.research.google.com/github/axel-sirota/ai-for-pms/blob/main/notebooks/workshop-apps/19-agent-failure-gallery.ipynb" target="_blank">Open in Google Colab</a>
+                </p>
+            </div>
+            <div class="card">
+                <h3>Human-in-the-Loop Designer</h3>
+                <p>Configure approval workflows for agent systems</p>
+                <a href="https://huggingface.co/spaces/axelsirota/human-in-the-loop-designer" class="hf-space-link" target="_blank">Open App</a>
+                <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-light);">
+                    Firewall blocked? <a href="https://colab.research.google.com/github/axel-sirota/ai-for-pms/blob/main/notebooks/workshop-apps/20-human-in-the-loop-designer.ipynb" target="_blank">Open in Google Colab</a>
+                </p>
+            </div>
+            <div class="card">
+                <h3>Tool Use Sandbox</h3>
+                <p>Give an agent tools and watch it solve problems</p>
+                <a href="https://huggingface.co/spaces/axelsirota/tool-use-sandbox" class="hf-space-link" target="_blank">Open App</a>
+                <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-light);">
+                    Firewall blocked? <a href="https://colab.research.google.com/github/axel-sirota/ai-for-pms/blob/main/notebooks/workshop-apps/21-tool-use-sandbox.ipynb" target="_blank">Open in Google Colab</a>
+                </p>
+            </div>
+        </div>
+
+        <div class="stakeholder-frame">
+            <h3>How to Explain Agents to Your VP</h3>
+            <blockquote>
+                "Agents are AI that can take actions, not just give suggestions. Think of them like interns: start supervised, earn trust through success, and always have a manager approve the big decisions. The difference between Knight Capital's disaster and Klarna's success? Human checkpoints at the right moments."
+            </blockquote>
+        </div>
+
+        <nav class="module-nav">
+            <a href="../section-4-rag/index.html">&larr; Section 4: RAG</a>
+            <a href="5.1-copilot-vs-agent.html">Start Section 5 &rarr;</a>
+        </nav>
+    </div>
+</body>
+</html>

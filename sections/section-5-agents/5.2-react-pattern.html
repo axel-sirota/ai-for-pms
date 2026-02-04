@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>5.2 The ReAct Pattern | AI for Product Managers</title>
+    <link rel="stylesheet" href="../../shared/css/course.css">
+</head>
+<body>
+    <div class="course-container">
+        <header class="course-header">
+            <span class="section-label">SECTION 5.2</span>
+            <h1>The ReAct Pattern</h1>
+            <p class="subtitle">How Agents Reason, Act, and Observe</p>
+        </header>
+
+        <div class="callout callout-insight">
+            <div class="callout-title">The Core Loop</div>
+            <p><strong>ReAct = Reason + Act</strong><br>
+            Agents don't just respond - they think, take action, observe results, and repeat. This loop is what makes them powerful and what makes them risky.</p>
+        </div>
+
+        <h2>The ReAct Cycle</h2>
+
+        <pre class="mermaid">
+flowchart LR
+    R[REASON<br>Think about what to do] --> A[ACT<br>Use a tool or take action]
+    A --> O[OBSERVE<br>See the result]
+    O --> R
+
+    style R fill:#E6F7F5,stroke:#40B8A6
+    style A fill:#fffbeb,stroke:#f59e0b
+    style O fill:#ecfdf5,stroke:#059669
+        </pre>
+
+        <h2>Example: Travel Booking Agent</h2>
+
+        <div class="card">
+            <p><strong>User Request:</strong> "Book me a flight from NYC to LA next Friday under $500"</p>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Step</th>
+                    <th>Phase</th>
+                    <th>What Happens</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td style="background: #E6F7F5;">REASON</td>
+                    <td>"I need to search for flights from NYC to LA on Friday with max price $500"</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td style="background: #fffbeb;">ACT</td>
+                    <td>search_flights(from="NYC", to="LA", date="Friday", max_price=500)</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td style="background: #ecfdf5;">OBSERVE</td>
+                    <td>Found 3 flights: Delta $450, United $380, JetBlue $420</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td style="background: #E6F7F5;">REASON</td>
+                    <td>"United is cheapest at $380. I should present options to the user."</td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td style="background: #fffbeb;">ACT</td>
+                    <td>present_options([Delta $450, United $380, JetBlue $420])</td>
+                </tr>
+                <tr>
+                    <td>6</td>
+                    <td style="background: #ecfdf5;">OBSERVE</td>
+                    <td>User selected United $380</td>
+                </tr>
+                <tr>
+                    <td>7</td>
+                    <td style="background: #E6F7F5;">REASON</td>
+                    <td>"User confirmed United. I should book the flight."</td>
+                </tr>
+                <tr>
+                    <td>8</td>
+                    <td style="background: #fffbeb;">ACT</td>
+                    <td>book_flight(flight="United", price=380)</td>
+                </tr>
+                <tr>
+                    <td>9</td>
+                    <td style="background: #ecfdf5;">OBSERVE</td>
+                    <td>Booking confirmed. Confirmation #UA12345</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="callout callout-decision">
+            <div class="callout-title">PM Decision Point</div>
+            <p>Notice step 5 - the agent <strong>presented options</strong> instead of auto-booking. This is a human checkpoint. As PM, you decide:</p>
+            <ul>
+                <li>Which actions need human confirmation?</li>
+                <li>What thresholds trigger checkpoints? ($500? $1000?)</li>
+                <li>How many ReAct cycles before forcing a stop?</li>
+            </ul>
+        </div>
+
+        <h2>Where ReAct Goes Wrong</h2>
+
+        <div class="card-grid">
+            <div class="card" style="border-left: 4px solid var(--danger);">
+                <h3>Infinite Loops</h3>
+                <p>Agent keeps searching, never finds a good answer, loops forever.</p>
+                <p><strong>Fix:</strong> Max iterations limit (e.g., 10 cycles)</p>
+            </div>
+            <div class="card" style="border-left: 4px solid var(--danger);">
+                <h3>Wrong Tool Selection</h3>
+                <p>Agent reasons incorrectly and picks the wrong action.</p>
+                <p><strong>Fix:</strong> Better tool descriptions, validation</p>
+            </div>
+            <div class="card" style="border-left: 4px solid var(--danger);">
+                <h3>Hallucinated Tools</h3>
+                <p>Agent tries to use a tool that doesn't exist.</p>
+                <p><strong>Fix:</strong> Strict tool validation before execution</p>
+            </div>
+            <div class="card" style="border-left: 4px solid var(--danger);">
+                <h3>Cascading Errors</h3>
+                <p>One bad observation leads to worse reasoning in the next cycle.</p>
+                <p><strong>Fix:</strong> Error detection and recovery paths</p>
+            </div>
+        </div>
+
+        <h2>The Agent Architecture</h2>
+
+        <pre class="mermaid">
+flowchart TB
+    U[User Request] --> LLM[LLM Brain]
+    LLM --> R{Reasoning}
+    R --> T1[Tool 1:<br>Search]
+    R --> T2[Tool 2:<br>Calculate]
+    R --> T3[Tool 3:<br>Book]
+    R --> T4[Tool 4:<br>Email]
+    T1 --> O[Observation]
+    T2 --> O
+    T3 --> O
+    T4 --> O
+    O --> LLM
+    LLM --> |Done| Response[Final Response]
+
+    style LLM fill:#E6F7F5,stroke:#40B8A6
+    style R fill:#fffbeb,stroke:#f59e0b
+    style Response fill:#ecfdf5,stroke:#059669
+        </pre>
+
+        <div class="callout callout-insight">
+            <div class="callout-title">Why PMs Care About ReAct</div>
+            <p>You don't need to implement ReAct - that's engineering's job. But you need to understand it because:</p>
+            <ul>
+                <li><strong>You define the tools:</strong> What can the agent do?</li>
+                <li><strong>You set the limits:</strong> How many cycles? What thresholds?</li>
+                <li><strong>You design the checkpoints:</strong> When does it stop and ask?</li>
+                <li><strong>You debug the failures:</strong> Understanding the loop helps diagnose problems</li>
+            </ul>
+        </div>
+
+        <h2>Try It Yourself</h2>
+        <div class="hf-space-embed">
+            <a href="https://huggingface.co/spaces/axelsirota/agent-failure-gallery" class="hf-space-link" target="_blank">Open Agent Failure Gallery</a>
+            <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-light);">
+                Firewall blocked? <a href="https://colab.research.google.com/github/axel-sirota/ai-for-pms/blob/main/notebooks/workshop-apps/19-agent-failure-gallery.ipynb" target="_blank">Open in Google Colab</a>
+            </p>
+            <p>Watch agents fail in controlled scenarios - infinite loops, wrong tools, and cascading errors.</p>
+        </div>
+
+        <div class="stakeholder-frame">
+            <h3>How to Explain ReAct to Stakeholders</h3>
+            <blockquote>
+                "The agent works in cycles: it thinks about what to do, takes an action, sees the result, and repeats until done. Like a smart employee who checks their work as they go. We control how many cycles it can run and which actions need approval."
+            </blockquote>
+        </div>
+
+        <nav class="module-nav">
+            <a href="5.1-copilot-vs-agent.html">&larr; Copilot vs Agent</a>
+            <a href="5.3-trust-progression.html">Next: Trust Progression &rarr;</a>
+        </nav>
+    </div>
+
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'base',
+            themeVariables: {
+                primaryColor: '#E6F7F5',
+                primaryTextColor: '#1A3D4D',
+                primaryBorderColor: '#40B8A6',
+                lineColor: '#40B8A6',
+                secondaryColor: '#F9FAFB',
+                tertiaryColor: '#fff'
+            }
+        });
+    </script>
+</body>
+</html>

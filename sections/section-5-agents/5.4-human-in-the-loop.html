@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>5.4 Human-in-the-Loop | AI for Product Managers</title>
+    <link rel="stylesheet" href="../../shared/css/course.css">
+</head>
+<body>
+    <div class="course-container">
+        <header class="course-header">
+            <span class="section-label">SECTION 5.4</span>
+            <h1>Human-in-the-Loop Design</h1>
+            <p class="subtitle">Designing Safe Agent Systems with Appropriate Checkpoints</p>
+        </header>
+
+        <div class="callout callout-failure">
+            <div class="callout-title">The Missing Checkpoint</div>
+            <p><strong>Knight Capital's Fatal Flaw:</strong> Their trading system had no human checkpoint for unusual activity. When the algorithm started executing erroneous trades at 100x normal volume, there was no automatic stop. By the time humans noticed, $440 million was gone.</p>
+        </div>
+
+        <h2>The Checkpoint Decision Framework</h2>
+
+        <pre class="mermaid">
+flowchart TD
+    A[Agent Action] --> B{Is it reversible?}
+    B -->|Yes| C{Cost if wrong < $100?}
+    B -->|No| D[REQUIRE APPROVAL]
+    C -->|Yes| E[Allow + Log]
+    C -->|No| F{Confidence > 95%?}
+    F -->|Yes| G[Allow + Notify]
+    F -->|No| D
+
+    style D fill:#fef2f2,stroke:#dc2626
+    style E fill:#ecfdf5,stroke:#059669
+    style G fill:#fffbeb,stroke:#f59e0b
+        </pre>
+
+        <h2>Types of Human Checkpoints</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Checkpoint Type</th>
+                    <th>Description</th>
+                    <th>Use When</th>
+                    <th>Example</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Pre-Action</strong></td>
+                    <td>Human approves before AI acts</td>
+                    <td>Irreversible, high-value actions</td>
+                    <td>"Approve this $5,000 purchase?"</td>
+                </tr>
+                <tr>
+                    <td><strong>Post-Action</strong></td>
+                    <td>AI acts, human can undo</td>
+                    <td>Reversible, medium-value actions</td>
+                    <td>"Meeting scheduled. Undo?"</td>
+                </tr>
+                <tr>
+                    <td><strong>Sampling</strong></td>
+                    <td>Human reviews random % of actions</td>
+                    <td>High-volume, low-risk actions</td>
+                    <td>Review 5% of auto-responses</td>
+                </tr>
+                <tr>
+                    <td><strong>Threshold</strong></td>
+                    <td>Auto-approve below threshold</td>
+                    <td>Value-based decisions</td>
+                    <td>Auto-approve if < $500</td>
+                </tr>
+                <tr>
+                    <td><strong>Confidence</strong></td>
+                    <td>Approve if AI is confident</td>
+                    <td>Uncertain situations</td>
+                    <td>If confidence < 80%, ask human</td>
+                </tr>
+                <tr>
+                    <td><strong>Exception</strong></td>
+                    <td>Human handles edge cases</td>
+                    <td>Unusual patterns detected</td>
+                    <td>Escalate if customer is angry</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="callout callout-decision">
+            <div class="callout-title">PM Decision Point</div>
+            <p>For each agent action, decide:</p>
+            <ul>
+                <li><strong>Checkpoint type:</strong> Pre, post, sampling, threshold, confidence, or exception?</li>
+                <li><strong>Threshold values:</strong> What $ amount? What confidence %?</li>
+                <li><strong>Sampling rate:</strong> Review what % of actions?</li>
+                <li><strong>Escalation path:</strong> Who handles exceptions?</li>
+            </ul>
+        </div>
+
+        <h2>Designing the Approval Flow</h2>
+
+        <h3>Example: Expense Report Agent</h3>
+
+        <pre class="mermaid">
+flowchart TD
+    S[Expense Submitted] --> OCR[AI: Extract Receipt Data]
+    OCR --> CAT[AI: Categorize Expense]
+    CAT --> POL{Policy Check}
+
+    POL -->|Compliant| AMT{Amount Check}
+    POL -->|Violation| HUM1[HUMAN: Review Violation]
+
+    AMT -->|< $100| AUTO[Auto-Approve]
+    AMT -->|$100-$500| MGR[Manager Approval]
+    AMT -->|> $500| FIN[Finance Approval]
+
+    AUTO --> PAY[Process Payment]
+    MGR --> PAY
+    FIN --> PAY
+    HUM1 -->|Approved| PAY
+    HUM1 -->|Rejected| REJ[Reject + Notify]
+
+    style AUTO fill:#ecfdf5,stroke:#059669
+    style MGR fill:#fffbeb,stroke:#f59e0b
+    style FIN fill:#fef2f2,stroke:#dc2626
+    style HUM1 fill:#fef2f2,stroke:#dc2626
+        </pre>
+
+        <h2>The Friction vs Safety Tradeoff</h2>
+
+        <div class="card-grid">
+            <div class="card" style="border-left: 4px solid var(--success);">
+                <h3>More Checkpoints</h3>
+                <ul>
+                    <li>Safer (catch more errors)</li>
+                    <li>Slower (users wait)</li>
+                    <li>More expensive (human time)</li>
+                    <li>Better for: High-risk, regulated, new systems</li>
+                </ul>
+            </div>
+            <div class="card" style="border-left: 4px solid var(--accent);">
+                <h3>Fewer Checkpoints</h3>
+                <ul>
+                    <li>Faster (instant action)</li>
+                    <li>Riskier (errors slip through)</li>
+                    <li>Cheaper (less human involvement)</li>
+                    <li>Better for: Low-risk, proven systems</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="stat-row">
+            <div class="stat-card">
+                <span class="stat-number">2-5%</span>
+                <span class="stat-label">Typical sampling rate for proven systems</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">$500</span>
+                <span class="stat-label">Common auto-approval threshold</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">80%</span>
+                <span class="stat-label">Typical confidence threshold</span>
+            </div>
+        </div>
+
+        <h2>UX Patterns for Transparency</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Pattern</th>
+                    <th>Description</th>
+                    <th>Example</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Show the reasoning</strong></td>
+                    <td>Explain what the AI is doing</td>
+                    <td>"Searching for flights... Found 3 options"</td>
+                </tr>
+                <tr>
+                    <td><strong>Confirm before acting</strong></td>
+                    <td>Ask before irreversible actions</td>
+                    <td>"Ready to book. Confirm purchase?"</td>
+                </tr>
+                <tr>
+                    <td><strong>Show confidence</strong></td>
+                    <td>Indicate how sure the AI is</td>
+                    <td>"90% confident this is correct"</td>
+                </tr>
+                <tr>
+                    <td><strong>Easy undo</strong></td>
+                    <td>Clear path to reverse</td>
+                    <td>"Meeting scheduled. [Undo]"</td>
+                </tr>
+                <tr>
+                    <td><strong>Summarize actions</strong></td>
+                    <td>Recap what was done</td>
+                    <td>"Booked flight, sent confirmation email"</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>Anti-Patterns to Avoid</h2>
+
+        <div class="callout callout-failure">
+            <div class="callout-title">Don't Do This</div>
+            <ul>
+                <li><strong>Black box:</strong> "Done!" (What did it do?)</li>
+                <li><strong>No undo:</strong> Irreversible action with no way back</li>
+                <li><strong>Overconfidence:</strong> "I have booked your flight" vs "I'm ready to book"</li>
+                <li><strong>Hidden actions:</strong> Agent does things user didn't ask for</li>
+                <li><strong>Alert fatigue:</strong> Too many checkpoints - users start auto-approving</li>
+            </ul>
+        </div>
+
+        <h2>Try It Yourself</h2>
+        <div class="hf-space-embed">
+            <a href="https://huggingface.co/spaces/axelsirota/tool-use-sandbox" class="hf-space-link" target="_blank">Open Tool Use Sandbox</a>
+            <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-light);">
+                Firewall blocked? <a href="https://colab.research.google.com/github/axel-sirota/ai-for-pms/blob/main/notebooks/workshop-apps/21-tool-use-sandbox.ipynb" target="_blank">Open in Google Colab</a>
+            </p>
+            <p>Give an agent tools and watch it solve multi-step problems.</p>
+        </div>
+
+        <div class="callout callout-insight">
+            <div class="callout-title">PM Insight</div>
+            <p><strong>Design for the 1% case.</strong> 99% of the time your agent works perfectly. But the 1% failure case is what makes headlines. Build your checkpoints around the worst-case scenario, then optimize for speed once you've proven safety.</p>
+        </div>
+
+        <div class="stakeholder-frame">
+            <h3>How to Explain Human-in-the-Loop to Stakeholders</h3>
+            <blockquote>
+                "Every agent action goes through a decision tree. Small, reversible actions happen automatically. Big or irreversible actions require human approval. We can tune the thresholds - tighter for safety, looser for speed. Right now we're starting conservative and will loosen as the system proves itself."
+            </blockquote>
+        </div>
+
+        <h2>Section 5 Summary</h2>
+
+        <div class="card">
+            <h3>Key Takeaways</h3>
+            <ol>
+                <li><strong>Copilot vs Agent:</strong> Start as copilot (suggests), graduate to agent (acts) based on track record</li>
+                <li><strong>ReAct Pattern:</strong> Agents reason → act → observe in cycles. You control the tools and limits.</li>
+                <li><strong>Trust Progression:</strong> Level 0 → Level 3 takes months, not days. Demotion can happen instantly.</li>
+                <li><strong>Human-in-the-Loop:</strong> Every checkpoint is a tradeoff between safety and speed. Design for the worst case.</li>
+            </ol>
+        </div>
+
+        <nav class="module-nav">
+            <a href="5.3-trust-progression.html">&larr; Trust Progression</a>
+            <a href="../section-6-evaluation/index.html">Next Section: Evaluation &rarr;</a>
+        </nav>
+    </div>
+
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'base',
+            themeVariables: {
+                primaryColor: '#E6F7F5',
+                primaryTextColor: '#1A3D4D',
+                primaryBorderColor: '#40B8A6',
+                lineColor: '#40B8A6',
+                secondaryColor: '#F9FAFB',
+                tertiaryColor: '#fff'
+            }
+        });
+    </script>
+</body>
+</html>
