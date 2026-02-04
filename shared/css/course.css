@@ -336,6 +336,45 @@ tr:hover { background: var(--bg-alt); }
   text-decoration: none;
 }
 
+/* Card with tool links */
+.card-links {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border);
+}
+
+.card-links a {
+  display: inline-block;
+  padding: 0.4rem 0.75rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  border-radius: var(--radius);
+  transition: background 0.2s, color 0.2s;
+}
+
+.card-links .link-primary {
+  background: var(--primary);
+  color: #fff;
+}
+
+.card-links .link-primary:hover {
+  background: var(--primary-dark);
+  text-decoration: none;
+}
+
+.card-links .link-secondary {
+  background: var(--bg-alt);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+.card-links .link-secondary:hover {
+  background: var(--border);
+  text-decoration: none;
+}
+
 /* ===== Stakeholder Framing ===== */
 .stakeholder-frame {
   background: linear-gradient(135deg, var(--primary-bg), #D4F0EC);
