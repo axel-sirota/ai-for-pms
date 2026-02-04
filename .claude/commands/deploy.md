@@ -49,6 +49,8 @@ Deploy Gradio apps to HuggingFace Spaces for student access.
 Apps will be available at:
 `https://huggingface.co/spaces/axelsirota/<app-name>`
 
+**⚠️ SYNC REMINDER:** If you updated an HF Space app, also update the corresponding Colab notebook at `notebooks/workshop-apps/NN-app-name.ipynb`. Students behind corporate firewalls depend on these notebooks.
+
 ## Troubleshooting
 
 - **Rate limited**: Wait 30 seconds and retry

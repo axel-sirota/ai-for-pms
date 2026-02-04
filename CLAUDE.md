@@ -111,8 +111,12 @@ ai-for-pms-2026/
 
 **For every new app:**
 1. Build the app normally in `hf_spaces/app-name/`
-2. Create migration doc at `plans/migration/NN-app-name.md`
+2. Create corresponding Colab notebook at `notebooks/workshop-apps/NN-app-name.ipynb`
 3. See `plans/firewall-bypass-overview.md` for full details
+
+**⚠️ CRITICAL SYNC RULE:**
+> **Every time an HF Space app is updated, the corresponding Colab notebook MUST be updated too.**
+> This is non-negotiable. Students behind corporate firewalls depend on Colab notebooks.
 
 **Workshop day procedure:**
 1. Open Colab notebooks for each app

@@ -217,3 +217,17 @@ demo.launch(share=True)
 - [ ] Cell 2: Full app code with `#@title`
 - [ ] Cell 3: `demo.launch(share=True)`
 - [ ] Runs in Colab and produces `*.gradio.live` URL
+
+---
+
+## ⚠️ CRITICAL: HF Space ↔ Colab Sync Rule
+
+**Every time an HF Space app is updated, the corresponding Colab notebook MUST be updated too.**
+
+This is non-negotiable. Students behind corporate firewalls (Cisco Umbrella, etc.) cannot access `*.hf.space` domains and depend entirely on the Colab notebooks.
+
+**Workflow:**
+1. Update `hf_spaces/app-name/app.py`
+2. Copy updated code to `notebooks/workshop-apps/NN-app-name.ipynb` (Cell 2)
+3. Ensure `demo.launch(share=True)` in Cell 3
+4. Commit both files together
