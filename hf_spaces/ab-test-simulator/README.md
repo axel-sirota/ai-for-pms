@@ -1,3 +1,15 @@
+---
+title: A/B Test Simulator
+emoji: 📊
+colorFrom: blue
+colorTo: indigo
+sdk: gradio
+sdk_version: "4.44.0"
+python_version: 3.10
+app_file: app.py
+pinned: false
+---
+
 # A/B Test Simulator
 
 Interactive tool for planning and analyzing A/B tests for AI features.

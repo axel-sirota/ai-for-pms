@@ -1,4 +1,5 @@
-gradio==4.44.1
 huggingface_hub==0.24.0
 openai
 anthropic
+pydantic==2.9.1
+fastapi==0.112.4
