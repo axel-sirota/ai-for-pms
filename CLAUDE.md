@@ -4,7 +4,7 @@
 
 1. Run `/read` to load all context (GUIDELINES.md, initial_research/, sections/)
 2. Then run the appropriate skill for your task (see GUIDELINES.md for the full workflow)
-3. The build order per section is: `/phase-plan` → `/build-html-module` → `/build-gradio-app` → `/build-section` → `/validate-notebooks` → **DEPLOY** → `/next-phase`
+3. The build order per section is: `/phase-plan` → `/build-html-module` → `/build-gradio-app` → `/build-section` → `/validate-notebooks` → `/validate-section` → **DEPLOY** → `/next-phase`
 
 ## DEPLOYMENT (MANDATORY AFTER EACH SECTION)
 

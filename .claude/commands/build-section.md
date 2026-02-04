@@ -130,9 +130,19 @@ Second batch (cells 5-9):
 - [ ] Runs top-to-bottom in Colab without errors
 - [ ] Content follows: FAILURE STORY -> PM DECISION -> MINIMAL THEORY -> HANDS-ON -> STAKEHOLDER FRAMING
 
+## AFTER COMPLETION
+
+Run `/validate-section N` to check:
+
+- Aesthetics compliance (AESTHETICS.md)
+- Guidelines compliance (GUIDELINES.md)
+- Continuity with previous sections
+- Known issues from issues/ folder
+
 ## NOW BEGIN:
 
 1. Read all context files
 2. Show me the plan for section [NUMBER]
 3. Wait for my approval
 4. Start building incrementally (5 cells at a time)
+5. After completion, run `/validate-section N`
