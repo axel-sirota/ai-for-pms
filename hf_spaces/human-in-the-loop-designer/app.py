@@ -242,6 +242,12 @@ with gr.Blocks(title="Human-in-the-Loop Designer", theme=gr.themes.Soft()) as de
     risk management with user experience.
     """)
 
+    gr.Markdown(
+        "> **PM Decision:** Human checkpoints add latency but reduce risk. "
+        "Balance speed vs safety based on action reversibility. "
+        "Irreversible actions (payments, deletions) always need human approval."
+    )
+
     with gr.Row():
         with gr.Column(scale=1):
             gr.Markdown("### Configuration")

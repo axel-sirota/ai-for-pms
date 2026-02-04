@@ -186,6 +186,12 @@ with gr.Blocks(title="Agent Workflow Builder", theme=gr.themes.Soft()) as demo:
     appropriate human checkpoints for your agent systems.
     """)
 
+    gr.Markdown(
+        "> **PM Decision:** Agent workflows determine failure modes and cost. "
+        "More steps = more points of failure but potentially higher capability. "
+        "Design your workflows to match task complexity and acceptable risk."
+    )
+
     with gr.Row():
         with gr.Column(scale=1):
             gr.Markdown("### Configuration")

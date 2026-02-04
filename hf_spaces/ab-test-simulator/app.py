@@ -225,6 +225,11 @@ with gr.Blocks(title="A/B Test Simulator", theme=gr.themes.Soft()) as demo:
     and avoid the trap of calling tests too early.
     """)
 
+    gr.Markdown(
+        "> **PM Decision:** A/B testing AI requires larger sample sizes than traditional tests due to output variability. "
+        "Plan for statistical significance - calling tests too early leads to false positives."
+    )
+
     with gr.Tab("Plan a Test"):
         with gr.Row():
             with gr.Column(scale=1):

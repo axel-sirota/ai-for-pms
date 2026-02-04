@@ -279,6 +279,11 @@ with gr.Blocks(title="Evaluation Suite Builder", theme=gr.themes.Soft()) as demo
     **For Product Managers:** Use this to create evaluation plans before launching AI features.
     """)
 
+    gr.Markdown(
+        "> **PM Decision:** Your evaluation suite defines what 'good' means for your AI. "
+        "Build it before you build the system - changing success criteria mid-project is expensive."
+    )
+
     with gr.Row():
         with gr.Column(scale=1):
             gr.Markdown("### 1. Feature Details")

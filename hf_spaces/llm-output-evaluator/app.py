@@ -164,6 +164,11 @@ with gr.Blocks(title="LLM Output Evaluator", theme=gr.themes.Soft()) as demo:
     how AI judges compare to human assessment.
     """)
 
+    gr.Markdown(
+        "> **PM Decision:** Evaluation criteria must align with business goals. A technically correct answer "
+        "can still be a business failure if it doesn't match tone, brand, or user expectations."
+    )
+
     with gr.Row():
         with gr.Column(scale=1):
             gr.Markdown("### 1. Select or Enter Content")

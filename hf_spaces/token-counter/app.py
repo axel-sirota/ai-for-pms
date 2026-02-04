@@ -115,6 +115,12 @@ with gr.Blocks(title="Token Counter & Cost Calculator", theme=gr.themes.Soft(pri
         "**Every token costs money. Know what you're spending.**"
     )
 
+    gr.Markdown(
+        "> **PM Decision:** Token counts directly impact API costs and response latency. "
+        "Use this to estimate costs before committing to a model - a 10x difference in token count "
+        "means a 10x difference in your monthly bill."
+    )
+
     with gr.Row():
         with gr.Column(scale=2):
             text_input = gr.Textbox(

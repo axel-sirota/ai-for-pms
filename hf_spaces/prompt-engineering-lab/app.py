@@ -256,6 +256,11 @@ with gr.Blocks(title="Prompt Engineering Lab", theme=gr.themes.Soft(primary_hue=
         "API key may already be configured. If not, enter yours below."
     )
 
+    gr.Markdown(
+        "> **PM Decision:** Well-structured prompts reduce hallucinations and improve output quality - "
+        "without changing models or increasing costs. Prompt engineering is your cheapest lever for quality improvement."
+    )
+
     with gr.Row():
         api_key = gr.Textbox(
             label="API Key",

@@ -121,6 +121,12 @@ with gr.Blocks(title="Prompt Injection Simulator", theme=gr.themes.Soft(primary_
         "**If you deploy an LLM without injection defenses, it's a matter of *when*, not *if*.**"
     )
 
+    gr.Markdown(
+        "> **PM Decision:** Prompt injection is a security risk that can expose sensitive data or bypass guardrails. "
+        "Before launching any customer-facing LLM, require security review of injection attack surfaces. "
+        "This is your Air Canada moment waiting to happen."
+    )
+
     with gr.Row():
         attack_dd = gr.Dropdown(
             choices=list(ATTACKS.keys()),

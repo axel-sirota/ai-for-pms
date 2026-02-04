@@ -176,6 +176,12 @@ with gr.Blocks(title="Temperature Playground", theme=gr.themes.Soft(primary_hue=
         "**Temperature is a product decision, not just an engineering parameter.**"
     )
 
+    gr.Markdown(
+        "> **PM Decision:** Temperature settings affect consistency vs creativity. "
+        "Higher temperature = more creative but less predictable outputs. "
+        "For customer support, use low temps (0-0.3). For marketing copy, try higher (0.7-1.0)."
+    )
+
     prompt_dd = gr.Dropdown(
         choices=PROMPTS,
         value=PROMPTS[0],

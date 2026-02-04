@@ -185,6 +185,11 @@ with gr.Blocks(title="Agent Failure Gallery", theme=gr.themes.Soft()) as demo:
     guardrails and human checkpoints.
     """)
 
+    gr.Markdown(
+        "> **PM Decision:** Understanding common agent failures helps you set realistic expectations "
+        "and design appropriate guardrails. Every failure mode here has happened in production systems."
+    )
+
     with gr.Row():
         with gr.Column(scale=1):
             gr.Markdown("### Select Failure Mode")

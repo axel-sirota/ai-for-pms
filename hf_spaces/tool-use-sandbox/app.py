@@ -267,6 +267,11 @@ with gr.Blocks(title="Tool Use Sandbox", theme=gr.themes.Soft()) as demo:
     which tools to use and in what order.
     """)
 
+    gr.Markdown(
+        "> **PM Decision:** Each tool you give an agent expands its capability AND its attack surface. "
+        "Only grant necessary permissions. More tools = more ways for things to go wrong."
+    )
+
     with gr.Row():
         with gr.Column(scale=1):
             gr.Markdown("### Task Configuration")

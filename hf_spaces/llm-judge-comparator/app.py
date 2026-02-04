@@ -155,6 +155,11 @@ with gr.Blocks(title="LLM Judge Comparator", theme=gr.themes.Soft()) as demo:
     evaluation systems and set appropriate expectations for LLM-as-judge approaches.
     """)
 
+    gr.Markdown(
+        "> **PM Decision:** LLM-as-judge is faster than human eval but may miss nuance. "
+        "Use for scale, not for final decisions. Always validate against human judgment first."
+    )
+
     with gr.Row():
         with gr.Column(scale=1):
             gr.Markdown("### Load Scenario or Enter Custom")
