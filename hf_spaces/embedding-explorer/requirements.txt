@@ -4,4 +4,3 @@ sentence-transformers
 scikit-learn
 plotly
 numpy
-audioop-lts

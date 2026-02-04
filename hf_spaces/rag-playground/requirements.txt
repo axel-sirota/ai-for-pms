@@ -4,4 +4,3 @@ sentence-transformers
 chromadb
 pypdf
 openai
-audioop-lts

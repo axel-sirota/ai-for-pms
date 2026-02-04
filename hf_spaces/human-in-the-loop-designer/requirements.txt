@@ -3,4 +3,3 @@ huggingface_hub==0.24.0
 plotly
 pandas
 numpy
-audioop-lts
