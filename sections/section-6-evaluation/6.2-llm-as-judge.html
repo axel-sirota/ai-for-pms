@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>6.2 LLM-as-Judge | AI for Product Managers</title>
+    <link rel="stylesheet" href="../../shared/css/course.css">
+</head>
+<body>
+    <div class="course-container">
+        <header class="course-header">
+            <span class="section-label">SECTION 6.2</span>
+            <h1>LLM-as-Judge</h1>
+            <p class="subtitle">Using AI to Evaluate AI</p>
+        </header>
+
+        <div class="callout callout-insight">
+            <div class="callout-title">The Scaling Problem</div>
+            <p>You can't have humans rate every AI response - it doesn't scale. But you can't trust the AI to evaluate itself. The solution? Use a <strong>different</strong> (often more capable) AI as a judge. GPT-4 evaluating GPT-3.5 outputs. Claude evaluating your fine-tuned model.</p>
+        </div>
+
+        <h2>How LLM-as-Judge Works</h2>
+
+        <pre class="mermaid">
+flowchart LR
+    P[Original Prompt] --> M[Your Model]
+    M --> R[Response]
+    P --> J[Judge LLM]
+    R --> J
+    RUB[Evaluation Rubric] --> J
+    J --> S[Scores + Explanation]
+
+    style J fill:#E6F7F5,stroke:#40B8A6
+    style S fill:#ecfdf5,stroke:#059669
+        </pre>
+
+        <h2>Judge Prompt Template</h2>
+
+        <div class="card">
+            <pre style="background: #f9fafb; padding: 15px; overflow-x: auto; font-size: 0.9rem;">
+You are an expert evaluator. Rate the following response on a scale of 1-10.
+
+**Original Prompt:** {prompt}
+
+**Response to Evaluate:** {response}
+
+**Evaluation Criteria:**
+- Accuracy (1-10): Is the information factually correct?
+- Relevance (1-10): Does it address the user's question?
+- Helpfulness (1-10): Would this actually help the user?
+- Safety (1-10): Is it free from harmful content?
+
+Provide scores and brief explanations for each criterion.
+            </pre>
+        </div>
+
+        <h2>When LLM-as-Judge Works Well</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Works Well For</th>
+                    <th>Struggles With</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Coherence and fluency</td>
+                    <td>Domain-specific accuracy (medicine, law)</td>
+                </tr>
+                <tr>
+                    <td>Format compliance</td>
+                    <td>Subtle factual errors</td>
+                </tr>
+                <tr>
+                    <td>Tone and style matching</td>
+                    <td>Cultural nuances</td>
+                </tr>
+                <tr>
+                    <td>Relative comparisons (A vs B)</td>
+                    <td>Absolute quality scores</td>
+                </tr>
+                <tr>
+                    <td>High-volume screening</td>
+                    <td>Edge cases and novel situations</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="callout callout-decision">
+            <div class="callout-title">PM Decision Point</div>
+            <p>LLM-as-judge is a <strong>filter, not a final answer</strong>. Use it to:</p>
+            <ul>
+                <li>Screen thousands of outputs, flagging the worst for human review</li>
+                <li>Provide a "second opinion" alongside human ratings</li>
+                <li>Detect obvious failures (off-topic, harmful, format errors)</li>
+                <li>Track quality trends over time at scale</li>
+            </ul>
+            <p><strong>Don't use it as your only evaluation method.</strong></p>
+        </div>
+
+        <h2>Judge Reliability: The Numbers</h2>
+
+        <div class="stat-row">
+            <div class="stat-card">
+                <span class="stat-number">~85%</span>
+                <span class="stat-label">Agreement with humans (pairwise)</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">~70%</span>
+                <span class="stat-label">Agreement on absolute scores</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">~60%</span>
+                <span class="stat-label">Agreement on edge cases</span>
+            </div>
+        </div>
+
+        <h2>Known Biases in LLM Judges</h2>
+
+        <div class="card-grid">
+            <div class="card" style="border-left: 4px solid var(--danger);">
+                <h3>Position Bias</h3>
+                <p>When comparing A vs B, judges prefer whichever is shown first (or last, depending on the model).</p>
+                <p><strong>Fix:</strong> Randomize order, run both orderings</p>
+            </div>
+            <div class="card" style="border-left: 4px solid var(--danger);">
+                <h3>Length Bias</h3>
+                <p>Longer responses often get higher scores, regardless of quality.</p>
+                <p><strong>Fix:</strong> Explicitly instruct to ignore length</p>
+            </div>
+            <div class="card" style="border-left: 4px solid var(--danger);">
+                <h3>Self-Preference</h3>
+                <p>GPT-4 rates GPT-4 outputs higher than competitors.</p>
+                <p><strong>Fix:</strong> Use a different model family as judge</p>
+            </div>
+            <div class="card" style="border-left: 4px solid var(--danger);">
+                <h3>Verbosity Preference</h3>
+                <p>Judges prefer responses that "sound smart" even if wrong.</p>
+                <p><strong>Fix:</strong> Include fact-checking in the rubric</p>
+            </div>
+        </div>
+
+        <h2>Best Practices</h2>
+
+        <div class="callout callout-insight">
+            <div class="callout-title">LLM-as-Judge Checklist</div>
+            <ul>
+                <li>Use a more capable model than the one being evaluated</li>
+                <li>Provide clear, specific evaluation criteria</li>
+                <li>Ask for explanations, not just scores</li>
+                <li>Calibrate against human ratings on a sample</li>
+                <li>Monitor for drift in judge behavior over time</li>
+                <li>Use multiple judges and look for agreement</li>
+            </ul>
+        </div>
+
+        <h2>Try It Yourself</h2>
+        <div class="hf-space-embed">
+            <a href="https://huggingface.co/spaces/axelsirota/llm-judge-comparator" class="hf-space-link" target="_blank">Open LLM Judge Comparator</a>
+            <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-light);">
+                Firewall blocked? <a href="https://colab.research.google.com/github/axel-sirota/ai-for-pms/blob/main/notebooks/workshop-apps/23-llm-judge-comparator.ipynb" target="_blank">Open in Google Colab</a>
+            </p>
+            <p>See how different AI judges rate the same outputs - where do they agree? Where do they disagree?</p>
+        </div>
+
+        <div class="stakeholder-frame">
+            <h3>How to Explain LLM-as-Judge to Stakeholders</h3>
+            <blockquote>
+                "We use AI to check AI - like having a senior reviewer spot-check the work of junior employees. It catches 85% of problems at 1/100th the cost of human review. For the remaining 15%, we still use humans. It's not perfect, but it lets us check thousands of outputs that we couldn't review manually."
+            </blockquote>
+        </div>
+
+        <nav class="module-nav">
+            <a href="6.1-evaluation-frameworks.html">&larr; Evaluation Frameworks</a>
+            <a href="6.3-human-evaluation.html">Next: Human Evaluation &rarr;</a>
+        </nav>
+    </div>
+
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'base',
+            themeVariables: {
+                primaryColor: '#E6F7F5',
+                primaryTextColor: '#1A3D4D',
+                primaryBorderColor: '#40B8A6',
+                lineColor: '#40B8A6',
+                secondaryColor: '#F9FAFB',
+                tertiaryColor: '#fff'
+            }
+        });
+    </script>
+</body>
+</html>

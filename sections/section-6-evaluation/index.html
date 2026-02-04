@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Section 6: Evaluating AI Features | AI for Product Managers</title>
+    <link rel="stylesheet" href="../../shared/css/course.css">
+</head>
+<body>
+    <div class="course-container">
+        <header class="course-header">
+            <span class="section-label">SECTION 6</span>
+            <h1>Evaluating AI Features</h1>
+            <p class="subtitle">How Do You Know If Your AI Is Actually Working?</p>
+        </header>
+
+        <div class="callout callout-failure">
+            <div class="callout-title">The 3-Day Disaster</div>
+            <p><strong>Meta Galactica, 2022:</strong> Meta launched an LLM trained on scientific papers, claiming it could "write scientific text." Within 3 days, users found it generating fake citations, wrong formulas, and scientifically nonsensical content. Meta shut it down after just 72 hours. The problem? They trusted internal benchmarks that didn't reflect real-world usage.</p>
+        </div>
+
+        <div class="callout callout-success">
+            <div class="callout-title">The Alternative</div>
+            <p><strong>OpenAI's approach:</strong> Before releasing GPT-4, OpenAI ran extensive "red team" evaluations with external experts across domains. They tested for factual accuracy, harmful outputs, and edge cases for 6+ months before public release. The difference? Rigorous evaluation frameworks.</p>
+        </div>
+
+        <h2>What You'll Learn</h2>
+        <div class="card-grid">
+            <div class="card">
+                <h3>Evaluation Frameworks</h3>
+                <p>Different AI types need different metrics - ML, LLM, and Agent evaluation</p>
+                <a href="6.1-evaluation-frameworks.html">Start Learning &rarr;</a>
+            </div>
+            <div class="card">
+                <h3>LLM-as-Judge</h3>
+                <p>Using AI to evaluate AI - powerful but has limitations</p>
+                <a href="6.2-llm-as-judge.html">Start Learning &rarr;</a>
+            </div>
+            <div class="card">
+                <h3>Human Evaluation</h3>
+                <p>When you need humans in the loop and how to scale it</p>
+                <a href="6.3-human-evaluation.html">Start Learning &rarr;</a>
+            </div>
+            <div class="card">
+                <h3>Feedback Loops</h3>
+                <p>Continuous improvement through monitoring and retraining</p>
+                <a href="6.4-feedback-loops.html">Start Learning &rarr;</a>
+            </div>
+        </div>
+
+        <h2>Key Statistics</h2>
+        <div class="stat-row">
+            <div class="stat-card">
+                <span class="stat-number">3 days</span>
+                <span class="stat-label">Time to Galactica shutdown</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">6+ months</span>
+                <span class="stat-label">GPT-4 evaluation period</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">85%</span>
+                <span class="stat-label">LLM-as-judge agreement with humans</span>
+            </div>
+        </div>
+
+        <h2>Interactive Experiences</h2>
+        <div class="card-grid">
+            <div class="card">
+                <h3>LLM Output Evaluator</h3>
+                <p>Rate outputs across multiple dimensions and compare to AI judge</p>
+                <a href="https://huggingface.co/spaces/axelsirota/llm-output-evaluator" class="hf-space-link" target="_blank">Open App</a>
+                <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-light);">
+                    Firewall blocked? <a href="https://colab.research.google.com/github/axel-sirota/ai-for-pms/blob/main/notebooks/workshop-apps/22-llm-output-evaluator.ipynb" target="_blank">Open in Google Colab</a>
+                </p>
+            </div>
+            <div class="card">
+                <h3>LLM Judge Comparator</h3>
+                <p>See how different AI judges rate the same outputs</p>
+                <a href="https://huggingface.co/spaces/axelsirota/llm-judge-comparator" class="hf-space-link" target="_blank">Open App</a>
+                <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-light);">
+                    Firewall blocked? <a href="https://colab.research.google.com/github/axel-sirota/ai-for-pms/blob/main/notebooks/workshop-apps/23-llm-judge-comparator.ipynb" target="_blank">Open in Google Colab</a>
+                </p>
+            </div>
+            <div class="card">
+                <h3>Evaluation Suite Builder</h3>
+                <p>Design custom evaluation frameworks for your AI features</p>
+                <a href="https://huggingface.co/spaces/axelsirota/evaluation-suite-builder" class="hf-space-link" target="_blank">Open App</a>
+                <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-light);">
+                    Firewall blocked? <a href="https://colab.research.google.com/github/axel-sirota/ai-for-pms/blob/main/notebooks/workshop-apps/24-evaluation-suite-builder.ipynb" target="_blank">Open in Google Colab</a>
+                </p>
+            </div>
+            <div class="card">
+                <h3>A/B Test Simulator</h3>
+                <p>Understand statistical significance for AI experiments</p>
+                <a href="https://huggingface.co/spaces/axelsirota/ab-test-simulator" class="hf-space-link" target="_blank">Open App</a>
+                <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-light);">
+                    Firewall blocked? <a href="https://colab.research.google.com/github/axel-sirota/ai-for-pms/blob/main/notebooks/workshop-apps/25-ab-test-simulator.ipynb" target="_blank">Open in Google Colab</a>
+                </p>
+            </div>
+        </div>
+
+        <div class="stakeholder-frame">
+            <h3>How to Explain AI Evaluation to Your VP</h3>
+            <blockquote>
+                "How do we know our AI is working? Not just 'it generates text' but 'it generates GOOD text'? We use a combination of automated checks, human reviewers, and statistical testing. Think of it like quality assurance for a factory - we need inspection at every stage, not just at the end."
+            </blockquote>
+        </div>
+
+        <nav class="module-nav">
+            <a href="../section-5-agents/index.html">&larr; Section 5: Agents</a>
+            <a href="6.1-evaluation-frameworks.html">Start Section 6 &rarr;</a>
+        </nav>
+    </div>
+</body>
+</html>

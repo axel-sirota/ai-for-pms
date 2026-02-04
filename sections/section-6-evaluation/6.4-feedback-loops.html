@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>6.4 Feedback Loops | AI for Product Managers</title>
+    <link rel="stylesheet" href="../../shared/css/course.css">
+</head>
+<body>
+    <div class="course-container">
+        <header class="course-header">
+            <span class="section-label">SECTION 6.4</span>
+            <h1>Feedback Loops</h1>
+            <p class="subtitle">Continuous Improvement Through Monitoring</p>
+        </header>
+
+        <div class="callout callout-insight">
+            <div class="callout-title">Evaluation Never Stops</div>
+            <p>Launch isn't the finish line - it's the starting line. AI systems drift, user needs change, edge cases emerge. You need continuous evaluation to catch problems before users do.</p>
+        </div>
+
+        <h2>The Continuous Evaluation Loop</h2>
+
+        <pre class="mermaid">
+flowchart LR
+    D[Deploy] --> M[Monitor]
+    M --> E[Evaluate Sample]
+    E --> I[Identify Issues]
+    I --> F[Fix/Retrain]
+    F --> D
+
+    style D fill:#E6F7F5,stroke:#40B8A6
+    style M fill:#fffbeb,stroke:#f59e0b
+    style E fill:#ecfdf5,stroke:#059669
+    style I fill:#fef2f2,stroke:#dc2626
+    style F fill:#E6F7F5,stroke:#40B8A6
+        </pre>
+
+        <h2>Key Metrics to Monitor</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Metric</th>
+                    <th>What It Tells You</th>
+                    <th>Alert Threshold</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>User engagement rate</strong></td>
+                    <td>Are users finding value?</td>
+                    <td>>20% drop from baseline</td>
+                </tr>
+                <tr>
+                    <td><strong>Thumbs down rate</strong></td>
+                    <td>Direct dissatisfaction signal</td>
+                    <td>>5% of responses</td>
+                </tr>
+                <tr>
+                    <td><strong>Edit/regenerate rate</strong></td>
+                    <td>Output not meeting needs</td>
+                    <td>>15% of responses</td>
+                </tr>
+                <tr>
+                    <td><strong>Task completion rate</strong></td>
+                    <td>Actually solving problems?</td>
+                    <td>>10% drop from baseline</td>
+                </tr>
+                <tr>
+                    <td><strong>Latency P95</strong></td>
+                    <td>Performance degradation</td>
+                    <td>>2x baseline</td>
+                </tr>
+                <tr>
+                    <td><strong>Safety classifier triggers</strong></td>
+                    <td>Harmful content attempts</td>
+                    <td>Any unexpected spike</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="callout callout-decision">
+            <div class="callout-title">PM Decision Point</div>
+            <p>Set up dashboards BEFORE launch that answer:</p>
+            <ul>
+                <li>Is the AI still performing as well as during testing?</li>
+                <li>Are there new failure patterns we didn't see in testing?</li>
+                <li>Are specific user segments having worse experiences?</li>
+                <li>Are there signs of model drift or data drift?</li>
+            </ul>
+        </div>
+
+        <h2>A/B Testing AI Features</h2>
+
+        <div class="callout callout-failure">
+            <div class="callout-title">AI A/B Testing is Different</div>
+            <p>Traditional A/B testing assumes consistent behavior. AI is stochastic - the same input can give different outputs. This means:</p>
+            <ul>
+                <li><strong>Higher variance:</strong> Need more samples for significance</li>
+                <li><strong>Harder to measure:</strong> Quality is subjective, not a click rate</li>
+                <li><strong>Risk of harm:</strong> Bad AI output can hurt users, not just convert poorly</li>
+            </ul>
+        </div>
+
+        <h2>A/B Test Sample Size Calculator</h2>
+
+        <div class="card-grid">
+            <div class="card">
+                <h3>Small Effect Size (5% lift)</h3>
+                <p>To detect with 95% confidence:</p>
+                <p><strong>~3,000 samples per variant</strong></p>
+                <p>At 1000/day: ~1 week</p>
+            </div>
+            <div class="card">
+                <h3>Medium Effect Size (10% lift)</h3>
+                <p>To detect with 95% confidence:</p>
+                <p><strong>~800 samples per variant</strong></p>
+                <p>At 1000/day: ~2 days</p>
+            </div>
+            <div class="card">
+                <h3>Large Effect Size (20% lift)</h3>
+                <p>To detect with 95% confidence:</p>
+                <p><strong>~200 samples per variant</strong></p>
+                <p>At 1000/day: ~hours</p>
+            </div>
+        </div>
+
+        <h2>When to Trigger Retraining</h2>
+
+        <pre class="mermaid">
+flowchart TD
+    A[Monitor Performance] --> B{Quality drop > 5%?}
+    B -->|No| A
+    B -->|Yes| C{Temporary spike?}
+    C -->|Yes| D[Wait 24h and re-check]
+    C -->|No| E{Root cause identified?}
+    E -->|Data drift| F[Update training data]
+    E -->|Model drift| G[Retrain model]
+    E -->|Prompt issue| H[Update prompts]
+    E -->|External change| I[Adapt system]
+
+    style B fill:#fffbeb,stroke:#f59e0b
+    style F fill:#E6F7F5,stroke:#40B8A6
+    style G fill:#E6F7F5,stroke:#40B8A6
+    style H fill:#E6F7F5,stroke:#40B8A6
+        </pre>
+
+        <h2>User Feedback Integration</h2>
+
+        <div class="card-grid">
+            <div class="card">
+                <h3>Explicit Feedback</h3>
+                <ul>
+                    <li>Thumbs up/down</li>
+                    <li>Star ratings</li>
+                    <li>Free-text comments</li>
+                    <li>Error reports</li>
+                </ul>
+                <p><strong>Pro:</strong> Clear signal</p>
+                <p><strong>Con:</strong> Low response rate (~2%)</p>
+            </div>
+            <div class="card">
+                <h3>Implicit Feedback</h3>
+                <ul>
+                    <li>Did user continue the task?</li>
+                    <li>Did they regenerate?</li>
+                    <li>Did they edit heavily?</li>
+                    <li>Time to next action</li>
+                </ul>
+                <p><strong>Pro:</strong> High volume</p>
+                <p><strong>Con:</strong> Noisy, needs interpretation</p>
+            </div>
+        </div>
+
+        <h2>Building the Feedback Flywheel</h2>
+
+        <pre class="mermaid">
+flowchart TB
+    subgraph Week1[Week 1-2]
+        A[Launch with logging]
+    end
+    subgraph Week2[Week 3-4]
+        B[Collect user feedback]
+        C[Sample for human eval]
+    end
+    subgraph Week3[Week 5-6]
+        D[Identify top failure modes]
+        E[Build test cases from failures]
+    end
+    subgraph Week4[Week 7-8]
+        F[Fix issues]
+        G[A/B test improvements]
+    end
+    subgraph Ongoing[Ongoing]
+        H[Automate detection of known failures]
+    end
+
+    Week1 --> Week2 --> Week3 --> Week4 --> Ongoing
+    Ongoing -.-> Week2
+
+    style A fill:#E6F7F5,stroke:#40B8A6
+    style H fill:#ecfdf5,stroke:#059669
+        </pre>
+
+        <h2>Try It Yourself</h2>
+        <div class="hf-space-embed">
+            <a href="https://huggingface.co/spaces/axelsirota/ab-test-simulator" class="hf-space-link" target="_blank">Open A/B Test Simulator</a>
+            <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-light);">
+                Firewall blocked? <a href="https://colab.research.google.com/github/axel-sirota/ai-for-pms/blob/main/notebooks/workshop-apps/25-ab-test-simulator.ipynb" target="_blank">Open in Google Colab</a>
+            </p>
+            <p>Calculate sample sizes, run simulated A/B tests, and understand statistical significance.</p>
+        </div>
+
+        <div class="callout callout-insight">
+            <div class="callout-title">PM Insight</div>
+            <p><strong>The 10x rule:</strong> For every hour spent building an AI feature, plan to spend 10 hours monitoring and improving it. AI isn't "set and forget" - it's "launch and learn."</p>
+        </div>
+
+        <div class="stakeholder-frame">
+            <h3>How to Explain Feedback Loops to Stakeholders</h3>
+            <blockquote>
+                "Think of AI like a new employee who needs ongoing coaching. We monitor their performance, collect feedback from users, and continuously improve based on what we learn. We have dashboards that alert us if quality drops, and we run A/B tests before rolling out changes. This ensures the AI keeps getting better, not worse, over time."
+            </blockquote>
+        </div>
+
+        <h2>Section 6 Summary</h2>
+
+        <div class="card">
+            <h3>Key Takeaways</h3>
+            <ol>
+                <li><strong>Different AI types need different metrics:</strong> ML metrics, LLM dimensions, RAG faithfulness, Agent task completion</li>
+                <li><strong>LLM-as-judge scales evaluation:</strong> Use it to filter, not as final judgment - ~85% agreement with humans</li>
+                <li><strong>Human evaluation is the gold standard:</strong> But measure inter-rater reliability (Kappa > 0.4)</li>
+                <li><strong>Feedback loops never stop:</strong> Monitor, evaluate, improve - plan 10x the effort for post-launch vs build</li>
+            </ol>
+        </div>
+
+        <nav class="module-nav">
+            <a href="6.3-human-evaluation.html">&larr; Human Evaluation</a>
+            <a href="../section-7-guardrails/index.html">Next Section: Guardrails &rarr;</a>
+        </nav>
+    </div>
+
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'base',
+            themeVariables: {
+                primaryColor: '#E6F7F5',
+                primaryTextColor: '#1A3D4D',
+                primaryBorderColor: '#40B8A6',
+                lineColor: '#40B8A6',
+                secondaryColor: '#F9FAFB',
+                tertiaryColor: '#fff'
+            }
+        });
+    </script>
+</body>
+</html>

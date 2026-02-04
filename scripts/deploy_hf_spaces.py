@@ -47,6 +47,11 @@ APPS = [
     "agent-failure-gallery",
     "human-in-the-loop-designer",
     "tool-use-sandbox",
+    # Section 6
+    "llm-output-evaluator",
+    "llm-judge-comparator",
+    "evaluation-suite-builder",
+    "ab-test-simulator",
 ]
 
 

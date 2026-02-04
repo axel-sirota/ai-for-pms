@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>6.3 Human Evaluation | AI for Product Managers</title>
+    <link rel="stylesheet" href="../../shared/css/course.css">
+</head>
+<body>
+    <div class="course-container">
+        <header class="course-header">
+            <span class="section-label">SECTION 6.3</span>
+            <h1>Human Evaluation</h1>
+            <p class="subtitle">The Gold Standard (When Done Right)</p>
+        </header>
+
+        <div class="callout callout-insight">
+            <div class="callout-title">Why Humans Still Matter</div>
+            <p>Automated metrics can tell you if the output is <em>correct</em>. Only humans can tell you if it's <em>good</em>. A response can be factually accurate but unhelpful, grammatically perfect but offensive, complete but confusing. Human judgment catches what algorithms miss.</p>
+        </div>
+
+        <h2>Human Evaluation Patterns</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Pattern</th>
+                    <th>When to Use</th>
+                    <th>Sample Size</th>
+                    <th>Cost</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Rating (1-5)</strong></td>
+                    <td>Quality scoring</td>
+                    <td>100-500 samples</td>
+                    <td>$</td>
+                </tr>
+                <tr>
+                    <td><strong>Pairwise Comparison</strong></td>
+                    <td>A vs B testing</td>
+                    <td>200-1000 pairs</td>
+                    <td>$$</td>
+                </tr>
+                <tr>
+                    <td><strong>Error Classification</strong></td>
+                    <td>Finding failure modes</td>
+                    <td>50-200 samples</td>
+                    <td>$$$</td>
+                </tr>
+                <tr>
+                    <td><strong>Expert Review</strong></td>
+                    <td>Domain-specific quality</td>
+                    <td>20-50 samples</td>
+                    <td>$$$$</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>The Inter-Rater Reliability Problem</h2>
+
+        <pre class="mermaid">
+flowchart LR
+    O[Same Output] --> J1[Judge 1: 4/5]
+    O --> J2[Judge 2: 2/5]
+    O --> J3[Judge 3: 5/5]
+    J1 --> Q[Which is right?]
+    J2 --> Q
+    J3 --> Q
+
+    style Q fill:#fef2f2,stroke:#dc2626
+        </pre>
+
+        <p><strong>The Problem:</strong> Humans disagree. Two people looking at the same AI output might give completely different ratings. Without measuring this disagreement, your evaluation data is unreliable.</p>
+
+        <h2>Measuring Agreement: Fleiss' Kappa</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Kappa Score</th>
+                    <th>Interpretation</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr style="background: #fef2f2;">
+                    <td>< 0.2</td>
+                    <td>Poor agreement</td>
+                    <td>Rubric is broken - redesign it</td>
+                </tr>
+                <tr style="background: #fffbeb;">
+                    <td>0.2 - 0.4</td>
+                    <td>Fair agreement</td>
+                    <td>Add examples, calibrate raters</td>
+                </tr>
+                <tr style="background: #ecfdf5;">
+                    <td>0.4 - 0.6</td>
+                    <td>Moderate agreement</td>
+                    <td>Acceptable for most use cases</td>
+                </tr>
+                <tr style="background: #E6F7F5;">
+                    <td>0.6 - 0.8</td>
+                    <td>Substantial agreement</td>
+                    <td>Good - your rubric is working</td>
+                </tr>
+                <tr style="background: #E6F7F5;">
+                    <td>> 0.8</td>
+                    <td>Near-perfect agreement</td>
+                    <td>Excellent - rare in subjective tasks</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="callout callout-decision">
+            <div class="callout-title">PM Decision Point</div>
+            <p>Before trusting human evaluation results, always measure inter-rater reliability:</p>
+            <ul>
+                <li>Have 10-20% of samples rated by multiple people</li>
+                <li>Calculate Kappa or % agreement</li>
+                <li>If Kappa < 0.4, fix your rubric before continuing</li>
+                <li>Provide calibration examples to all raters</li>
+            </ul>
+        </div>
+
+        <h2>Designing a Good Rubric</h2>
+
+        <div class="card-grid">
+            <div class="card" style="border-left: 4px solid var(--success);">
+                <h3>Good Rubric</h3>
+                <ul>
+                    <li>5 = Completely answers question with accurate info</li>
+                    <li>4 = Answers question with minor omissions</li>
+                    <li>3 = Partially answers, some relevant info</li>
+                    <li>2 = Attempts to answer but mostly misses</li>
+                    <li>1 = Doesn't address the question at all</li>
+                </ul>
+                <p><strong>Clear, specific, observable criteria</strong></p>
+            </div>
+            <div class="card" style="border-left: 4px solid var(--danger);">
+                <h3>Bad Rubric</h3>
+                <ul>
+                    <li>5 = Excellent</li>
+                    <li>4 = Good</li>
+                    <li>3 = Average</li>
+                    <li>2 = Below average</li>
+                    <li>1 = Poor</li>
+                </ul>
+                <p><strong>Vague, subjective, no examples</strong></p>
+            </div>
+        </div>
+
+        <h2>Scaling Human Evaluation</h2>
+
+        <div class="callout callout-insight">
+            <div class="callout-title">The Sampling Strategy</div>
+            <p>You can't review everything. Smart sampling gets you 90% of the value at 10% of the cost:</p>
+            <ul>
+                <li><strong>Random sample:</strong> 2-5% of all outputs for quality tracking</li>
+                <li><strong>Stratified sample:</strong> Ensure coverage of different use cases</li>
+                <li><strong>Edge case sample:</strong> Focus on low-confidence or unusual inputs</li>
+                <li><strong>Failure sample:</strong> Deep dive on outputs flagged by automated systems</li>
+            </ul>
+        </div>
+
+        <h2>Where to Find Evaluators</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Source</th>
+                    <th>Best For</th>
+                    <th>Cost</th>
+                    <th>Quality</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Internal team</td>
+                    <td>Quick calibration, sensitive data</td>
+                    <td>Free (but time cost)</td>
+                    <td>High (domain expertise)</td>
+                </tr>
+                <tr>
+                    <td>Crowd platforms (Scale, Surge)</td>
+                    <td>Large volume, simple tasks</td>
+                    <td>$0.10-1 per rating</td>
+                    <td>Medium (needs QC)</td>
+                </tr>
+                <tr>
+                    <td>Domain experts</td>
+                    <td>Medical, legal, technical content</td>
+                    <td>$50-200/hour</td>
+                    <td>Highest</td>
+                </tr>
+                <tr>
+                    <td>Your users</td>
+                    <td>Real-world relevance</td>
+                    <td>Incentive cost</td>
+                    <td>Authentic</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>Try It Yourself</h2>
+        <div class="hf-space-embed">
+            <a href="https://huggingface.co/spaces/axelsirota/evaluation-suite-builder" class="hf-space-link" target="_blank">Open Evaluation Suite Builder</a>
+            <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-light);">
+                Firewall blocked? <a href="https://colab.research.google.com/github/axel-sirota/ai-for-pms/blob/main/notebooks/workshop-apps/24-evaluation-suite-builder.ipynb" target="_blank">Open in Google Colab</a>
+            </p>
+            <p>Design custom evaluation frameworks with rubrics, sample sizes, and evaluator requirements.</p>
+        </div>
+
+        <div class="stakeholder-frame">
+            <h3>How to Explain Human Evaluation to Stakeholders</h3>
+            <blockquote>
+                "We have humans rate a sample of AI outputs - like quality inspectors on a factory floor. We check that our raters agree with each other (inter-rater reliability), then use their ratings to calibrate our automated systems. It's expensive to rate everything, so we use strategic sampling - focusing on edge cases and random checks."
+            </blockquote>
+        </div>
+
+        <nav class="module-nav">
+            <a href="6.2-llm-as-judge.html">&larr; LLM-as-Judge</a>
+            <a href="6.4-feedback-loops.html">Next: Feedback Loops &rarr;</a>
+        </nav>
+    </div>
+
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'base',
+            themeVariables: {
+                primaryColor: '#E6F7F5',
+                primaryTextColor: '#1A3D4D',
+                primaryBorderColor: '#40B8A6',
+                lineColor: '#40B8A6',
+                secondaryColor: '#F9FAFB',
+                tertiaryColor: '#fff'
+            }
+        });
+    </script>
+</body>
+</html>

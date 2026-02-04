@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>6.1 Evaluation Frameworks | AI for Product Managers</title>
+    <link rel="stylesheet" href="../../shared/css/course.css">
+</head>
+<body>
+    <div class="course-container">
+        <header class="course-header">
+            <span class="section-label">SECTION 6.1</span>
+            <h1>Evaluation Frameworks</h1>
+            <p class="subtitle">Different AI Types Need Different Metrics</p>
+        </header>
+
+        <div class="callout callout-insight">
+            <div class="callout-title">The Core Problem</div>
+            <p>Traditional software testing is binary: it works or it doesn't. AI evaluation is probabilistic: it works <em>most of the time</em>, <em>kind of well</em>, <em>for certain inputs</em>. This requires entirely different evaluation frameworks.</p>
+        </div>
+
+        <h2>Evaluation by AI Type</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>AI Type</th>
+                    <th>Primary Metrics</th>
+                    <th>Evaluation Method</th>
+                    <th>Key Challenge</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Classical ML</strong></td>
+                    <td>Accuracy, Precision, Recall, F1, AUC</td>
+                    <td>Hold-out test set, cross-validation</td>
+                    <td>Data drift over time</td>
+                </tr>
+                <tr>
+                    <td><strong>LLM Features</strong></td>
+                    <td>Relevance, Accuracy, Helpfulness, Safety</td>
+                    <td>Human evaluation, LLM-as-judge</td>
+                    <td>Subjective quality, no ground truth</td>
+                </tr>
+                <tr>
+                    <td><strong>RAG Systems</strong></td>
+                    <td>Retrieval precision, Answer faithfulness, Groundedness</td>
+                    <td>RAGAS framework, human review</td>
+                    <td>Hallucination despite good retrieval</td>
+                </tr>
+                <tr>
+                    <td><strong>Agents</strong></td>
+                    <td>Task completion rate, Steps to completion, Error rate</td>
+                    <td>End-to-end testing, trajectory analysis</td>
+                    <td>Multi-step failures, cascading errors</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>The Evaluation Pyramid</h2>
+
+        <pre class="mermaid">
+flowchart TB
+    L1[Unit Tests<br>Does each component work?] --> L2[Integration Tests<br>Do components work together?]
+    L2 --> L3[Human Evaluation<br>Is the output actually good?]
+    L3 --> L4[A/B Testing<br>Does it improve business metrics?]
+
+    style L1 fill:#ecfdf5,stroke:#059669
+    style L2 fill:#E6F7F5,stroke:#40B8A6
+    style L3 fill:#fffbeb,stroke:#f59e0b
+    style L4 fill:#fef2f2,stroke:#dc2626
+        </pre>
+
+        <div class="callout callout-decision">
+            <div class="callout-title">PM Decision Point</div>
+            <p>You need evaluation at EVERY level. Many teams skip to A/B testing without the foundation - that's how Galactica happened.</p>
+            <ul>
+                <li><strong>Unit tests:</strong> Engineering owns, but PM defines requirements</li>
+                <li><strong>Integration tests:</strong> PM defines realistic scenarios</li>
+                <li><strong>Human evaluation:</strong> PM designs rubric and selects evaluators</li>
+                <li><strong>A/B testing:</strong> PM defines success metrics and sample sizes</li>
+            </ul>
+        </div>
+
+        <h2>LLM Evaluation Dimensions</h2>
+
+        <div class="card-grid">
+            <div class="card">
+                <h3>Factual Accuracy</h3>
+                <p>Is the information correct? Can it be verified?</p>
+                <p><strong>Measure:</strong> Fact-checking against sources</p>
+            </div>
+            <div class="card">
+                <h3>Relevance</h3>
+                <p>Does the response answer the actual question?</p>
+                <p><strong>Measure:</strong> Semantic similarity to ideal response</p>
+            </div>
+            <div class="card">
+                <h3>Helpfulness</h3>
+                <p>Does it actually help the user accomplish their goal?</p>
+                <p><strong>Measure:</strong> Task completion rate</p>
+            </div>
+            <div class="card">
+                <h3>Harmlessness</h3>
+                <p>Does it avoid harmful, biased, or inappropriate content?</p>
+                <p><strong>Measure:</strong> Safety classifier scores</p>
+            </div>
+            <div class="card">
+                <h3>Coherence</h3>
+                <p>Is the response well-structured and easy to understand?</p>
+                <p><strong>Measure:</strong> Readability scores, human ratings</p>
+            </div>
+            <div class="card">
+                <h3>Format Compliance</h3>
+                <p>Does it follow the requested format (JSON, bullets, etc.)?</p>
+                <p><strong>Measure:</strong> Parsing success rate</p>
+            </div>
+        </div>
+
+        <h2>Common Evaluation Mistakes</h2>
+
+        <div class="callout callout-failure">
+            <div class="callout-title">Anti-Patterns to Avoid</div>
+            <ul>
+                <li><strong>Single metric obsession:</strong> Optimizing only for accuracy while ignoring safety</li>
+                <li><strong>Test set contamination:</strong> Training data that overlaps with evaluation data</li>
+                <li><strong>Benchmark gaming:</strong> Optimizing for benchmarks that don't reflect real usage</li>
+                <li><strong>Skipping human eval:</strong> Trusting automated metrics blindly</li>
+                <li><strong>Static evaluation:</strong> Not re-evaluating as the model or data changes</li>
+            </ul>
+        </div>
+
+        <h2>Try It Yourself</h2>
+        <div class="hf-space-embed">
+            <a href="https://huggingface.co/spaces/axelsirota/llm-output-evaluator" class="hf-space-link" target="_blank">Open LLM Output Evaluator</a>
+            <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-light);">
+                Firewall blocked? <a href="https://colab.research.google.com/github/axel-sirota/ai-for-pms/blob/main/notebooks/workshop-apps/22-llm-output-evaluator.ipynb" target="_blank">Open in Google Colab</a>
+            </p>
+            <p>Rate LLM outputs across multiple dimensions and compare your ratings to an AI judge.</p>
+        </div>
+
+        <div class="stakeholder-frame">
+            <h3>How to Explain Evaluation Frameworks to Stakeholders</h3>
+            <blockquote>
+                "We evaluate AI like we'd evaluate a new employee. We check if they know the facts, if they understand the question, if they're actually helpful, and if they're professional. We do this with a mix of spot-checks (human review) and automated monitoring (AI judges). And we keep checking - because unlike employees, AI can drift over time."
+            </blockquote>
+        </div>
+
+        <nav class="module-nav">
+            <a href="index.html">&larr; Section Overview</a>
+            <a href="6.2-llm-as-judge.html">Next: LLM-as-Judge &rarr;</a>
+        </nav>
+    </div>
+
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'base',
+            themeVariables: {
+                primaryColor: '#E6F7F5',
+                primaryTextColor: '#1A3D4D',
+                primaryBorderColor: '#40B8A6',
+                lineColor: '#40B8A6',
+                secondaryColor: '#F9FAFB',
+                tertiaryColor: '#fff'
+            }
+        });
+    </script>
+</body>
+</html>
