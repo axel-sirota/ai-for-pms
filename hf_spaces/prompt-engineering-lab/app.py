@@ -1,23 +1,81 @@
 """
-Prompt Engineering Lab — AI for Product Managers
-4 tabs showing how prompt patterns change output quality.
-All responses pre-cached for demo mode.
+Prompt Engineering Lab - AI for Product Managers
+Live LLM interaction to experiment with 7 prompt patterns.
+Students bring their own API key (OpenAI or Anthropic).
 """
 
 import gradio as gr
 import os
 
-# ── Tab 1: Zero-Shot vs Few-Shot ─────────────────────────────────────────────
+# Try to import API clients
+try:
+    from openai import OpenAI
+    OPENAI_AVAILABLE = True
+except ImportError:
+    OPENAI_AVAILABLE = False
 
-ZERO_VS_FEW = {
-    "Classify this customer email: 'I've been waiting 3 weeks for my order and nobody will help me!'": {
-        "zero_shot": {
-            "prompt": "Classify this customer email: 'I've been waiting 3 weeks for my order and nobody will help me!'",
-            "response": "This is a complaint email.",
-            "quality": "Vague — no category, no severity, no actionable classification."
-        },
-        "few_shot": {
-            "prompt": """Classify customer emails into exactly one category and severity level.
+try:
+    from anthropic import Anthropic
+    ANTHROPIC_AVAILABLE = True
+except ImportError:
+    ANTHROPIC_AVAILABLE = False
+
+
+def get_completion(api_key: str, provider: str, prompt: str, system_prompt: str = None) -> str:
+    """Get completion from OpenAI or Anthropic."""
+    # Use provided key, or fall back to HF Secrets
+    if provider == "OpenAI":
+        key = api_key or os.getenv("OPENAI_API_KEY")
+    else:
+        key = api_key or os.getenv("ANTHROPIC_API_KEY")
+
+    if not key:
+        return "No API key found. Either enter one above, or ask your instructor for access."
+
+    try:
+        if provider == "OpenAI" and OPENAI_AVAILABLE:
+            client = OpenAI(api_key=key)
+            messages = []
+            if system_prompt:
+                messages.append({"role": "system", "content": system_prompt})
+            messages.append({"role": "user", "content": prompt})
+
+            response = client.chat.completions.create(
+                model="gpt-4o-mini",
+                messages=messages,
+                max_tokens=1000,
+                temperature=0.7
+            )
+            return response.choices[0].message.content
+
+        elif provider == "Anthropic" and ANTHROPIC_AVAILABLE:
+            client = Anthropic(api_key=key)
+
+            response = client.messages.create(
+                model="claude-3-5-haiku-20241022",
+                max_tokens=1000,
+                system=system_prompt or "You are a helpful assistant.",
+                messages=[{"role": "user", "content": prompt}]
+            )
+            return response.content[0].text
+
+        else:
+            return f"Provider {provider} not available. Install: pip install openai anthropic"
+
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+
+# ── Tab 1: Few-Shot Pattern ──────────────────────────────────────────────────
+
+def tab1_run(api_key, provider, scenario, use_few_shot):
+    """Compare zero-shot vs few-shot."""
+
+    if scenario == "Customer Email Classification":
+        user_input = "I've been waiting 3 weeks for my order and nobody will help me!"
+
+        if use_few_shot:
+            prompt = """Classify customer emails into exactly one category and severity level.
 
 Examples:
 Email: "Thanks for the quick delivery!" → Category: Praise | Severity: None
@@ -26,19 +84,16 @@ Email: "How do I change my password?" → Category: Account Support | Severity: 
 Email: "I want to cancel everything, this is the worst service ever" → Category: Cancellation Risk | Severity: Critical
 
 Now classify:
-Email: "I've been waiting 3 weeks for my order and nobody will help me!\"""",
-            "response": "Category: Shipping Issue | Severity: Critical\n\nReasoning: The customer mentions a 3-week wait (significantly delayed) and has already tried to get help without success, indicating high frustration and potential churn risk.",
-            "quality": "Structured, actionable, includes severity. The few-shot examples taught the model the exact format and level of detail you want."
-        }
-    },
-    "Summarize this product review: 'The battery life is amazing but the screen is too dim outdoors. Camera is decent for the price.'": {
-        "zero_shot": {
-            "prompt": "Summarize this product review: 'The battery life is amazing but the screen is too dim outdoors. Camera is decent for the price.'",
-            "response": "The reviewer likes the battery life but finds the screen dim outdoors and thinks the camera is okay for the price.",
-            "quality": "Just a paraphrase — not structured, not actionable for product decisions."
-        },
-        "few_shot": {
-            "prompt": """Extract structured feedback from product reviews.
+Email: "{input}"
+""".format(input=user_input)
+        else:
+            prompt = f"Classify this customer email: '{user_input}'"
+
+    elif scenario == "Product Review Analysis":
+        user_input = "The battery life is amazing but the screen is too dim outdoors. Camera is decent for the price."
+
+        if use_few_shot:
+            prompt = """Extract structured feedback from product reviews.
 
 Examples:
 Review: "Love the design, hate the charging speed" →
@@ -52,191 +107,268 @@ Review: "Everything works perfectly, best purchase this year" →
 - Sentiment: Positive
 
 Now extract:
-Review: "The battery life is amazing but the screen is too dim outdoors. Camera is decent for the price.\"""",
-            "response": "- Positive: Battery life (performance)\n- Negative: Screen brightness outdoors (display)\n- Neutral: Camera quality (value for money)\n- Sentiment: Mixed-positive\n- Product team signal: Display brightness is a prioritizable improvement",
-            "quality": "Structured, categorized, actionable. The PM can immediately route this to the display team."
-        }
-    },
-}
+Review: "{input}"
+""".format(input=user_input)
+        else:
+            prompt = f"Summarize this product review: '{user_input}'"
 
-# ── Tab 2: System Prompt Impact ───────────────────────────────────────────────
+    else:
+        return "Select a scenario."
 
-SYSTEM_PROMPT_DEMOS = {
-    "What are the risks of our new AI chatbot?": {
-        "No system prompt": {
-            "system": "(none)",
-            "response": "AI chatbots carry several risks including hallucination (generating false information), bias in responses, privacy concerns with user data, potential for misuse, and lack of accountability. They may also provide incorrect advice in high-stakes domains like healthcare or finance.",
-            "analysis": "Generic, academic answer. Not tailored to any specific context or audience."
-        },
-        "PM Persona": {
-            "system": "You are a senior product manager at a SaaS company. Frame all answers in terms of business impact, user experience, and stakeholder communication. Be specific and actionable.",
-            "response": "Key risks to present to stakeholders:\n\n1. **Hallucination risk** — The bot may confidently state incorrect policies (see: Air Canada, $800K). Mitigation: implement fact-checking layer against your knowledge base.\n\n2. **Brand damage** — One viral screenshot of a bad response costs more than the entire project (see: DPD chatbot). Mitigation: output filtering + human escalation for sensitive topics.\n\n3. **Scope creep** — Users will ask questions outside the bot's domain. Without boundaries, it'll answer anyway, badly. Mitigation: clear system prompt constraints + 'I don't know' fallback.\n\n4. **Cost overrun** — Token costs scale linearly with usage. A viral feature could 10x your API bill overnight. Mitigation: rate limiting + cost alerts.\n\n**Recommendation:** Soft-launch to 5% of traffic with human-in-the-loop review before full rollout.",
-            "analysis": "Specific, actionable, business-framed. References real cases. Includes mitigations. This is what your VP wants to hear."
-        },
-        "Security Auditor Persona": {
-            "system": "You are a cybersecurity auditor reviewing AI systems. Focus on attack vectors, compliance risks, and security controls. Reference industry frameworks (OWASP, NIST) where applicable.",
-            "response": "**Security Risk Assessment: AI Chatbot**\n\n1. **Prompt Injection (OWASP LLM01)** — Users can override system instructions. Severity: HIGH. Control: Input sanitization + instruction hierarchy.\n\n2. **Sensitive Information Disclosure (OWASP LLM06)** — Model may leak training data, system prompts, or PII from context. Severity: HIGH. Control: Output filtering + PII detection.\n\n3. **Data Poisoning** — If the model learns from user interactions, adversarial inputs can degrade quality. Severity: MEDIUM. Control: Input validation + human review of training data.\n\n4. **Compliance** — GDPR Art. 22 requires disclosure of automated decision-making. If the chatbot makes decisions affecting users, you need transparency. Severity: HIGH.\n\n**Required before launch:** Penetration testing, privacy impact assessment, incident response plan.",
-            "analysis": "Completely different framing — same question, but now focused on attack vectors and compliance. The system prompt transformed the response."
-        }
-    },
-}
+    response = get_completion(api_key, provider, prompt)
 
-# ── Tab 3: Chain-of-Thought ───────────────────────────────────────────────────
-
-COT_DEMOS = {
-    "A customer bought 3 items at $50, $30, and $20. They have a 20% discount code and a $10 store credit. What's the final total?": {
-        "without_cot": {
-            "prompt": "A customer bought 3 items at $50, $30, and $20. They have a 20% discount code and a $10 store credit. What's the final total?",
-            "response": "$62",
-            "correct": False,
-            "analysis": "Wrong answer, no reasoning shown. The model likely applied the discount incorrectly. Without step-by-step thinking, errors go undetected."
-        },
-        "with_cot": {
-            "prompt": "A customer bought 3 items at $50, $30, and $20. They have a 20% discount code and a $10 store credit. What's the final total? Think step by step.",
-            "response": "Let me work through this step by step:\n\n1. **Subtotal:** $50 + $30 + $20 = $100\n2. **Apply 20% discount:** $100 × 0.20 = $20 discount → $100 - $20 = $80\n3. **Apply $10 store credit:** $80 - $10 = $70\n\n**Final total: $70**",
-            "correct": True,
-            "analysis": "Correct answer with full reasoning. Each step is verifiable. If there's an error, you can see exactly where it happened. This is why CoT matters for any feature involving calculations."
-        }
-    },
-    "Should we build a recommendation engine in-house or buy a third-party solution? Our team has 3 ML engineers, 6-month timeline, and 10M users.": {
-        "without_cot": {
-            "prompt": "Should we build or buy a recommendation engine? Team: 3 ML engineers, 6-month timeline, 10M users.",
-            "response": "You should probably buy a third-party solution given your timeline constraints.",
-            "correct": None,
-            "analysis": "Unsupported opinion. No reasoning, no tradeoff analysis. A PM can't present this to stakeholders."
-        },
-        "with_cot": {
-            "prompt": "Should we build or buy a recommendation engine? Team: 3 ML engineers, 6-month timeline, 10M users. Think step by step, considering cost, timeline, quality, and maintenance.",
-            "response": "Let me analyze this systematically:\n\n**1. Build Assessment:**\n- 3 ML engineers × 6 months = 18 person-months\n- At $15K/month fully loaded = ~$270K development cost\n- Risk: 6 months is tight for production-quality recsys at 10M scale\n- Ongoing: Need to maintain, retrain, scale — permanent headcount\n\n**2. Buy Assessment:**\n- Solutions like Algolia Recommend, Amazon Personalize: $5K-20K/month\n- Time to integrate: 2-4 weeks\n- 12-month cost: $60K-240K\n- Ongoing: vendor manages scaling, updates, ML pipeline\n\n**3. Key Factors:**\n- Timeline: Buy wins (weeks vs months)\n- Cost (year 1): Similar range\n- Cost (year 2+): Build gets cheaper IF no major changes needed\n- Customization: Build wins for unique requirements\n- Team focus: Buy frees engineers for core product\n\n**Recommendation:** Buy for v1, instrument heavily, evaluate build for v2 after you understand what customization you actually need.\n\n**Present to stakeholders:** 'We can be live in 3 weeks with a vendor solution vs. 6 months to build. Let's validate demand first, then build custom if our needs diverge from what the vendor offers.'",
-            "correct": True,
-            "analysis": "Structured analysis with numbers, tradeoffs, and a stakeholder-ready recommendation. Chain-of-thought turned a vague opinion into a PM decision framework."
-        }
-    },
-}
-
-# ── Tab 4: Output Format Control ──────────────────────────────────────────────
-
-FORMAT_DEMOS = {
-    "List the top 5 risks of launching an AI chatbot for customer service.": {
-        "No format instruction": {
-            "prompt": "List the top 5 risks of launching an AI chatbot for customer service.",
-            "response": "The main risks of launching an AI chatbot include hallucination where the bot gives wrong information, prompt injection attacks, high costs at scale, brand damage from bad responses, and compliance issues with data privacy regulations. Each of these needs careful planning before launch.",
-            "analysis": "Paragraph format — hard to scan, can't copy into a slide deck."
-        },
-        "Markdown bullets": {
-            "prompt": "List the top 5 risks of launching an AI chatbot for customer service. Use markdown bullet points with bold risk names.",
-            "response": "- **Hallucination** — Bot confidently states incorrect policies or facts\n- **Prompt Injection** — Users override system instructions to misuse the bot\n- **Cost Overrun** — Token costs scale linearly; viral usage = massive bill\n- **Brand Damage** — One bad response screenshot goes viral on social media\n- **Compliance** — GDPR/CCPA requirements for AI-based decision making",
-            "analysis": "Scannable, copy-paste ready for docs or Slack."
-        },
-        "JSON": {
-            "prompt": "List the top 5 risks of launching an AI chatbot. Return as JSON array with fields: risk_name, severity (high/medium/low), mitigation.",
-            "response": "```json\n[\n  {\"risk_name\": \"Hallucination\", \"severity\": \"high\", \"mitigation\": \"RAG with verified knowledge base + output validation\"},\n  {\"risk_name\": \"Prompt Injection\", \"severity\": \"high\", \"mitigation\": \"Input sanitization + instruction hierarchy + output filtering\"},\n  {\"risk_name\": \"Cost Overrun\", \"severity\": \"medium\", \"mitigation\": \"Rate limiting + cost alerts + model routing\"},\n  {\"risk_name\": \"Brand Damage\", \"severity\": \"high\", \"mitigation\": \"Output filtering + human-in-loop for sensitive topics\"},\n  {\"risk_name\": \"Compliance\", \"severity\": \"medium\", \"mitigation\": \"Privacy impact assessment + transparency disclosures\"}\n]\n```",
-            "analysis": "Machine-readable. Can be directly ingested by dashboards, risk trackers, or APIs."
-        },
-    },
-}
+    pattern_used = "Few-Shot (with examples)" if use_few_shot else "Zero-Shot (no examples)"
+    return f"**Pattern:** {pattern_used}\n\n**Prompt:**\n```\n{prompt}\n```\n\n**Response:**\n\n{response}"
 
 
-def tab1_compare(scenario):
-    data = ZERO_VS_FEW.get(scenario)
-    if not data:
-        return "Select a scenario.", ""
-    zs = data["zero_shot"]
-    fs = data["few_shot"]
+# ── Tab 2: Chain-of-Thought Pattern ──────────────────────────────────────────
 
-    left = f"### Zero-Shot Prompt\n\n```\n{zs['prompt']}\n```\n\n### Response\n\n{zs['response']}\n\n### Quality Assessment\n\n⚠️ {zs['quality']}"
-    right = f"### Few-Shot Prompt\n\n```\n{fs['prompt']}\n```\n\n### Response\n\n{fs['response']}\n\n### Quality Assessment\n\n✅ {fs['quality']}"
-    return left, right
+def tab2_run(api_key, provider, scenario, use_cot):
+    """Compare with/without chain-of-thought."""
 
+    if scenario == "Pricing Calculation":
+        base_prompt = "A customer bought 3 items at $50, $30, and $20. They have a 20% discount code and a $10 store credit. What's the final total?"
+    elif scenario == "Build vs Buy Decision":
+        base_prompt = "Should we build or buy a recommendation engine? Team: 3 ML engineers, 6-month timeline, 10M users."
+    else:
+        return "Select a scenario."
 
-def tab2_compare(scenario):
-    data = SYSTEM_PROMPT_DEMOS.get(scenario)
-    if not data:
-        return ""
-    md = f"## User Prompt: *\"{scenario}\"*\n\n"
-    for persona, info in data.items():
-        md += f"### {persona}\n\n"
-        if info["system"] != "(none)":
-            md += f"**System prompt:** *{info['system']}*\n\n"
-        md += f"{info['response']}\n\n"
-        md += f"**Analysis:** {info['analysis']}\n\n---\n\n"
-    return md
+    if use_cot:
+        prompt = base_prompt + " Think step by step."
+    else:
+        prompt = base_prompt
+
+    response = get_completion(api_key, provider, prompt)
+
+    pattern_used = "Chain-of-Thought ('Think step by step')" if use_cot else "Direct (no reasoning)"
+    return f"**Pattern:** {pattern_used}\n\n**Prompt:**\n```\n{prompt}\n```\n\n**Response:**\n\n{response}"
 
 
-def tab3_compare(scenario):
-    data = COT_DEMOS.get(scenario)
-    if not data:
-        return "", ""
-    wo = data["without_cot"]
-    wi = data["with_cot"]
+# ── Tab 3: Persona Pattern ───────────────────────────────────────────────────
 
-    icon_wo = "❌" if wo["correct"] is False else ("✅" if wo["correct"] else "⚠️")
-    icon_wi = "✅" if wi["correct"] else "❌"
+def tab3_run(api_key, provider, question, persona):
+    """Compare different personas on same question."""
 
-    left = f"### Without Chain-of-Thought\n\n```\n{wo['prompt']}\n```\n\n### Response\n\n{wo['response']}\n\n{icon_wo} **{wo['analysis']}**"
-    right = f"### With Chain-of-Thought\n\n```\n{wi['prompt']}\n```\n\n### Response\n\n{wi['response']}\n\n{icon_wi} **{wi['analysis']}**"
-    return left, right
+    personas = {
+        "No persona": None,
+        "Senior PM": "You are a senior product manager at a SaaS company. Frame all answers in terms of business impact, user experience, and stakeholder communication. Be specific and actionable.",
+        "Security Auditor": "You are a cybersecurity auditor reviewing AI systems. Focus on attack vectors, compliance risks, and security controls. Reference industry frameworks (OWASP, NIST) where applicable.",
+        "CFO": "You are a CFO evaluating technology investments. Focus on ROI, cost structure, risk mitigation, and financial impact. Be quantitative where possible.",
+    }
 
+    system_prompt = personas.get(persona)
+    response = get_completion(api_key, provider, question, system_prompt)
 
-def tab4_compare(scenario):
-    data = FORMAT_DEMOS.get(scenario)
-    if not data:
-        return ""
-    md = f"## Prompt: *\"{scenario}\"*\n\n"
-    for fmt, info in data.items():
-        md += f"### Format: {fmt}\n\n"
-        md += f"**Prompt:** `{info['prompt']}`\n\n"
-        md += f"**Response:**\n\n{info['response']}\n\n"
-        md += f"**Assessment:** {info['analysis']}\n\n---\n\n"
-    return md
+    return f"**Persona:** {persona}\n\n**System Prompt:**\n```\n{system_prompt or '(none)'}\n```\n\n**Question:** {question}\n\n**Response:**\n\n{response}"
 
 
-# ── Gradio UI ─────────────────────────────────────────────────────────────────
+# ── Tab 4: Template Pattern ──────────────────────────────────────────────────
 
-with gr.Blocks(title="Prompt Engineering Lab", theme=gr.themes.Soft(primary_hue="blue")) as demo:
+def tab4_run(api_key, provider, input_text, output_format):
+    """Force structured output formats."""
+
+    formats = {
+        "No format": f"List the top 5 risks of launching an AI chatbot for customer service.",
+        "Markdown bullets": f"List the top 5 risks of launching an AI chatbot for customer service. Use markdown bullet points with bold risk names.",
+        "JSON": f"List the top 5 risks of launching an AI chatbot. Return as JSON array with fields: risk_name, severity (high/medium/low), mitigation.",
+        "Table": f"List the top 5 risks of launching an AI chatbot. Format as a markdown table with columns: Risk | Severity | Mitigation | Owner.",
+    }
+
+    prompt = formats.get(output_format, formats["No format"])
+    response = get_completion(api_key, provider, prompt)
+
+    return f"**Format:** {output_format}\n\n**Prompt:**\n```\n{prompt}\n```\n\n**Response:**\n\n{response}"
+
+
+# ── Tab 5: Flipped Interaction Pattern ───────────────────────────────────────
+
+def tab5_run(api_key, provider, goal):
+    """Make the AI ask questions first."""
+
+    system_prompt = f"""You are a helpful assistant. Before providing any recommendations or solutions, you MUST ask clarifying questions first.
+
+Your goal is to help the user: {goal}
+
+Start by asking 3-5 relevant questions to understand their specific situation. Do NOT provide recommendations until you have gathered enough information."""
+
+    user_prompt = f"I need help with: {goal}"
+
+    response = get_completion(api_key, provider, user_prompt, system_prompt)
+
+    return f"**Pattern:** Flipped Interaction\n\n**Goal:** {goal}\n\n**System Prompt:**\n```\n{system_prompt}\n```\n\n**Response:**\n\n{response}\n\n---\n**Why this matters:** The AI asks before assuming. Essential for chatbots - prevents hallucinated recommendations based on incomplete info."
+
+
+# ── Tab 6: Reflection Pattern ────────────────────────────────────────────────
+
+def tab6_run(api_key, provider, question, use_reflection):
+    """Make the AI self-check its response."""
+
+    if use_reflection:
+        system_prompt = """You are a helpful assistant. After providing your response, you MUST include a self-review section.
+
+Format:
+1. [Your main response]
+
+2. **Self-Review:**
+   - Potential issues with this response:
+   - Claims that should be verified:
+   - What I might be missing:
+   - Confidence level (low/medium/high):"""
+    else:
+        system_prompt = "You are a helpful assistant."
+
+    response = get_completion(api_key, provider, question, system_prompt)
+
+    pattern_used = "Reflection (self-check)" if use_reflection else "Standard (no reflection)"
+    return f"**Pattern:** {pattern_used}\n\n**Question:** {question}\n\n**Response:**\n\n{response}"
+
+
+# ── Tab 7: Fact Check List Pattern ───────────────────────────────────────────
+
+def tab7_run(api_key, provider, topic):
+    """Make the AI list verifiable claims."""
+
+    system_prompt = """You are a helpful assistant that prioritizes accuracy. After providing information, you MUST include a fact-check list.
+
+Format:
+1. [Your main response]
+
+2. **Fact Check List:**
+   For each factual claim you made, list:
+   - Claim: [the specific claim]
+   - Verifiable: Yes/No
+   - Suggested verification: [how to verify]
+   - Confidence: High/Medium/Low"""
+
+    prompt = f"Tell me about: {topic}"
+
+    response = get_completion(api_key, provider, prompt, system_prompt)
+
+    return f"**Pattern:** Fact Check List\n\n**Topic:** {topic}\n\n**Response:**\n\n{response}\n\n---\n**Why this matters:** This is your #1 defense against hallucination in customer-facing AI. The model flags its own claims that need verification."
+
+
+# ── Gradio UI ────────────────────────────────────────────────────────────────
+
+with gr.Blocks(title="Prompt Engineering Lab", theme=gr.themes.Soft(primary_hue="teal")) as demo:
     gr.Markdown(
         "# Prompt Engineering Lab\n"
-        "See how different prompt techniques change output quality.\n"
-        "**Better prompts beat better models — and they're free.**"
+        "**Experiment with 7 prompt patterns using live LLM calls.**\n\n"
+        "API key may already be configured. If not, enter yours below."
     )
 
-    with gr.Tab("Zero-Shot vs Few-Shot"):
-        gr.Markdown("### Does giving examples actually help? See for yourself.")
-        t1_dd = gr.Dropdown(choices=list(ZERO_VS_FEW.keys()), value=list(ZERO_VS_FEW.keys())[0], label="Scenario")
-        t1_btn = gr.Button("Compare", variant="primary")
-        with gr.Row():
-            t1_left = gr.Markdown()
-            t1_right = gr.Markdown()
-        t1_btn.click(tab1_compare, [t1_dd], [t1_left, t1_right])
-        demo.load(tab1_compare, [t1_dd], [t1_left, t1_right])
+    with gr.Row():
+        api_key = gr.Textbox(
+            label="API Key",
+            placeholder="sk-... or sk-ant-...",
+            type="password",
+            scale=3
+        )
+        provider = gr.Dropdown(
+            choices=["OpenAI", "Anthropic"],
+            value="OpenAI",
+            label="Provider",
+            scale=1
+        )
 
-    with gr.Tab("System Prompt Impact"):
-        gr.Markdown("### Same question, different personas. Watch the response transform.")
-        t2_dd = gr.Dropdown(choices=list(SYSTEM_PROMPT_DEMOS.keys()), value=list(SYSTEM_PROMPT_DEMOS.keys())[0], label="Question")
-        t2_btn = gr.Button("Compare", variant="primary")
+    gr.Markdown("---")
+
+    # Tab 1: Few-Shot
+    with gr.Tab("1. Few-Shot"):
+        gr.Markdown("### Does giving examples help? Compare zero-shot vs few-shot.")
+        t1_scenario = gr.Dropdown(
+            choices=["Customer Email Classification", "Product Review Analysis"],
+            value="Customer Email Classification",
+            label="Scenario"
+        )
+        t1_fewshot = gr.Checkbox(label="Use Few-Shot (with examples)", value=False)
+        t1_btn = gr.Button("Run", variant="primary")
+        t1_out = gr.Markdown()
+        t1_btn.click(tab1_run, [api_key, provider, t1_scenario, t1_fewshot], t1_out)
+
+    # Tab 2: Chain-of-Thought
+    with gr.Tab("2. Chain-of-Thought"):
+        gr.Markdown("### Does 'think step by step' improve reasoning?")
+        t2_scenario = gr.Dropdown(
+            choices=["Pricing Calculation", "Build vs Buy Decision"],
+            value="Pricing Calculation",
+            label="Scenario"
+        )
+        t2_cot = gr.Checkbox(label="Use Chain-of-Thought", value=False)
+        t2_btn = gr.Button("Run", variant="primary")
         t2_out = gr.Markdown()
-        t2_btn.click(tab2_compare, [t2_dd], [t2_out])
-        demo.load(tab2_compare, [t2_dd], [t2_out])
+        t2_btn.click(tab2_run, [api_key, provider, t2_scenario, t2_cot], t2_out)
 
-    with gr.Tab("Chain-of-Thought"):
-        gr.Markdown("### Does 'think step by step' actually improve reasoning?")
-        t3_dd = gr.Dropdown(choices=list(COT_DEMOS.keys()), value=list(COT_DEMOS.keys())[0], label="Problem")
-        t3_btn = gr.Button("Compare", variant="primary")
-        with gr.Row():
-            t3_left = gr.Markdown()
-            t3_right = gr.Markdown()
-        t3_btn.click(tab3_compare, [t3_dd], [t3_left, t3_right])
-        demo.load(tab3_compare, [t3_dd], [t3_left, t3_right])
+    # Tab 3: Persona
+    with gr.Tab("3. Persona"):
+        gr.Markdown("### Same question, different personas. Watch the response transform.")
+        t3_question = gr.Textbox(
+            label="Your Question",
+            value="What are the risks of launching an AI chatbot for customer service?",
+            lines=2
+        )
+        t3_persona = gr.Dropdown(
+            choices=["No persona", "Senior PM", "Security Auditor", "CFO"],
+            value="No persona",
+            label="Persona"
+        )
+        t3_btn = gr.Button("Run", variant="primary")
+        t3_out = gr.Markdown()
+        t3_btn.click(tab3_run, [api_key, provider, t3_question, t3_persona], t3_out)
 
-    with gr.Tab("Output Format Control"):
-        gr.Markdown("### Same content, different formats. Control what you get back.")
-        t4_dd = gr.Dropdown(choices=list(FORMAT_DEMOS.keys()), value=list(FORMAT_DEMOS.keys())[0], label="Request")
-        t4_btn = gr.Button("Compare", variant="primary")
+    # Tab 4: Template
+    with gr.Tab("4. Template"):
+        gr.Markdown("### Control output format - text, bullets, JSON, tables.")
+        t4_format = gr.Dropdown(
+            choices=["No format", "Markdown bullets", "JSON", "Table"],
+            value="No format",
+            label="Output Format"
+        )
+        t4_btn = gr.Button("Run", variant="primary")
         t4_out = gr.Markdown()
-        t4_btn.click(tab4_compare, [t4_dd], [t4_out])
-        demo.load(tab4_compare, [t4_dd], [t4_out])
+        t4_btn.click(tab4_run, [api_key, provider, gr.State(""), t4_format], t4_out)
 
-    gr.Markdown("---\n*AI for Product Managers*")
+    # Tab 5: Flipped Interaction
+    with gr.Tab("5. Flipped Interaction"):
+        gr.Markdown("### Make the AI ask questions FIRST before recommending.")
+        t5_goal = gr.Textbox(
+            label="What do you need help with?",
+            value="Planning a vacation",
+            placeholder="e.g., Planning a vacation, Writing a PRD, Choosing a tech stack"
+        )
+        t5_btn = gr.Button("Run", variant="primary")
+        t5_out = gr.Markdown()
+        t5_btn.click(tab5_run, [api_key, provider, t5_goal], t5_out)
+
+    # Tab 6: Reflection
+    with gr.Tab("6. Reflection"):
+        gr.Markdown("### Make the AI critique its own answer before responding.")
+        t6_question = gr.Textbox(
+            label="Ask a question",
+            value="What's the best way to reduce customer churn?",
+            lines=2
+        )
+        t6_reflection = gr.Checkbox(label="Use Reflection Pattern", value=False)
+        t6_btn = gr.Button("Run", variant="primary")
+        t6_out = gr.Markdown()
+        t6_btn.click(tab6_run, [api_key, provider, t6_question, t6_reflection], t6_out)
+
+    # Tab 7: Fact Check List
+    with gr.Tab("7. Fact Check List"):
+        gr.Markdown("### Make the AI list claims that need verification - hallucination defense.")
+        t7_topic = gr.Textbox(
+            label="Topic to ask about",
+            value="The Air Canada chatbot lawsuit",
+            placeholder="e.g., GDPR requirements for AI, OpenAI pricing, etc."
+        )
+        t7_btn = gr.Button("Run", variant="primary")
+        t7_out = gr.Markdown()
+        t7_btn.click(tab7_run, [api_key, provider, t7_topic], t7_out)
+
+    gr.Markdown(
+        "---\n"
+        "*AI for Product Managers* | "
+        "Patterns from [Jules White et al.](https://arxiv.org/abs/2302.11382)"
+    )
 
 if __name__ == "__main__":
     demo.launch()
