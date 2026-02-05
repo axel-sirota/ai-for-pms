@@ -14,9 +14,14 @@
             <p class="subtitle">Using AI to Evaluate AI</p>
         </header>
 
+        <div class="callout callout-failure">
+            <div class="callout-title">The Position Bias Trap</div>
+            <p><strong>AI startup, 2024:</strong> A company used GPT-4 as a judge to evaluate two candidate models for customer support. Model A was always shown first, Model B second. GPT-4 consistently rated Model A higher. When they swapped the order, GPT-4 suddenly preferred Model B. The "evaluation" had been measuring <strong>presentation order</strong>, not quality. They had spent 3 months optimizing the wrong model.</p>
+        </div>
+
         <div class="callout callout-insight">
             <div class="callout-title">The Scaling Problem</div>
-            <p>You can't have humans rate every AI response - it doesn't scale. But you can't trust the AI to evaluate itself. The solution? Use a <strong>different</strong> (often more capable) AI as a judge. GPT-4 evaluating GPT-3.5 outputs. Claude evaluating your fine-tuned model.</p>
+            <p>You can't have humans rate every AI response - it doesn't scale. But you can't trust the AI to evaluate itself. The solution? Use a <strong>different</strong> (often more capable) AI as a judge. GPT-4 evaluating GPT-3.5 outputs. Claude evaluating your fine-tuned model. But beware - LLM judges have their own biases.</p>
         </div>
 
         <h2>How LLM-as-Judge Works</h2>
@@ -186,8 +191,8 @@ Provide scores and brief explanations for each criterion.
                 primaryColor: '#E6F7F5',
                 primaryTextColor: '#1A3D4D',
                 primaryBorderColor: '#40B8A6',
-                lineColor: '#40B8A6',
-                secondaryColor: '#F9FAFB',
+                lineColor: '#4B5563',
+                secondaryColor: '#D4F0EC',
                 tertiaryColor: '#fff'
             }
         });
