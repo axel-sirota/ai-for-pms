@@ -91,6 +91,50 @@ USE_CASE_TEMPLATES = {
             "Edge cases (insufficient data, conflicting information)"
         ],
         "judge_focus": "Analysis must be logically sound and factually accurate. Conclusions should be supported by the data. Recommendations should be specific and actionable."
+    },
+    "rag_knowledge_base": {
+        "name": "RAG Knowledge Base",
+        "description": "AI that answers questions from your company's documents (knowledge base, help center, internal docs)",
+        "priority_dimensions": ["accuracy", "relevance", "completeness", "groundedness"],
+        "recommended_metrics": [
+            "Faithfulness score (are claims supported by retrieved docs?)",
+            "Answer relevancy (does it answer the actual question?)",
+            "Context precision (did we retrieve the right docs?)",
+            "Context recall (did we miss relevant docs?)",
+            "Hallucination rate (claims not in source material)"
+        ],
+        "test_case_categories": [
+            "Simple fact lookup (who, what, when)",
+            "Multi-document synthesis",
+            "Questions with no good answer in docs",
+            "Ambiguous questions",
+            "Questions requiring recent information",
+            "Edge cases (jargon, abbreviations, typos)"
+        ],
+        "judge_focus": "Focus on whether claims are supported by the retrieved documents. Hallucination is the critical failure mode. Check that the answer directly addresses the question asked, not a related question."
+    },
+    "ai_agent": {
+        "name": "AI Agent / Automation",
+        "description": "AI that takes actions autonomously (booking, scheduling, data entry, multi-step workflows)",
+        "priority_dimensions": ["accuracy", "safety", "completeness", "task_completion"],
+        "recommended_metrics": [
+            "Task completion rate (did it finish the job?)",
+            "Goal accuracy (did it solve the RIGHT problem?)",
+            "Steps to completion (efficiency)",
+            "Escalation rate (how often does it need human help?)",
+            "Error recovery rate (can it fix its own mistakes?)",
+            "Tool selection accuracy (right tool for the job?)"
+        ],
+        "test_case_categories": [
+            "Happy path (standard requests)",
+            "Multi-step workflows",
+            "Ambiguous instructions",
+            "Requests requiring clarification",
+            "Requests outside scope",
+            "Error scenarios (API failures, missing data)",
+            "Adversarial inputs (prompt injection attempts)"
+        ],
+        "judge_focus": "Grade the OUTCOME, not the path. Did the agent accomplish what the user wanted? Did it ask for clarification when needed? Did it avoid taking irreversible actions without confirmation?"
     }
 }
 
@@ -151,6 +195,20 @@ DIMENSION_DEFINITIONS = {
         "rubric_1": "Contains harmful content",
         "rubric_3": "Some potentially concerning elements",
         "rubric_5": "Completely safe and appropriate"
+    },
+    "groundedness": {
+        "name": "Groundedness",
+        "description": "Is every claim in the response supported by the retrieved context?",
+        "rubric_1": "Multiple unsupported claims (hallucination)",
+        "rubric_3": "Mostly grounded with minor unsupported details",
+        "rubric_5": "Every claim is traceable to source documents"
+    },
+    "task_completion": {
+        "name": "Task Completion",
+        "description": "Did the agent successfully complete the requested task?",
+        "rubric_1": "Task failed or abandoned",
+        "rubric_3": "Partially completed or required human intervention",
+        "rubric_5": "Task fully completed as requested"
     }
 }
 
@@ -293,7 +351,9 @@ with gr.Blocks(title="Evaluation Suite Builder", theme=gr.themes.Soft()) as demo
                     ("Customer Service Bot", "customer_service"),
                     ("Content Generation", "content_generation"),
                     ("Code Assistant", "code_assistant"),
-                    ("Analysis Assistant", "analysis_assistant")
+                    ("Analysis Assistant", "analysis_assistant"),
+                    ("RAG Knowledge Base", "rag_knowledge_base"),
+                    ("AI Agent / Automation", "ai_agent")
                 ],
                 label="Load Template (Optional)",
                 value=None
@@ -321,7 +381,9 @@ with gr.Blocks(title="Evaluation Suite Builder", theme=gr.themes.Soft()) as demo
                     ("Tone", "tone"),
                     ("Completeness", "completeness"),
                     ("Creativity", "creativity"),
-                    ("Safety", "safety")
+                    ("Safety", "safety"),
+                    ("Groundedness (RAG)", "groundedness"),
+                    ("Task Completion (Agents)", "task_completion")
                 ],
                 value=["accuracy", "relevance", "helpfulness"],
                 label="Select Dimensions to Evaluate"

@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>6.6 Evaluating AI Agents | AI for Product Managers</title>
+    <link rel="stylesheet" href="../../shared/css/course.css">
+</head>
+<body>
+    <div class="course-container">
+        <header class="course-header">
+            <span class="section-label">SECTION 6.6</span>
+            <h1>Evaluating AI Agents</h1>
+            <p class="subtitle">Your Agent DOES Things - How Do You Know It Does the RIGHT Things?</p>
+        </header>
+
+        <div class="callout callout-failure">
+            <div class="callout-title">The 47 Non-Refundable Tickets</div>
+            <p><strong>Travel agency, 2024:</strong> A booking agent was given the task "Book flights for the team offsite." Without asking for clarification on dates, preferences, or budget, it booked 47 non-refundable economy tickets on the cheapest available flights - including red-eyes and 3-stop connections. The agent completed its task (100% task completion!) but solved the wrong problem. Cost: $34K in rebooking fees and a very angry CFO.</p>
+        </div>
+
+        <div class="callout callout-insight">
+            <div class="callout-title">Why Agent Evaluation is Different</div>
+            <p>An LLM generates text. An agent takes <strong>actions</strong>. Wrong text is annoying. Wrong actions cost money, break things, and can't always be undone. That's why agent evaluation focuses on outcomes and safety, not just output quality.</p>
+        </div>
+
+        <h2>The Four Agent Metrics That Matter</h2>
+
+        <pre class="mermaid">
+flowchart TB
+    subgraph Metrics[Agent Success Metrics]
+        TC[Task Completion Rate<br>Did it finish the job?]
+        GA[Goal Accuracy<br>Did it solve the RIGHT problem?]
+        ER[Escalation Rate<br>How often does it need help?]
+        RR[Error Recovery<br>Can it fix its own mistakes?]
+    end
+
+    TC --> V1{85%+ for production}
+    GA --> V2{90%+ for high-stakes}
+    ER --> V3{Lower = more trusted}
+    RR --> V4{Higher = more resilient}
+
+    style TC fill:#E6F7F5,stroke:#40B8A6
+    style GA fill:#E6F7F5,stroke:#40B8A6
+    style ER fill:#fffbeb,stroke:#f59e0b
+    style RR fill:#fffbeb,stroke:#f59e0b
+    style V1 fill:#ecfdf5,stroke:#059669
+    style V2 fill:#ecfdf5,stroke:#059669
+    style V3 fill:#F9FAFB,stroke:#4B5563
+    style V4 fill:#F9FAFB,stroke:#4B5563
+        </pre>
+
+        <div class="card-grid">
+            <div class="card">
+                <h3>Task Completion Rate</h3>
+                <p><strong>"Did it finish the job?"</strong></p>
+                <p>The most basic metric - did the agent complete the task it was given? But beware: 100% completion doesn't mean success (see the booking agent above).</p>
+                <p><strong>Target:</strong> 85%+ for production, 75-80% acceptable for early pilots</p>
+            </div>
+            <div class="card">
+                <h3>Goal Accuracy</h3>
+                <p><strong>"Did it solve the RIGHT problem?"</strong></p>
+                <p>The most important metric. An agent can complete every step correctly and still fail if it misunderstood the goal. This is the difference between "task adherence" and "goal alignment."</p>
+                <p><strong>Target:</strong> 90%+ for high-stakes, 80%+ for routine tasks</p>
+            </div>
+            <div class="card">
+                <h3>Escalation Rate</h3>
+                <p><strong>"How often does it need human help?"</strong></p>
+                <p>When the agent can't handle a situation, it should escalate to a human. Too high = agent isn't capable enough. Too low = agent might be overconfident.</p>
+                <p><strong>Target:</strong> Depends on trust level (see Section 5.3)</p>
+            </div>
+            <div class="card">
+                <h3>Error Recovery Rate</h3>
+                <p><strong>"Can it fix its own mistakes?"</strong></p>
+                <p>Things go wrong - APIs fail, data is missing, users give unclear instructions. Can the agent detect the problem and recover, or does it cascade into bigger failures?</p>
+                <p><strong>Target:</strong> 70%+ for recoverable errors</p>
+            </div>
+        </div>
+
+        <div class="callout callout-decision">
+            <div class="callout-title">The Anthropic Principle</div>
+            <p><strong>"Grade outcomes, not the path agents take."</strong></p>
+            <p>An agent might take 3 steps or 7 steps to reach the same result. It might use different tools than you expected. What matters is: did the user get what they needed? Don't penalize creative problem-solving.</p>
+            <p><strong>"20-50 tasks from real failures is enough to start."</strong></p>
+            <p>You don't need thousands of test cases. Start with the tasks your agent gets wrong, and build your evaluation set from actual failures.</p>
+        </div>
+
+        <h2>Three Ways to Evaluate Agents</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Approach</th>
+                    <th>What It Tests</th>
+                    <th>Best For</th>
+                    <th>Limitation</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Deterministic Tests</strong></td>
+                    <td>Did it use the right tool? Did it follow the workflow?</td>
+                    <td>Structured tasks with clear steps</td>
+                    <td>Can't evaluate creative solutions</td>
+                </tr>
+                <tr>
+                    <td><strong>LLM-as-Judge</strong></td>
+                    <td>Was the final outcome acceptable? Was the approach reasonable?</td>
+                    <td>Open-ended tasks, quality assessment at scale</td>
+                    <td>May miss subtle errors, ~85% agreement with humans</td>
+                </tr>
+                <tr>
+                    <td><strong>Human Review</strong></td>
+                    <td>Full end-to-end assessment by a domain expert</td>
+                    <td>High-stakes actions, edge cases, calibrating LLM judges</td>
+                    <td>Slow, expensive, doesn't scale</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="callout callout-insight">
+            <div class="callout-title">The Hybrid Approach</div>
+            <p>Use deterministic tests for basic checks (did it call the right API?), LLM-as-judge for 100% coverage (was the outcome good?), and human review for 5-10% spot checks plus all high-stakes actions. This gives you both scale and quality.</p>
+        </div>
+
+        <h2>Diagnosis Framework - What Went Wrong?</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Agent Symptom</th>
+                    <th>Likely Cause</th>
+                    <th>What to Check</th>
+                    <th>Fix</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Low completion rate</td>
+                    <td>Unclear instructions or tools</td>
+                    <td>Task adherence metric</td>
+                    <td>Better system prompt, clearer tool descriptions</td>
+                </tr>
+                <tr>
+                    <td>High escalation rate</td>
+                    <td>Over-cautious confidence thresholds</td>
+                    <td>Confidence calibration</td>
+                    <td>Adjust escalation thresholds, add more examples</td>
+                </tr>
+                <tr>
+                    <td>Wrong tool selection</td>
+                    <td>Poor tool descriptions</td>
+                    <td>Tool call accuracy</td>
+                    <td>Rewrite tool descriptions, add few-shot examples</td>
+                </tr>
+                <tr>
+                    <td>Cascading failures</td>
+                    <td>No error handling</td>
+                    <td>Error recovery rate</td>
+                    <td>Add retry logic, error detection prompts</td>
+                </tr>
+                <tr>
+                    <td>Completes task but wrong outcome</td>
+                    <td>Goal misunderstanding</td>
+                    <td>Goal accuracy metric</td>
+                    <td>Add clarification step, confirmation before action</td>
+                </tr>
+                <tr>
+                    <td>Takes irreversible actions</td>
+                    <td>Missing safety guardrails</td>
+                    <td>Human-in-the-loop coverage</td>
+                    <td>Add confirmation for destructive actions (see 5.4)</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>Test Case Categories for Agents</h2>
+
+        <div class="card-grid">
+            <div class="card">
+                <h3>Happy Path</h3>
+                <p>"Schedule a meeting with 3 people next Tuesday"</p>
+                <p>Standard requests that should work every time. Your baseline.</p>
+            </div>
+            <div class="card">
+                <h3>Ambiguous Instructions</h3>
+                <p>"Book something for the team"</p>
+                <p>Should the agent ask for clarification or make assumptions? Test that it handles uncertainty appropriately.</p>
+            </div>
+            <div class="card">
+                <h3>Error Scenarios</h3>
+                <p>"Book a flight" (but the API is down)</p>
+                <p>Tests error recovery. Can the agent detect the problem, retry, try an alternative, or escalate gracefully?</p>
+            </div>
+            <div class="card">
+                <h3>Out of Scope</h3>
+                <p>"Hack into the competitor's system"</p>
+                <p>Tests boundary enforcement. The agent should refuse clearly, not attempt partial completion.</p>
+            </div>
+        </div>
+
+        <h2>Agent Launch Checklist</h2>
+
+        <div class="card">
+            <h3>Before You Ship - Agent Readiness</h3>
+            <ul>
+                <li><strong>Task completion rate >75%</strong> on test scenarios (>85% for production)</li>
+                <li><strong>Goal accuracy >85%</strong> (right outcome, not just completed steps)</li>
+                <li><strong>50+ test cases</strong> from real or expected use cases</li>
+                <li><strong>Escalation path tested</strong> and working (human can take over)</li>
+                <li><strong>Human-in-the-loop</strong> for all irreversible actions</li>
+                <li><strong>Failure monitoring</strong> in place for production</li>
+                <li><strong>Fallback behavior defined</strong> for when the agent can't proceed</li>
+                <li><strong>Cost per task calculated</strong> (tokens + API calls + tool costs)</li>
+                <li><strong>Red team testing</strong> for adversarial inputs and prompt injection</li>
+                <li><strong>Trust level appropriate</strong> - matches Section 5.3 progression (start at Level 1-2)</li>
+            </ul>
+        </div>
+
+        <h2>Try It Yourself</h2>
+        <div class="hf-space-embed">
+            <a href="https://huggingface.co/spaces/axelsirota/evaluation-suite-builder" class="hf-space-link" target="_blank">Open Evaluation Suite Builder - Agent Template</a>
+            <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-light);">
+                Firewall blocked? <a href="https://colab.research.google.com/github/axel-sirota/ai-for-pms/blob/main/notebooks/workshop-apps/24-evaluation-suite-builder.ipynb" target="_blank">Open in Google Colab</a>
+            </p>
+            <p>Select the "AI Agent / Automation" template to generate a complete evaluation suite with task completion, goal accuracy, and escalation metrics.</p>
+        </div>
+
+        <h2>Connecting the Dots</h2>
+
+        <div class="callout callout-insight">
+            <div class="callout-title">From Section 5 to Section 6</div>
+            <p>In Section 5, you learned the agent patterns - Copilot vs Agent (5.1), ReAct (5.2), Trust Progression (5.3), and Human-in-the-Loop (5.4). Now you know how to MEASURE whether those patterns are working:</p>
+            <ul>
+                <li><strong>Trust Progression (5.3)</strong> - Your agent's metrics determine when to advance trust levels</li>
+                <li><strong>Human-in-the-Loop (5.4)</strong> - Escalation rate tells you if your HITL boundaries are right</li>
+                <li><strong>ReAct Pattern (5.2)</strong> - Tool selection accuracy measures reasoning quality</li>
+            </ul>
+        </div>
+
+        <h2>Section 6 Complete Summary</h2>
+
+        <div class="card">
+            <h3>The Full Evaluation Toolkit</h3>
+            <ol>
+                <li><strong>Evaluation Frameworks (6.1):</strong> Different AI types need different metrics</li>
+                <li><strong>LLM-as-Judge (6.2):</strong> Scale evaluation with AI judges (~85% human agreement)</li>
+                <li><strong>Human Evaluation (6.3):</strong> The gold standard - calibrate with Kappa >0.4</li>
+                <li><strong>Feedback Loops (6.4):</strong> Continuous monitoring, not one-time testing</li>
+                <li><strong>RAG Evaluation (6.5):</strong> The Triad - Faithfulness, Relevancy, Context Quality</li>
+                <li><strong>Agent Evaluation (6.6):</strong> Grade outcomes, not paths - Task Completion, Goal Accuracy, Escalation</li>
+            </ol>
+            <p style="margin-top: 1rem;"><strong>The golden rule:</strong> Define "what good looks like" BEFORE you build. Changing success criteria mid-project is the most expensive mistake a PM can make.</p>
+        </div>
+
+        <div class="stakeholder-frame">
+            <h3>How to Explain Agent Evaluation to Stakeholders</h3>
+            <blockquote>
+                "Our AI agent doesn't just generate text - it takes actions. So we evaluate it like we'd evaluate a new hire: Does it complete the tasks we give it? Does it understand the real goal, not just follow steps blindly? Does it know when to ask for help? And when something goes wrong, can it recover? We test with 50+ real scenarios and monitor these metrics continuously."
+            </blockquote>
+        </div>
+
+        <div class="callout callout-insight">
+            <div class="callout-title">Putting It All Together</div>
+            <p>You've now learned the complete AI PM toolkit: from <strong>choosing the right paradigm</strong> (Section 1), through <strong>understanding the technology</strong> (Sections 2-5), to <strong>measuring success</strong> (this section). The key is continuous evaluation - AI isn't "set and forget." Build your evaluation suite first, then build your AI.</p>
+        </div>
+
+        <nav class="module-nav">
+            <a href="6.5-evaluating-rag.html">&larr; Evaluating RAG</a>
+            <a href="index.html">Back to Section Overview &rarr;</a>
+        </nav>
+    </div>
+
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'base',
+            themeVariables: {
+                primaryColor: '#E6F7F5',
+                primaryTextColor: '#1A3D4D',
+                primaryBorderColor: '#40B8A6',
+                lineColor: '#40B8A6',
+                secondaryColor: '#F9FAFB',
+                tertiaryColor: '#fff'
+            }
+        });
+    </script>
+</body>
+</html>

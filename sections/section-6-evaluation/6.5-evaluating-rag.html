@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>6.5 Evaluating RAG Systems | AI for Product Managers</title>
+    <link rel="stylesheet" href="../../shared/css/course.css">
+</head>
+<body>
+    <div class="course-container">
+        <header class="course-header">
+            <span class="section-label">SECTION 6.5</span>
+            <h1>Evaluating RAG Systems</h1>
+            <p class="subtitle">Your RAG Works - But Does It Work WELL?</p>
+        </header>
+
+        <div class="callout callout-failure">
+            <div class="callout-title">The Hallucinating Legal Bot</div>
+            <p><strong>A legal tech startup, 2024:</strong> A RAG-powered legal chatbot was answering attorney questions using their firm's document library. It looked great in demos. Then a junior associate cited one of its answers in a court filing - a regulation that didn't exist. The chatbot had hallucinated a plausible-sounding legal citation that wasn't in any retrieved document. Cost: $50K+ in legal fees and a formal court sanction.</p>
+        </div>
+
+        <div class="callout callout-insight">
+            <div class="callout-title">Why RAG Needs Special Evaluation</div>
+            <p>A standard LLM can be wrong because it doesn't know the answer. A RAG system can be wrong in a more dangerous way - it has the right documents but generates the wrong answer. Users trust RAG more (because it has "sources"), which makes hallucination even more costly.</p>
+        </div>
+
+        <h2>The RAG Triad - Three Things That Can Go Wrong</h2>
+
+        <p>Think of RAG evaluation like checking a research assistant's work. Three things can fail independently:</p>
+
+        <pre class="mermaid">
+flowchart LR
+    Q[User Question] --> R[Retriever]
+    R --> D[Retrieved Documents]
+    D --> G[Generator / LLM]
+    G --> A[Answer]
+
+    R -.-> CP[Context Precision<br>Did we find the right docs?]
+    D -.-> F[Faithfulness<br>Is the answer supported?]
+    A -.-> AR[Answer Relevancy<br>Did it answer MY question?]
+
+    style Q fill:#fffbeb,stroke:#f59e0b
+    style R fill:#E6F7F5,stroke:#40B8A6
+    style D fill:#E6F7F5,stroke:#40B8A6
+    style G fill:#E6F7F5,stroke:#40B8A6
+    style A fill:#ecfdf5,stroke:#059669
+    style CP fill:#F9FAFB,stroke:#4B5563
+    style F fill:#F9FAFB,stroke:#4B5563
+    style AR fill:#F9FAFB,stroke:#4B5563
+        </pre>
+
+        <div class="card-grid">
+            <div class="card">
+                <h3>1. Faithfulness</h3>
+                <p><strong>"Is the AI making stuff up?"</strong></p>
+                <p>Every claim in the answer should be supported by the retrieved documents. If the AI adds information that isn't in the source material, that's hallucination.</p>
+                <p><strong>How to measure:</strong> Count claims in the answer. Check each against the retrieved context. Supported claims / Total claims = Faithfulness score.</p>
+                <p><strong>Target:</strong> >90% for production</p>
+            </div>
+            <div class="card">
+                <h3>2. Answer Relevancy</h3>
+                <p><strong>"Did it answer MY question?"</strong></p>
+                <p>The answer might be accurate but not relevant. If you ask "What's our refund policy?" and get a technically correct essay about your company history, that's an answer relevancy failure.</p>
+                <p><strong>How to measure:</strong> Does the answer directly address the question asked - not a similar question, not a related topic?</p>
+                <p><strong>Target:</strong> >85% for production</p>
+            </div>
+            <div class="card">
+                <h3>3. Context Precision</h3>
+                <p><strong>"Did we find the right documents?"</strong></p>
+                <p>The retrieval step matters as much as the generation step. If the system retrieves irrelevant documents, even the best LLM can't give a good answer.</p>
+                <p><strong>How to measure:</strong> Of the top-5 retrieved documents, how many are actually relevant to the question?</p>
+                <p><strong>Target:</strong> >70% at top-5</p>
+            </div>
+        </div>
+
+        <div class="callout callout-decision">
+            <div class="callout-title">PM Decision Point</div>
+            <p>When your RAG system fails, the fix depends on WHERE it failed:</p>
+        </div>
+
+        <h2>Diagnosis Framework - What Went Wrong?</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Symptom</th>
+                    <th>Likely Cause</th>
+                    <th>Metric to Check</th>
+                    <th>Fix</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Wrong answers despite good docs</td>
+                    <td>Hallucination</td>
+                    <td>Faithfulness</td>
+                    <td>Tighter prompts, lower temperature</td>
+                </tr>
+                <tr>
+                    <td>Correct but off-topic answers</td>
+                    <td>Poor relevance matching</td>
+                    <td>Answer Relevancy</td>
+                    <td>Better prompt engineering</td>
+                </tr>
+                <tr>
+                    <td>Wrong documents retrieved</td>
+                    <td>Bad retrieval</td>
+                    <td>Context Precision</td>
+                    <td>Improve chunking, better embeddings</td>
+                </tr>
+                <tr>
+                    <td>"I don't know" too often</td>
+                    <td>Missing context</td>
+                    <td>Context Recall</td>
+                    <td>Add more docs, adjust retrieval threshold</td>
+                </tr>
+                <tr>
+                    <td>Answers mix multiple topics</td>
+                    <td>Chunk too large or too small</td>
+                    <td>Context Precision</td>
+                    <td>Re-chunk documents (see Section 4.3)</td>
+                </tr>
+                <tr>
+                    <td>Made-up citations/sources</td>
+                    <td>Hallucinated references</td>
+                    <td>Faithfulness</td>
+                    <td>Citation verification step, strict grounding</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>Building Your RAG Test Set</h2>
+
+        <div class="callout callout-insight">
+            <div class="callout-title">Start Small, Start From Failures</div>
+            <p><strong>Anthropic's guidance:</strong> "20-50 tasks from real failures is enough to start." Don't try to build a comprehensive test set on day one. Start with the questions your RAG system gets wrong, and build from there.</p>
+        </div>
+
+        <h3>Test Case Categories for RAG</h3>
+
+        <div class="card-grid">
+            <div class="card">
+                <h3>Simple Fact Lookup</h3>
+                <p>"What is our return policy window?"</p>
+                <p>Tests basic retrieval and faithfulness. The answer should come directly from one document.</p>
+            </div>
+            <div class="card">
+                <h3>Multi-Document Synthesis</h3>
+                <p>"How do our pricing tiers compare?"</p>
+                <p>Tests whether the system can combine information from multiple sources without hallucinating connections.</p>
+            </div>
+            <div class="card">
+                <h3>No Good Answer Exists</h3>
+                <p>"What's our policy on cryptocurrency payments?"</p>
+                <p>Tests whether the system says "I don't know" instead of making something up. This is often the most important test.</p>
+            </div>
+            <div class="card">
+                <h3>Ambiguous Questions</h3>
+                <p>"Tell me about the update"</p>
+                <p>Tests whether the system asks for clarification or makes assumptions. Both can be valid - you decide which behavior you want.</p>
+            </div>
+        </div>
+
+        <h2>RAG Launch Checklist</h2>
+
+        <div class="card">
+            <h3>Before You Ship - RAG Readiness</h3>
+            <ul>
+                <li><strong>Faithfulness score >90%</strong> on your test set</li>
+                <li><strong>Context precision >70%</strong> at top-5 retrieved documents</li>
+                <li><strong>50+ test cases</strong> covering happy path, edge cases, and "no answer" scenarios</li>
+                <li><strong>Human review of 20%</strong> of test outputs (don't trust automated scores alone)</li>
+                <li><strong>Fallback behavior defined</strong> for when the system can't find a good answer</li>
+                <li><strong>Hallucination monitoring</strong> in place for production</li>
+                <li><strong>Cost per query calculated</strong> (retrieval + generation costs)</li>
+                <li><strong>Latency P95 acceptable</strong> (retrieval adds latency)</li>
+                <li><strong>Citation display working</strong> so users can verify sources</li>
+                <li><strong>Red team testing</strong> for prompt injection through documents</li>
+            </ul>
+        </div>
+
+        <h2>Try It Yourself</h2>
+        <div class="hf-space-embed">
+            <a href="https://huggingface.co/spaces/axelsirota/evaluation-suite-builder" class="hf-space-link" target="_blank">Open Evaluation Suite Builder - RAG Template</a>
+            <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-light);">
+                Firewall blocked? <a href="https://colab.research.google.com/github/axel-sirota/ai-for-pms/blob/main/notebooks/workshop-apps/24-evaluation-suite-builder.ipynb" target="_blank">Open in Google Colab</a>
+            </p>
+            <p>Select the "RAG Knowledge Base" template to generate a complete evaluation suite with faithfulness, relevancy, and context quality metrics.</p>
+        </div>
+
+        <h2>Connecting the Dots</h2>
+
+        <div class="callout callout-insight">
+            <div class="callout-title">From Section 4 to Section 6</div>
+            <p>In Section 4, you learned how RAG works - chunking strategies (4.3), failure modes (4.4), and production considerations (4.5). Now you know how to MEASURE whether your RAG system is working. The failure modes from 4.4 map directly to the metrics here:</p>
+            <ul>
+                <li><strong>Wrong retrieval</strong> (4.4) - measured by <strong>Context Precision</strong></li>
+                <li><strong>Hallucination</strong> (4.4) - measured by <strong>Faithfulness</strong></li>
+                <li><strong>Off-topic answers</strong> (4.4) - measured by <strong>Answer Relevancy</strong></li>
+            </ul>
+        </div>
+
+        <div class="stakeholder-frame">
+            <h3>How to Explain RAG Evaluation to Stakeholders</h3>
+            <blockquote>
+                "How do we know our knowledge base AI isn't making things up? We measure three things: Did it find the right documents? Is the answer actually supported by those documents? And does it answer the question that was asked? We test with 50+ real questions, and we monitor these scores continuously in production. If faithfulness drops below 90%, we get an alert."
+            </blockquote>
+        </div>
+
+        <nav class="module-nav">
+            <a href="6.4-feedback-loops.html">&larr; Feedback Loops</a>
+            <a href="6.6-evaluating-agents.html">Next: Evaluating Agents &rarr;</a>
+        </nav>
+    </div>
+
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'base',
+            themeVariables: {
+                primaryColor: '#E6F7F5',
+                primaryTextColor: '#1A3D4D',
+                primaryBorderColor: '#40B8A6',
+                lineColor: '#40B8A6',
+                secondaryColor: '#F9FAFB',
+                tertiaryColor: '#fff'
+            }
+        });
+    </script>
+</body>
+</html>
